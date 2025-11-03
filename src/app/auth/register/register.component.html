@@ -1,0 +1,65 @@
+ <h2>Registrácia</h2>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <label>
+    Používateľské meno
+    <input type="text" formControlName="username" required />
+  </label>
+  <div *ngIf="form.controls.username.invalid && (form.controls.username.dirty || form.controls.username.touched)" style="color:red;">
+    Používateľské meno je povinné.
+  </div>
+
+  <label>
+    Meno
+    <input type="text" formControlName="firstName" required />
+  </label>
+  <div *ngIf="form.controls.firstName.invalid && (form.controls.firstName.dirty || form.controls.firstName.touched)" style="color:red;">
+    Meno je povinné.
+  </div>
+
+  <label>
+    Priezvisko
+    <input type="text" formControlName="surname" required />
+  </label>
+  <div *ngIf="form.controls.surname.invalid && (form.controls.surname.dirty || form.controls.surname.touched)" style="color:red;">
+    Priezvisko je povinné.
+  </div>
+
+  <label>
+    Email
+    <input type="email" formControlName="email" required />
+  </label>
+  <div *ngIf="form.controls.email.invalid && (form.controls.email.dirty || form.controls.email.touched)" style="color:red;">
+    Zadajte platný email.
+  </div>
+
+  <label>
+    Telefón
+    <input type="tel" formControlName="phone" required />
+  </label>
+  <div *ngIf="form.controls.phone.invalid && (form.controls.phone.dirty || form.controls.phone.touched)" style="color:red;">
+    Telefón je povinný.
+  </div>
+
+  <label>
+    Heslo
+    <input type="password" formControlName="password" required />
+  </label>
+  <div *ngIf="form.controls.password.invalid && (form.controls.password.dirty || form.controls.password.touched)" style="color:red;">
+    Heslo je povinné.
+  </div>
+
+  <label>
+    Potvrdenie hesla
+    <input type="password" formControlName="confirmPassword" required />
+  </label>
+  <div *ngIf="(form.errors?.['passwordMismatch']) && (form.controls.confirmPassword.dirty || form.controls.confirmPassword.touched)" style="color:red;">
+    Heslá sa nezhodujú.
+  </div>
+
+  <button type="submit" [disabled]="form.invalid || loading()">Registrovať</button>
+  <a routerLink="/login">Máte účet? Prihláste sa</a>
+
+  <p *ngIf="error()" style="color:red;">{{ error() }}</p>
+  <p *ngIf="success()" style="color:green;">{{ success() }}</p>
+</form>
+

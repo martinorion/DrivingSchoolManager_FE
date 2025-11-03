@@ -2,38 +2,14 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from './auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
-  template: `
-    <h2>Prihlásenie</h2>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <label>
-        Používateľské meno
-        <input type="text" formControlName="username" required />
-      </label>
-      <div *ngIf="form.controls.username.invalid && (form.controls.username.dirty || form.controls.username.touched)" style="color:red;">
-        Používateľské meno je povinné.
-      </div>
-
-      <label>
-        Heslo
-        <input type="password" formControlName="password" required />
-      </label>
-      <div *ngIf="form.controls.password.invalid && (form.controls.password.dirty || form.controls.password.touched)" style="color:red;">
-        Heslo je povinné.
-      </div>
-
-      <button type="submit" [disabled]="form.invalid || loading()">Prihlásiť</button>
-      <a routerLink="/register">Nemáte účet? Registrujte sa</a>
-      <a routerLink="/reset-password" style="margin-left: 0.75rem;">Zabudnuté heslo?</a>
-
-      <p *ngIf="error()" style="color:red;">{{ error() }}</p>
-    </form>
-  `,
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.css'
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
@@ -64,3 +40,4 @@ export class LoginComponent {
       });
   }
 }
+

@@ -2,36 +2,14 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
-import { AuthService } from './auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-confirm-account',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
-  template: `
-    <h2>Potvrdenie účtu</h2>
-    <p>Voliteľne si môžete nastaviť nové heslo. Ak necháte prázdne, účet sa iba aktivuje.</p>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <label>
-        Nové heslo (voliteľné)
-        <input type="password" formControlName="password" />
-      </label>
-
-      <label>
-        Potvrdenie hesla
-        <input type="password" formControlName="confirmPassword" />
-      </label>
-      <div *ngIf="(form.errors?.['passwordMismatch']) && (form.controls.confirmPassword.dirty || form.controls.confirmPassword.touched)" style="color:red;">
-        Heslá sa nezhodujú.
-      </div>
-
-      <button type="submit" [disabled]="loading()">Potvrdiť účet</button>
-      <a routerLink="/login" style="margin-left: 0.75rem;">Späť na prihlásenie</a>
-
-      <p *ngIf="error()" style="color:red;">{{ error() }}</p>
-      <p *ngIf="success()" style="color:green;">{{ success() }}</p>
-    </form>
-  `,
+  templateUrl: './confirm-account.component.html',
+  styleUrl: './confirm-account.component.css'
 })
 export class ConfirmAccountComponent {
   private fb = inject(FormBuilder);
@@ -51,7 +29,6 @@ export class ConfirmAccountComponent {
     { validators: [this.passwordsMatchValidator] }
   );
 
-  // Convert to a class method so it is available during form initialization
   private passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
     const password = group.get('password')?.value as string | undefined;
     const confirm = group.get('confirmPassword')?.value as string | undefined;
@@ -65,10 +42,7 @@ export class ConfirmAccountComponent {
       this.error.set('Chýba token v URL.');
       return;
     }
-
-    if (this.form.errors?.['passwordMismatch']) {
-      return;
-    }
+    if (this.form.errors?.['passwordMismatch']) return;
 
     const password = (this.form.controls.password.value || '') as string;
 
@@ -89,3 +63,4 @@ export class ConfirmAccountComponent {
     });
   }
 }
+

@@ -2,30 +2,14 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { AuthService } from './auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
-  template: `
-    <h2>Obnova hesla</h2>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <label>
-        Email
-        <input type="email" formControlName="email" required />
-      </label>
-      <div *ngIf="form.controls.email.invalid && (form.controls.email.dirty || form.controls.email.touched)" style="color:red;">
-        Zadajte platný email.
-      </div>
-
-      <button type="submit" [disabled]="form.invalid || loading()">Odoslať inštrukcie</button>
-      <a routerLink="/login" style="margin-left: 0.75rem;">Späť na prihlásenie</a>
-
-      <p *ngIf="error()" style="color:red;">{{ error() }}</p>
-      <p *ngIf="success()" style="color:green;">{{ success() }}</p>
-    </form>
-  `,
+  templateUrl: './reset-password.component.html',
+  styleUrl: './reset-password.component.css'
 })
 export class ResetPasswordComponent {
   private fb = inject(FormBuilder);
@@ -58,3 +42,4 @@ export class ResetPasswordComponent {
     });
   }
 }
+

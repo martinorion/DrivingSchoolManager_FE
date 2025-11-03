@@ -1,0 +1,17 @@
+/* Štýly pre potvrdenie účtu */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 420px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  width: fit-content;
+}
+
