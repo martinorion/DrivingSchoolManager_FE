@@ -3,11 +3,16 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, ValidationErrors, AbstractControl } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService, RegisterResponseDTO } from '../../services/auth.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, MatCardModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
@@ -45,7 +50,7 @@ export class RegisterComponent {
   private registrationKeyRequiredValidator(group: AbstractControl): ValidationErrors | null {
     const role = (group.get('authority')?.value || 'STUDENT') as string;
     const key = (group.get('registrationKey')?.value || '') as string;
-    const needsKey = role === 'INSTRUCTOR' || role === 'ADMIN';
+    const needsKey = role === 'INSTRUCTOR' || role === 'ADMIN' || role === 'ADMINISTRATOR';
     if (!needsKey) return null;
     return key && key.trim().length > 0 ? null : { registrationKeyRequired: true };
   }
@@ -73,4 +78,3 @@ export class RegisterComponent {
     });
   }
 }
-

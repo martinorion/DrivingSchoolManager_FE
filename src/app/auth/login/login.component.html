@@ -1,25 +1,37 @@
-<h2>Prihlásenie</h2>
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <label>
-    Používateľské meno
-    <input type="text" formControlName="username" required />
-  </label>
-  <div *ngIf="form.controls.username.invalid && (form.controls.username.dirty || form.controls.username.touched)" style="color:red;">
-    Používateľské meno je povinné.
-  </div>
+<div class="auth-wrapper">
+  <mat-card class="auth-card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Prihlásenie</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Používateľské meno</mat-label>
+          <input matInput type="text" formControlName="username" required />
+          <mat-error *ngIf="form.controls.username.invalid && (form.controls.username.dirty || form.controls.username.touched)">
+            Používateľské meno je povinné.
+          </mat-error>
+        </mat-form-field>
 
-  <label>
-    Heslo
-    <input type="password" formControlName="password" required />
-  </label>
-  <div *ngIf="form.controls.password.invalid && (form.controls.password.dirty || form.controls.password.touched)" style="color:red;">
-    Heslo je povinné.
-  </div>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Heslo</mat-label>
+          <input matInput type="password" formControlName="password" required />
+          <mat-error *ngIf="form.controls.password.invalid && (form.controls.password.dirty || form.controls.password.touched)">
+            Heslo je povinné.
+          </mat-error>
+        </mat-form-field>
 
-  <button type="submit" [disabled]="form.invalid || loading()">Prihlásiť</button>
-  <a routerLink="/register">Nemáte účet? Registrujte sa</a>
-  <a routerLink="/reset-password" style="margin-left: 0.75rem;">Zabudnuté heslo?</a>
+        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || loading()">
+          Prihlásiť
+        </button>
 
-  <p *ngIf="error()" style="color:red;">{{ error() }}</p>
-</form>
+        <div class="links">
+          <a routerLink="/register">Nemáte účet? Registrujte sa</a>
+          <a routerLink="/reset-password">Zabudnuté heslo?</a>
+        </div>
 
+        <p *ngIf="error()" class="error">{{ error() }}</p>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

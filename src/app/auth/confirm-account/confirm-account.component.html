@@ -1,22 +1,35 @@
-<h2>Potvrdenie účtu</h2>
-<p>Voliteľne si môžete nastaviť nové heslo. Ak necháte prázdne, účet sa iba aktivuje.</p>
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <label>
-    Nové heslo (voliteľné)
-    <input type="password" formControlName="password" />
-  </label>
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-card-header">
+      <h2>Potvrdenie účtu</h2>
+    </div>
+    <div class="auth-card-content">
+      <p class="mb-4">Voliteľne si môžete nastaviť nové heslo. Ak necháte prázdne, účet sa iba aktivuje.</p>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
+        <label class="field">
+          <span class="label">Nové heslo (voliteľné)</span>
+          <input class="input" type="password" formControlName="password" />
+        </label>
 
-  <label>
-    Potvrdenie hesla
-    <input type="password" formControlName="confirmPassword" />
-  </label>
-  <div *ngIf="(form.errors?.['passwordMismatch']) && (form.controls.confirmPassword.dirty || form.controls.confirmPassword.touched)" style="color:red;">
-    Heslá sa nezhodujú.
+        <label class="field">
+          <span class="label">Potvrdenie hesla</span>
+          <input class="input" type="password" formControlName="confirmPassword" />
+        </label>
+        <div class="error" *ngIf="(form.errors?.['passwordMismatch']) && (form.controls.confirmPassword.dirty || form.controls.confirmPassword.touched)">
+          Heslá sa nezhodujú.
+        </div>
+
+        <button class="btn btn-primary" type="submit" [disabled]="loading()">
+          Potvrdiť účet
+        </button>
+
+        <div class="links">
+          <a routerLink="/login">Späť na prihlásenie</a>
+        </div>
+
+        <p *ngIf="error()" class="error">{{ error() }}</p>
+        <p *ngIf="success()" class="success">{{ success() }}</p>
+      </form>
+    </div>
   </div>
-
-  <button type="submit" [disabled]="loading()">Potvrdiť účet</button>
-  <a routerLink="/login" style="margin-left: 0.75rem;">Späť na prihlásenie</a>
-
-  <p *ngIf="error()" style="color:red;">{{ error() }}</p>
-  <p *ngIf="success()" style="color:green;">{{ success() }}</p>
-</form>
+</div>

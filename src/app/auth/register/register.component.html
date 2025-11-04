@@ -1,87 +1,106 @@
- <h2>Registrácia</h2>
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <label>
-    Používateľské meno
-    <input type="text" formControlName="username" required />
-  </label>
-  <div *ngIf="form.controls.username.invalid && (form.controls.username.dirty || form.controls.username.touched)" style="color:red;">
-    Používateľské meno je povinné.
-  </div>
+<div class="auth-wrapper">
+  <mat-card class="auth-card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Registrácia</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Používateľské meno</mat-label>
+          <input matInput type="text" formControlName="username" required />
+          <mat-error *ngIf="form.controls.username.invalid && (form.controls.username.dirty || form.controls.username.touched)">
+            Používateľské meno je povinné.
+          </mat-error>
+        </mat-form-field>
 
-  <label>
-    Meno
-    <input type="text" formControlName="firstName" required />
-  </label>
-  <div *ngIf="form.controls.firstName.invalid && (form.controls.firstName.dirty || form.controls.firstName.touched)" style="color:red;">
-    Meno je povinné.
-  </div>
+        <div class="row-2">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Meno</mat-label>
+            <input matInput type="text" formControlName="firstName" required />
+            <mat-error *ngIf="form.controls.firstName.invalid && (form.controls.firstName.dirty || form.controls.firstName.touched)">
+              Meno je povinné.
+            </mat-error>
+          </mat-form-field>
 
-  <label>
-    Priezvisko
-    <input type="text" formControlName="surname" required />
-  </label>
-  <div *ngIf="form.controls.surname.invalid && (form.controls.surname.dirty || form.controls.surname.touched)" style="color:red;">
-    Priezvisko je povinné.
-  </div>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Priezvisko</mat-label>
+            <input matInput type="text" formControlName="surname" required />
+            <mat-error *ngIf="form.controls.surname.invalid && (form.controls.surname.dirty || form.controls.surname.touched)">
+              Priezvisko je povinné.
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-  <label>
-    Email
-    <input type="email" formControlName="email" required />
-  </label>
-  <div *ngIf="form.controls.email.invalid && (form.controls.email.dirty || form.controls.email.touched)" style="color:red;">
-    Zadajte platný email.
-  </div>
+        <div class="row-2">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" required />
+            <mat-error *ngIf="form.controls.email.invalid && (form.controls.email.dirty || form.controls.email.touched)">
+              Zadajte platný email.
+            </mat-error>
+          </mat-form-field>
 
-  <label>
-    Telefón
-    <input type="tel" formControlName="phone" required />
-  </label>
-  <div *ngIf="form.controls.phone.invalid && (form.controls.phone.dirty || form.controls.phone.touched)" style="color:red;">
-    Telefón je povinný.
-  </div>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Telefón</mat-label>
+            <input matInput type="tel" formControlName="phone" required />
+            <mat-error *ngIf="form.controls.phone.invalid && (form.controls.phone.dirty || form.controls.phone.touched)">
+              Telefón je povinný.
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-  <label>
-    Heslo
-    <input type="password" formControlName="password" required />
-  </label>
-  <div *ngIf="form.controls.password.invalid && (form.controls.password.dirty || form.controls.password.touched)" style="color:red;">
-    Heslo je povinné.
-  </div>
+        <div class="row-2">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Heslo</mat-label>
+            <input matInput type="password" formControlName="password" required />
+            <mat-error *ngIf="form.controls.password.invalid && (form.controls.password.dirty || form.controls.password.touched)">
+              Heslo je povinné.
+            </mat-error>
+          </mat-form-field>
 
-  <label>
-    Potvrdenie hesla
-    <input type="password" formControlName="confirmPassword" required />
-  </label>
-  <div *ngIf="(form.errors?.['passwordMismatch']) && (form.controls.confirmPassword.dirty || form.controls.confirmPassword.touched)" style="color:red;">
-    Heslá sa nezhodujú.
-  </div>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Potvrdenie hesla</mat-label>
+            <input matInput type="password" formControlName="confirmPassword" required />
+            <mat-error *ngIf="(form.errors?.['passwordMismatch']) && (form.controls.confirmPassword.dirty || form.controls.confirmPassword.touched)">
+              Heslá sa nezhodujú.
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-  <label>
-    Rola
-    <select formControlName="authority" required>
-      <option value="STUDENT">Študent</option>
-      <option value="INSTRUCTOR">Inštruktor</option>
-      <option value="ADMINISTRATOR">Admin</option>
-    </select>
-  </label>
-  <div *ngIf="form.controls.authority.invalid && (form.controls.authority.dirty || form.controls.authority.touched)" style="color:red;">
-    Rola je povinná.
-  </div>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Rola</mat-label>
+          <mat-select formControlName="authority" required>
+            <mat-option value="STUDENT">Študent</mat-option>
+            <mat-option value="INSTRUCTOR">Inštruktor</mat-option>
+            <mat-option value="ADMINISTRATOR">Admin</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.controls.authority.invalid && (form.controls.authority.dirty || form.controls.authority.touched)">
+            Rola je povinná.
+          </mat-error>
+        </mat-form-field>
 
-  <ng-container *ngIf="form.controls.authority.value === 'INSTRUCTOR' || form.controls.authority.value === 'ADMINISTRATOR'">
-    <label>
-      Registračný kľúč
-      <input type="text" formControlName="registrationKey" />
-    </label>
-    <div *ngIf="form.errors?.['registrationKeyRequired'] && (form.controls.registrationKey.dirty || form.controls.registrationKey.touched)" style="color:red;">
-      Pri tejto role je registračný kľúč povinný.
-    </div>
-  </ng-container>
+        <ng-container *ngIf="form.controls.authority.value === 'INSTRUCTOR' || form.controls.authority.value === 'ADMIN' || form.controls.authority.value === 'ADMINISTRATOR'">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Registračný kľúč</mat-label>
+            <input matInput type="text" formControlName="registrationKey" />
+            <mat-hint>Povinné pre rolu Inštruktor a Admin</mat-hint>
+            <mat-error *ngIf="form.errors?.['registrationKeyRequired'] && (form.controls.registrationKey.dirty || form.controls.registrationKey.touched)">
+              Pri tejto role je registračný kľúč povinný.
+            </mat-error>
+          </mat-form-field>
+        </ng-container>
 
-  <button type="submit" [disabled]="form.invalid || loading()">Registrovať</button>
-  <a routerLink="/login">Máte účet? Prihláste sa</a>
+        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || loading()">
+          Registrovať
+        </button>
 
-  <p *ngIf="error()" style="color:red;">{{ error() }}</p>
-  <p *ngIf="success()" style="color:green;">{{ success() }}</p>
-</form>
+        <div class="links">
+          <a routerLink="/login">Máte účet? Prihláste sa</a>
+        </div>
 
+        <p *ngIf="error()" class="error">{{ error() }}</p>
+        <p *ngIf="success()" class="success">{{ success() }}</p>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

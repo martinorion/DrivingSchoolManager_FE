@@ -17,13 +17,22 @@ export class App {
   private readonly route = inject(ActivatedRoute);
 
   protected readonly pageTitle = signal<string>('');
+  protected readonly menuOpen = signal<boolean>(false);
 
   constructor() {
     // Initialize and react to route changes
     this.updatePageTitle();
     this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-      .subscribe(() => this.updatePageTitle());
+      .subscribe(() => {
+        this.updatePageTitle();
+        // Close mobile menu after navigation
+        this.menuOpen.set(false);
+      });
+  }
+
+  protected toggleMenu() {
+    this.menuOpen.update((v) => !v);
   }
 
   private updatePageTitle() {

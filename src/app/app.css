@@ -138,6 +138,50 @@
   color: #1f2937;
 }
 
+/* Hamburger toggle button (hidden by default, shown on small screens) */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.7);
+  color: #fff;
+  border-radius: 10px;
+  padding: 6px 8px;
+  cursor: pointer;
+  /* make sure bars stack nicely when shown */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.nav-toggle__bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #fff;
+  margin: 0; /* use gap on parent instead */
+  border-radius: 1px;
+}
+
+@media (max-width: 700px) {
+  .nav-toggle { display: inline-flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; }
+
+  /* Stack the links vertically and hide by default */
+  .top-nav .nav-links {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .top-nav .nav-links.open { display: flex; }
+
+  /* Make items easier to tap */
+  .top-nav .nav-links a,
+  .top-nav .nav-links button { display: block; width: fit-content; }
+}
+
 /* Mobile nav stacking to avoid x-scroll */
 @media (max-width: 640px) {
   .top-nav { gap: 0.5rem; }

@@ -2,7 +2,14 @@
     <div class="brand">
       <a routerLink="/dashboard" routerLinkActive="active">{{ title() }}</a>
     </div>
-    <div class="nav-links">
+
+    <button class="nav-toggle" type="button" (click)="toggleMenu()" aria-label="Menu" [attr.aria-expanded]="menuOpen()">
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+    </button>
+
+    <div class="nav-links" [class.open]="menuOpen()">
       @if (auth.isAuthenticated()) {
       <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
       @if (auth.hasRole('INSTRUCTOR')) {
