@@ -29,8 +29,10 @@ export class RegisterComponent {
       confirmPassword: ['', [Validators.required]],
       firstName: ['', [Validators.required]],
       surname: ['', [Validators.required]],
+      authority: ['STUDENT', [Validators.required]],
+      registrationKey: [''],
     },
-    { validators: [this.passwordsMatchValidator] }
+    { validators: [this.passwordsMatchValidator, this.registrationKeyRequiredValidator] }
   );
 
   private passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
@@ -38,6 +40,14 @@ export class RegisterComponent {
     const confirm = group.get('confirmPassword')?.value as string | undefined;
     if (!password || !confirm) return null;
     return password === confirm ? null : { passwordMismatch: true };
+  }
+
+  private registrationKeyRequiredValidator(group: AbstractControl): ValidationErrors | null {
+    const role = (group.get('authority')?.value || 'STUDENT') as string;
+    const key = (group.get('registrationKey')?.value || '') as string;
+    const needsKey = role === 'INSTRUCTOR' || role === 'ADMIN';
+    if (!needsKey) return null;
+    return key && key.trim().length > 0 ? null : { registrationKeyRequired: true };
   }
 
   onSubmit() {

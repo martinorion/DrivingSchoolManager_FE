@@ -56,6 +56,28 @@
     Heslá sa nezhodujú.
   </div>
 
+  <label>
+    Rola
+    <select formControlName="authority" required>
+      <option value="STUDENT">Študent</option>
+      <option value="INSTRUCTOR">Inštruktor</option>
+      <option value="ADMINISTRATOR">Admin</option>
+    </select>
+  </label>
+  <div *ngIf="form.controls.authority.invalid && (form.controls.authority.dirty || form.controls.authority.touched)" style="color:red;">
+    Rola je povinná.
+  </div>
+
+  <ng-container *ngIf="form.controls.authority.value === 'INSTRUCTOR' || form.controls.authority.value === 'ADMINISTRATOR'">
+    <label>
+      Registračný kľúč
+      <input type="text" formControlName="registrationKey" />
+    </label>
+    <div *ngIf="form.errors?.['registrationKeyRequired'] && (form.controls.registrationKey.dirty || form.controls.registrationKey.touched)" style="color:red;">
+      Pri tejto role je registračný kľúč povinný.
+    </div>
+  </ng-container>
+
   <button type="submit" [disabled]="form.invalid || loading()">Registrovať</button>
   <a routerLink="/login">Máte účet? Prihláste sa</a>
 

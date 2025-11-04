@@ -1,7 +1,6 @@
-import { Injectable, computed, signal, inject } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { map, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, tap, map, finalize } from 'rxjs';
 
 export interface LoginRequest {
   username: string;
@@ -16,12 +15,13 @@ export interface RegisterRequest {
   confirmPassword: string;
   firstName: string;
   surname: string;
+  authority: 'STUDENT' | 'INSTRUCTOR' | 'ADMINISTRATOR';
+  registrationKey?: string;
 }
 
 export interface LoginResponseDTO {
   accessToken: string;
   authority: string;
-  expiresAt: string; // ISO datetime string
 }
 
 export interface RegisterResponseDTO {
@@ -54,35 +54,36 @@ export class AuthService {
     return this.http.post<RegisterResponseDTO>(`${this.baseUrl}/register`, payload);
   }
 
+  // Sends a confirmation request; backend should validate token and optionally set password
+  confirmAccount(token: string, password?: string): Observable<void> {
+    const body: any = { token };
+    if (password) body.password = password;
+    return this.http.post<void>(`${this.baseUrl}/confirm-account`, body);
+  }
+
+  // Starts password reset flow by email
+  resetPassword(email: string): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/reset-password`, { email });
+  }
+
   logout(): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/logout`, {}).pipe(
-      tap(() => this.clearState()),
-      map(() => void 0)
+      map(() => void 0),
+      finalize(() => this.clearState())
     );
   }
 
-  // Immediately clear local auth state (no backend call)
   forceLogout(): void {
     this.clearState();
   }
 
-  resetPassword(email: string): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'text/plain' });
-    return this.http.post<any>(`${this.baseUrl}/resetPassword`, email, { headers });
-  }
-
-  confirmAccount(token: string, password: string): Observable<void> {
-    const params = new HttpParams().set('token', token).set('password', password || '');
-    return this.http.post<void>(`${this.baseUrl}/confirm-account`, null, { params });
-  }
-
-  // Helpers
   private setLoginState(res: LoginResponseDTO): void {
-    const { accessToken, authority, expiresAt } = res;
+    const { accessToken, authority } = res;
+    const expiresAt = this.decodeExpiry(accessToken);
     this.setToken(accessToken);
     try {
       localStorage.setItem(AUTHORITY_KEY, authority ?? '');
-      localStorage.setItem(EXPIRES_KEY, expiresAt ?? '');
+      localStorage.setItem(EXPIRES_KEY, expiresAt.toString());
     } catch {}
   }
 
@@ -104,10 +105,35 @@ export class AuthService {
 
   private readToken(): string | null {
     try {
-      return localStorage.getItem(TOKEN_KEY);
+      const token = localStorage.getItem(TOKEN_KEY);
+      if (!token) return null;
+      const exp = this.decodeExpiry(token);
+      if (Date.now() >= exp) {
+        this.clearState();
+        return null;
+      }
+      return token;
     } catch {
       return null;
     }
   }
-}
 
+  private decodeExpiry(token: string): number {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp * 1000;
+    } catch {
+      return 0;
+    }
+  }
+
+  // Role helpers based on stored authority string from login response
+  getAuthority(): string | null {
+    try { return localStorage.getItem(AUTHORITY_KEY); } catch { return null; }
+  }
+
+  hasRole(role: 'USER' | 'INSTRUCTOR' | string): boolean {
+    const a = this.getAuthority();
+    return (a ?? '').toUpperCase() === String(role).toUpperCase();
+  }
+}

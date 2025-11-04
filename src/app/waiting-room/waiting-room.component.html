@@ -1,0 +1,42 @@
+<section class="container">
+  <h1>Waiting room</h1>
+
+  @if (error()) {<div class="alert alert--error">{{ error() }}</div>}
+  @if (success()) {<div class="alert alert--success">{{ success() }}</div>}
+
+  @if (loading()) {<div>Načítavam...</div>} @else {
+    @if (isUser()) {
+      <h3>Moje žiadosti</h3>
+      <div class="list">
+        @for (w of myWaiting(); track w.id) {
+          <div class="row">
+            <div>Org ID: {{ w.organizationId }}</div>
+            <button (click)="cancel(w)">Zrušiť žiadosť</button>
+          </div>
+        }
+        @if (!myWaiting().length) { <div>Nemáte žiadne otvorené žiadosti.</div> }
+      </div>
+    }
+
+    @if (isInstructor()) {
+      <h3>Študenti čakajúci na schválenie</h3>
+      <div class="list">
+        @for (s of students(); track s.id) {
+          <div class="row">
+            <div>
+              {{ s.firstName || '' }} {{ s.surname || '' }}
+              <span class="muted">ID: {{ s.id }}</span>
+            </div>
+            <div class="actions">
+              <button class="approve" (click)="approve(s)">Schváliť</button>
+              <button class="reject" (click)="reject(s)">Odmietnuť</button>
+            </div>
+          </div>
+        }
+        @if (!students().length) { <div>Žiadni študenti v čakárni.</div> }
+      </div>
+    }
+  }
+</section>
+
+
