@@ -1,23 +1,25 @@
 <div class="auth-wrapper">
-  <div class="auth-card">
-    <div class="auth-card-header">
-      <h2>Potvrdenie účtu</h2>
-    </div>
-    <div class="auth-card-content">
+  <mat-card class="auth-card auth-card--md" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Potvrdenie účtu</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
       <p class="mb-4">Voliteľne si môžete nastaviť nové heslo. Ak necháte prázdne, účet sa iba aktivuje.</p>
       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
-        <label class="field">
-          <span class="label">Nové heslo (voliteľné)</span>
-          <input class="input" type="password" formControlName="password" />
-        </label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Nové heslo (voliteľné)</mat-label>
+          <input matInput type="password" formControlName="password" />
+        </mat-form-field>
 
-        <label class="field">
-          <span class="label">Potvrdenie hesla</span>
-          <input class="input" type="password" formControlName="confirmPassword" />
-        </label>
-        <div class="error" *ngIf="(form.errors?.['passwordMismatch']) && (form.controls.confirmPassword.dirty || form.controls.confirmPassword.touched)">
-          Heslá sa nezhodujú.
-        </div>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Potvrdenie hesla</mat-label>
+          <input matInput type="password" formControlName="confirmPassword" />
+          @if ((form.errors?.['passwordMismatch']) && (form.controls.confirmPassword.dirty || form.controls.confirmPassword.touched)) {
+            <mat-error>
+              Heslá sa nezhodujú.
+            </mat-error>
+          }
+        </mat-form-field>
 
         <button class="btn btn-primary" type="submit" [disabled]="loading()">
           Potvrdiť účet
@@ -27,9 +29,13 @@
           <a routerLink="/login">Späť na prihlásenie</a>
         </div>
 
-        <p *ngIf="error()" class="error">{{ error() }}</p>
-        <p *ngIf="success()" class="success">{{ success() }}</p>
+        @if (error()) {
+          <p class="error">{{ error() }}</p>
+        }
+        @if (success()) {
+          <p class="success">{{ success() }}</p>
+        }
       </form>
-    </div>
-  </div>
+    </mat-card-content>
+  </mat-card>
 </div>

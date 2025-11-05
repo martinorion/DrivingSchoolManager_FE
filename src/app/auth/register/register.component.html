@@ -1,5 +1,5 @@
 <div class="auth-wrapper">
-  <mat-card class="auth-card" appearance="outlined">
+  <mat-card class="auth-card auth-card--md" appearance="outlined">
     <mat-card-header>
       <mat-card-title>Registrácia</mat-card-title>
     </mat-card-header>
@@ -8,26 +8,32 @@
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Používateľské meno</mat-label>
           <input matInput type="text" formControlName="username" required />
-          <mat-error *ngIf="form.controls.username.invalid && (form.controls.username.dirty || form.controls.username.touched)">
-            Používateľské meno je povinné.
-          </mat-error>
+          @if (form.controls.username.invalid && (form.controls.username.dirty || form.controls.username.touched)) {
+            <mat-error>
+              Používateľské meno je povinné.
+            </mat-error>
+          }
         </mat-form-field>
 
         <div class="row-2">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Meno</mat-label>
             <input matInput type="text" formControlName="firstName" required />
-            <mat-error *ngIf="form.controls.firstName.invalid && (form.controls.firstName.dirty || form.controls.firstName.touched)">
-              Meno je povinné.
-            </mat-error>
+            @if (form.controls.firstName.invalid && (form.controls.firstName.dirty || form.controls.firstName.touched)) {
+              <mat-error>
+                Meno je povinné.
+              </mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Priezvisko</mat-label>
             <input matInput type="text" formControlName="surname" required />
-            <mat-error *ngIf="form.controls.surname.invalid && (form.controls.surname.dirty || form.controls.surname.touched)">
-              Priezvisko je povinné.
-            </mat-error>
+            @if (form.controls.surname.invalid && (form.controls.surname.dirty || form.controls.surname.touched)) {
+              <mat-error>
+                Priezvisko je povinné.
+              </mat-error>
+            }
           </mat-form-field>
         </div>
 
@@ -35,17 +41,21 @@
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Email</mat-label>
             <input matInput type="email" formControlName="email" required />
-            <mat-error *ngIf="form.controls.email.invalid && (form.controls.email.dirty || form.controls.email.touched)">
-              Zadajte platný email.
-            </mat-error>
+            @if (form.controls.email.invalid && (form.controls.email.dirty || form.controls.email.touched)) {
+              <mat-error>
+                Zadajte platný email.
+              </mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Telefón</mat-label>
             <input matInput type="tel" formControlName="phone" required />
-            <mat-error *ngIf="form.controls.phone.invalid && (form.controls.phone.dirty || form.controls.phone.touched)">
-              Telefón je povinný.
-            </mat-error>
+            @if (form.controls.phone.invalid && (form.controls.phone.dirty || form.controls.phone.touched)) {
+              <mat-error>
+                Telefón je povinný.
+              </mat-error>
+            }
           </mat-form-field>
         </div>
 
@@ -53,17 +63,21 @@
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Heslo</mat-label>
             <input matInput type="password" formControlName="password" required />
-            <mat-error *ngIf="form.controls.password.invalid && (form.controls.password.dirty || form.controls.password.touched)">
-              Heslo je povinné.
-            </mat-error>
+            @if (form.controls.password.invalid && (form.controls.password.dirty || form.controls.password.touched)) {
+              <mat-error>
+                Heslo je povinné.
+              </mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Potvrdenie hesla</mat-label>
             <input matInput type="password" formControlName="confirmPassword" required />
-            <mat-error *ngIf="(form.errors?.['passwordMismatch']) && (form.controls.confirmPassword.dirty || form.controls.confirmPassword.touched)">
-              Heslá sa nezhodujú.
-            </mat-error>
+            @if ((form.errors?.['passwordMismatch']) && (form.controls.confirmPassword.dirty || form.controls.confirmPassword.touched)) {
+              <mat-error>
+                Heslá sa nezhodujú.
+              </mat-error>
+            }
           </mat-form-field>
         </div>
 
@@ -74,23 +88,27 @@
             <mat-option value="INSTRUCTOR">Inštruktor</mat-option>
             <mat-option value="ADMINISTRATOR">Admin</mat-option>
           </mat-select>
-          <mat-error *ngIf="form.controls.authority.invalid && (form.controls.authority.dirty || form.controls.authority.touched)">
-            Rola je povinná.
-          </mat-error>
+          @if (form.controls.authority.invalid && (form.controls.authority.dirty || form.controls.authority.touched)) {
+            <mat-error>
+              Rola je povinná.
+            </mat-error>
+          }
         </mat-form-field>
 
-        <ng-container *ngIf="form.controls.authority.value === 'INSTRUCTOR' || form.controls.authority.value === 'ADMIN' || form.controls.authority.value === 'ADMINISTRATOR'">
+        @if (form.controls.authority.value === 'INSTRUCTOR' || form.controls.authority.value === 'ADMIN' || form.controls.authority.value === 'ADMINISTRATOR') {
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Registračný kľúč</mat-label>
             <input matInput type="text" formControlName="registrationKey" />
             <mat-hint>Povinné pre rolu Inštruktor a Admin</mat-hint>
-            <mat-error *ngIf="form.errors?.['registrationKeyRequired'] && (form.controls.registrationKey.dirty || form.controls.registrationKey.touched)">
-              Pri tejto role je registračný kľúč povinný.
-            </mat-error>
+            @if (form.errors?.['registrationKeyRequired'] && (form.controls.registrationKey.dirty || form.controls.registrationKey.touched)) {
+              <mat-error>
+                Pri tejto role je registračný kľúč povinný.
+              </mat-error>
+            }
           </mat-form-field>
-        </ng-container>
+        }
 
-        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || loading()">
+        <button class="btn btn-primary" type="submit" [disabled]="form.invalid || loading()">
           Registrovať
         </button>
 
@@ -98,8 +116,12 @@
           <a routerLink="/login">Máte účet? Prihláste sa</a>
         </div>
 
-        <p *ngIf="error()" class="error">{{ error() }}</p>
-        <p *ngIf="success()" class="success">{{ success() }}</p>
+        @if (error()) {
+          <p class="error">{{ error() }}</p>
+        }
+        @if (success()) {
+          <p class="success">{{ success() }}</p>
+        }
       </form>
     </mat-card-content>
   </mat-card>

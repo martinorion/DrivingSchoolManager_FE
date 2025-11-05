@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { WaitingRoomService, WaitingRoomDTO, UserDTO } from './waiting-room.service';
+import { WaitingRoomService, WaitingRoomDTO, UserDTO } from '../services/waiting-room.service';
 import { AuthService } from '../services/auth.service';
 
 @Component({

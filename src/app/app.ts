@@ -26,7 +26,7 @@ export class App {
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
       .subscribe(() => {
         this.updatePageTitle();
-        // Close mobile menu after navigation
+
         this.menuOpen.set(false);
       });
   }
@@ -36,7 +36,6 @@ export class App {
   }
 
   private updatePageTitle() {
-    // Traverse to the deepest activated route
     let r: ActivatedRoute | null = this.route;
     while (r?.firstChild) r = r.firstChild;
 
@@ -45,18 +44,6 @@ export class App {
       this.pageTitle.set(dataTitle);
       return;
     }
-
-    // Fallback: build from URL
-    const url = this.router.url.split('?')[0].split('#')[0];
-    const parts = url.replace(/^\/+|\/+$/g, '').split('/').filter(Boolean);
-    const last = parts[parts.length - 1] ?? '';
-
-    const pretty = last
-      ? last.replace(/[-_]+/g, ' ')
-            .replace(/\b\w/g, (m) => m.toUpperCase())
-      : 'Domov';
-
-    this.pageTitle.set(pretty);
   }
 
   protected logout() {

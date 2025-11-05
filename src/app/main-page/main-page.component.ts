@@ -1,8 +1,8 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { OrganizationService, Organization } from '../organization/organization.service';
-import { WaitingRoomService } from '../waiting-room/waiting-room.service';
+import { OrganizationService, Organization } from '../services/organization.service';
+import { WaitingRoomService } from '../services/waiting-room.service';
 import { AuthService } from '../services/auth.service';
 
 @Component({

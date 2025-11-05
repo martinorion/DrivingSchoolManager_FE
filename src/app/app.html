@@ -4,9 +4,9 @@
     </div>
 
     <button class="nav-toggle" type="button" (click)="toggleMenu()" aria-label="Menu" [attr.aria-expanded]="menuOpen()">
-      <span class="nav-toggle__bar"></span>
-      <span class="nav-toggle__bar"></span>
-      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
     </button>
 
     <div class="nav-links" [class.open]="menuOpen()">
@@ -23,24 +23,24 @@
     </div>
   </nav>
 
-  <header class="hero">
-    <div class="container hero__content">
-      <h1 class="hero__title">{{ pageTitle() }}</h1>
+  <header class="page-header">
+    <div class="page-header-content">
+      <h1 class="page-title">{{ pageTitle() }}</h1>
     </div>
-    <div class="hero__wave" aria-hidden="true">
+    <div class="header-divider" aria-hidden="true">
       <svg viewBox="0 0 1440 100" preserveAspectRatio="none" focusable="false">
         <path d="M0,40 C240,80 480,0 720,30 C960,60 1200,20 1440,40 L1440,100 L0,100 Z" fill="#fff"></path>
       </svg>
     </div>
   </header>
 
-  <main class="container page">
+  <main class="page">
     <router-outlet></router-outlet>
   </main>
 
   <footer class="site-footer">
-    <div class="container footer__inner">
-      <div class="footer__brand">{{ title() }}</div>
-      <div class="footer__copy">© 2025 Všetky práva vyhradené</div>
+    <div class="footer-inner">
+      <div class="footer-brand">{{ title() }}</div>
+      <div class="footer-copy">© 2025 Všetky práva vyhradené</div>
     </div>
   </footer>

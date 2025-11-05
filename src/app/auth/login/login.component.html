@@ -1,5 +1,5 @@
 <div class="auth-wrapper">
-  <mat-card class="auth-card" appearance="outlined">
+  <mat-card class="auth-card auth-card--sm" appearance="outlined">
     <mat-card-header>
       <mat-card-title>Prihlásenie</mat-card-title>
     </mat-card-header>
@@ -8,20 +8,24 @@
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Používateľské meno</mat-label>
           <input matInput type="text" formControlName="username" required />
-          <mat-error *ngIf="form.controls.username.invalid && (form.controls.username.dirty || form.controls.username.touched)">
-            Používateľské meno je povinné.
-          </mat-error>
+          @if (form.controls.username.invalid && (form.controls.username.dirty || form.controls.username.touched)) {
+            <mat-error>
+              Používateľské meno je povinné.
+            </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Heslo</mat-label>
           <input matInput type="password" formControlName="password" required />
-          <mat-error *ngIf="form.controls.password.invalid && (form.controls.password.dirty || form.controls.password.touched)">
-            Heslo je povinné.
-          </mat-error>
+          @if (form.controls.password.invalid && (form.controls.password.dirty || form.controls.password.touched)) {
+            <mat-error>
+              Heslo je povinné.
+            </mat-error>
+          }
         </mat-form-field>
 
-        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || loading()">
+        <button class="btn btn-primary" type="submit" [disabled]="form.invalid || loading()">
           Prihlásiť
         </button>
 
@@ -30,7 +34,9 @@
           <a routerLink="/reset-password">Zabudnuté heslo?</a>
         </div>
 
-        <p *ngIf="error()" class="error">{{ error() }}</p>
+        @if (error()) {
+          <p class="error">{{ error() }}</p>
+        }
       </form>
     </mat-card-content>
   </mat-card>
