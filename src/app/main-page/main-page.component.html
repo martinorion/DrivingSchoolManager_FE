@@ -5,10 +5,14 @@
   @if (success()) {<div class="alert alert--success">{{ success() }}</div>}
 
   @if (isInstructor()) {
-    <form class="create" [formGroup]="createForm" (ngSubmit)="create()">
-      <input type="text" placeholder="Názov organizácie" formControlName="name" />
-      <button type="submit" [disabled]="createForm.invalid">Vytvoriť organizáciu</button>
-    </form>
+    @if (hasOrg() === false) {
+      <form class="create" [formGroup]="createForm" (ngSubmit)="create()">
+        <input type="text" placeholder="Názov organizácie" formControlName="name" />
+        <button type="submit" [disabled]="createForm.invalid">Vytvoriť organizáciu</button>
+      </form>
+    } @else if (hasOrg() === true) {
+      <div class="alert">Už máte vytvorenú organizáciu. Použite stránky Čakáreň a Študenti.</div>
+    }
   }
 
   @if (loading()) {
@@ -18,7 +22,7 @@
       @for (org of organizations(); track org.id) {
         <div class="card">
           <div class="card__title">{{ org.name }}</div>
-          @if (isUser() && auth.isAuthenticated()) {
+          @if (isStudent() && auth.isAuthenticated()) {
             <button class="join" (click)="join(org)">Pripojiť sa</button>
           }
         </div>
@@ -26,5 +30,3 @@
     </div>
   }
 </section>
-
-

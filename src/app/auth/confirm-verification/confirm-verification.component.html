@@ -1,0 +1,30 @@
+<div class="auth-wrapper">
+  <mat-card class="auth-card auth-card--md" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Overenie účtu</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @if (loading()) {
+        <div class="state state--verifying" role="status" aria-live="polite">
+          <p>Overujem váš token...</p>
+        </div>
+      } @else {
+        @if (!error()) {
+          <div class="state state--success" role="status" aria-live="polite">
+            <mat-icon class="icon icon--success" aria-hidden="true">check_circle</mat-icon>
+            <h2>Účet úspešne overený</h2>
+            <p>Presmerovanie na prihlásenie prebehne o <strong>{{ countdown() }}</strong> s.</p>
+            <button class="btn btn-primary" (click)="goLogin()">Prejsť na prihlásenie teraz</button>
+          </div>
+        } @else {
+          <div class="state state--error" role="alert" aria-live="assertive">
+            <mat-icon class="icon icon--error" aria-hidden="true">error</mat-icon>
+            <h2>Overenie zlyhalo</h2>
+            <p>{{ error() }}</p>
+            <a routerLink="/login">Späť na prihlásenie</a>
+          </div>
+        }
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

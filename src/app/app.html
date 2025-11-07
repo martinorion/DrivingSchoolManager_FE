@@ -11,14 +11,16 @@
 
     <div class="nav-links" [class.open]="menuOpen()">
       @if (auth.isAuthenticated()) {
-      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-      @if (auth.hasRole('INSTRUCTOR')) {
-      <a routerLink="/waiting-room" routerLinkActive="active">Čakajúci na schválenie</a>
-      }
-      <button type="button" (click)="logout()">Odhlásiť</button>
+        @if (auth.hasRole('INSTRUCTOR') && hasOrg() === true) {
+          <a routerLink="/waiting-room" routerLinkActive="active">Čakáreň</a>
+          <a routerLink="/students" routerLinkActive="active">Študenti</a>
+        } @else {
+          <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+        }
+        <button type="button" (click)="logout()">Odhlásiť</button>
       } @else {
-      <a routerLink="/login" routerLinkActive="active">Prihlásenie</a>
-      <a routerLink="/register" routerLinkActive="active">Registrácia</a>
+        <a routerLink="/login" routerLinkActive="active">Prihlásenie</a>
+        <a routerLink="/register" routerLinkActive="active">Registrácia</a>
       }
     </div>
   </nav>

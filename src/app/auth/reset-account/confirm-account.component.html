@@ -4,10 +4,10 @@
       <mat-card-title>Potvrdenie účtu</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <p class="mb-4">Voliteľne si môžete nastaviť nové heslo. Ak necháte prázdne, účet sa iba aktivuje.</p>
+      <p class="mb-4">Nastavte si nové heslo</p>
       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Nové heslo (voliteľné)</mat-label>
+          <mat-label>Nové heslo</mat-label>
           <input matInput type="password" formControlName="password" />
         </mat-form-field>
 

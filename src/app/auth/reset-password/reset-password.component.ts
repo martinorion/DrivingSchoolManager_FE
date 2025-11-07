@@ -36,7 +36,7 @@ export class ResetPasswordComponent {
     const email = this.form.controls.email.value as string;
     this.auth.resetPassword(email).subscribe({
       next: () => {
-        this.success.set('Ak účet existuje, poslali sme e-mail s ďalšími inštrukciami.');
+        this.success.set('Poslali sme e-mail s ďalšími inštrukciami.');
         this.loading.set(false);
       },
       error: () => {

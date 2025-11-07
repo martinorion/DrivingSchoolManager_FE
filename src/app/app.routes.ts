@@ -3,16 +3,23 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { guestGuard } from './auth/guards/guest.guard';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
-import { ConfirmAccountComponent } from './auth/confirm-account/confirm-account.component';
+import { ConfirmAccountComponent } from './auth/reset-account/confirm-account.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { WaitingRoomComponent } from './waiting-room/waiting-room.component';
+import { StudentsComponent } from './students/students.component';
+import { instructorOrgRedirectGuard } from './auth/guards/instructor-org-redirect.guard';
+import { authGuard } from './auth/guards/auth.guard';
+import { ConfirmVerificationComponent } from './auth/confirm-verification/confirm-verification.component';
 
 export const routes: Routes = [
-  { path: '', component: MainPageComponent, pathMatch: 'full', data: { title: 'Domov' } },
+  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+  { path: 'dashboard', component: MainPageComponent, canActivate: [instructorOrgRedirectGuard], data: { title: 'Dashboard' } },
   { path: 'login', component: LoginComponent, canActivate: [guestGuard], data: { title: 'Prihlásenie' } },
   { path: 'register', component: RegisterComponent, canActivate: [guestGuard], data: { title: 'Registrácia' } },
   { path: 'reset-password', component: ResetPasswordComponent, canActivate: [guestGuard], data: { title: 'Obnovenie hesla' } },
-  { path: 'confirm-account', component: ConfirmAccountComponent, canActivate: [guestGuard], data: { title: 'Potvrdenie účtu' } },
-  { path: 'waiting-room', component: WaitingRoomComponent, data: { title: 'Čakáreň' } },
-  { path: '**', redirectTo: '' }
+  { path: 'reset-account', component: ConfirmAccountComponent, canActivate: [guestGuard], data: { title: 'Potvrdenie účtu' } },
+  { path: 'confirm-verification', component: ConfirmVerificationComponent, data: { title: 'Overenie účtu' } },
+  { path: 'waiting-room', component: WaitingRoomComponent, canActivate: [authGuard], data: { title: 'Čakáreň' } },
+  { path: 'students', component: StudentsComponent, canActivate: [authGuard], data: { title: 'Študenti' } },
+  { path: '**', redirectTo: 'dashboard' }
 ];

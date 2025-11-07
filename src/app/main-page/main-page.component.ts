@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { OrganizationService, Organization } from '../services/organization.service';
 import { WaitingRoomService } from '../services/waiting-room.service';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
@@ -17,14 +18,17 @@ export class MainPageComponent {
   private readonly fb = inject(FormBuilder);
   private readonly waiting = inject(WaitingRoomService);
   protected readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
 
   organizations = signal<Organization[]>([]);
   loading = signal(false);
   error = signal<string | null>(null);
   success = signal<string | null>(null);
 
-  isUser = computed(() => this.auth.hasRole('USER'));
+  isStudent = computed(() => this.auth.hasRole('STUDENT'));
   isInstructor = computed(() => this.auth.hasRole('INSTRUCTOR'));
+
+  hasOrg = signal<boolean | null>(null);
 
   createForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]]
@@ -32,6 +36,12 @@ export class MainPageComponent {
 
   ngOnInit() {
     this.fetchOrganizations();
+    if (this.isInstructor()) {
+      this.orgService.checkHasOrganization().subscribe({
+        next: v => this.hasOrg.set(v),
+        error: () => this.hasOrg.set(false)
+      });
+    }
   }
 
   fetchOrganizations() {
@@ -59,7 +69,7 @@ export class MainPageComponent {
   }
 
   create() {
-    if (this.createForm.invalid) return;
+    if (this.createForm.invalid || this.hasOrg()) return;
     const { name } = this.createForm.getRawValue();
     this.error.set(null);
     this.success.set(null);
@@ -67,11 +77,11 @@ export class MainPageComponent {
       next: () => {
         this.success.set('Organizácia bola vytvorená.');
         this.createForm.reset();
-        this.fetchOrganizations();
+        this.hasOrg.set(true);
+        // Immediately show instructor workflow pages
+        this.router.navigateByUrl('/waiting-room');
       },
       error: (err) => this.error.set(err?.error?.message || 'Vytvorenie zlyhalo.')
     });
   }
 }
-
-

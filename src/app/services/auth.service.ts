@@ -1,5 +1,5 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, tap, map, finalize } from 'rxjs';
 
 export interface LoginRequest {
@@ -29,6 +29,11 @@ export interface RegisterResponseDTO {
   message: string;
 }
 
+export interface ConfirmAccountRequestDTO {
+  token: string;
+  password?: string;
+}
+
 const TOKEN_KEY = 'auth_token';
 const AUTHORITY_KEY = 'auth_authority';
 const EXPIRES_KEY = 'auth_expires_at';
@@ -56,9 +61,13 @@ export class AuthService {
 
   // Sends a confirmation request; backend should validate token and optionally set password
   confirmAccount(token: string, password?: string): Observable<void> {
-    const body: any = { token };
-    if (password) body.password = password;
+    const body: ConfirmAccountRequestDTO =
+      password && password.trim().length > 0 ? { token, password } : { token };
     return this.http.post<void>(`${this.baseUrl}/confirm-account`, body);
+  }
+
+  verifyAccount(token: string): Observable<void> {
+    return this.confirmAccount(token)
   }
 
   // Starts password reset flow by email
