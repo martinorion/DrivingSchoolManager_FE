@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { WaitingRoomService, WaitingRoomDTO, UserDTO } from '../services/waiting-room.service';
 import { AuthService } from '../services/auth.service';
 import { OrganizationService } from '../services/organization.service';
+import { InstructorRequestService, InstructorRequestDTO } from '../services/instructor-request.service';
 
 @Component({
   selector: 'app-waiting-room',
@@ -15,6 +16,7 @@ export class WaitingRoomComponent {
   private readonly service = inject(WaitingRoomService);
   protected readonly auth = inject(AuthService);
   private readonly org = inject(OrganizationService);
+  private readonly instructorReq = inject(InstructorRequestService);
 
   isStudent = computed(() => this.auth.hasRole('STUDENT'));
   isInstructor = computed(() => this.auth.hasRole('INSTRUCTOR'));
@@ -23,6 +25,7 @@ export class WaitingRoomComponent {
 
   myWaiting = signal<WaitingRoomDTO[]>([]);
   students = signal<UserDTO[]>([]);
+  instructorRequests = signal<InstructorRequestDTO[]>([]);
   loading = signal(false);
   error = signal<string | null>(null);
   success = signal<string | null>(null);
@@ -52,8 +55,12 @@ export class WaitingRoomComponent {
       });
     } else if (this.isInstructor() && this.hasOrg()) {
       this.service.getAllStudentsInWaitingRoom().subscribe({
-        next: (r) => { this.students.set(r); this.loading.set(false); },
-        error: () => { this.error.set('Nepodarilo sa načítať študentov.'); this.loading.set(false); }
+        next: (r) => { this.students.set(r); },
+        error: () => { this.error.set('Nepodarilo sa načítať študentov.'); }
+      });
+      this.instructorReq.getAllRequests().subscribe({
+        next: (r) => { this.instructorRequests.set(r ?? []); this.loading.set(false); },
+        error: () => { this.loading.set(false); }
       });
     } else {
       this.loading.set(false);
@@ -84,6 +91,16 @@ export class WaitingRoomComponent {
     this.service.removeFromWaitingRoom({ id: wait.id, organizationId: wait.organizationId }).subscribe({
       next: () => { this.success.set('Žiadosť bola zrušená.'); this.refresh(); },
       error: () => this.error.set('Zrušenie zlyhalo.')
+    });
+  }
+
+  approveInstructor(req: InstructorRequestDTO) {
+    if (!req.instructorId || !req.organizationId) return;
+    this.success.set(null);
+    this.error.set(null);
+    this.instructorReq.addInstructorToOrganization(req.instructorId, req.organizationId).subscribe({
+      next: () => { this.success.set('Inštruktor bol pridaný do organizácie.'); this.refresh(); },
+      error: () => this.error.set('Pridanie inštruktora zlyhalo.')
     });
   }
 }

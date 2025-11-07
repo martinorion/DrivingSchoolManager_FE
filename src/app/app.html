@@ -14,6 +14,9 @@
         @if (auth.hasRole('INSTRUCTOR') && hasOrg() === true) {
           <a routerLink="/waiting-room" routerLinkActive="active">Čakáreň</a>
           <a routerLink="/students" routerLinkActive="active">Študenti</a>
+        } @else if (auth.hasRole('INSTRUCTOR') && hasOrg() !== true) {
+          <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+          <a routerLink="/instructors" routerLinkActive="active">Inštruktori</a>
         } @else {
           <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
         }

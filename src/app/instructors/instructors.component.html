@@ -1,0 +1,37 @@
+<section class="container instructors-page">
+  <h1>Pripojenie k organizácii</h1>
+
+  @if (error()) {<div class="alert alert--error">{{ error() }}</div>}
+  @if (success()) {<div class="alert alert--success">{{ success() }}</div>}
+
+  @if (!isInstructor()) {
+    <p>Len inštruktori môžu používať túto stránku.</p>
+  } @else {
+    @if (loading()) {
+      <div>Načítavam...</div>
+    } @else {
+      @if (!existingRequest()) {
+        <p>Vyberte organizáciu a odošlite žiadosť o pripojenie ako sekundárny inštruktor.</p>
+        <div class="org-grid">
+          @for (org of organizations(); track org.id) {
+            <div class="org-card">
+              <div class="org-card__name">{{ org.name }}</div>
+              <button (click)="requestJoin(org)">Požiadať</button>
+            </div>
+          }
+        </div>
+        @if (!organizations().length) { <p>Žiadne organizácie na zobrazenie.</p> }
+      } @else {
+        <div class="waiting">
+          <div class="waiting__icon" aria-hidden="true">⏳</div>
+          <h2>Žiadosť odoslaná</h2>
+          <p>
+            Počkajte na schválenie administrátora organizácie
+            <strong>{{ organizationNameById(existingRequest()?.organizationId) }}</strong>.
+          </p>
+          <p class="muted">Po schválení budete mať rovnaký prístup ako hlavný inštruktor.</p>
+        </div>
+      }
+    }
+  }
+</section>

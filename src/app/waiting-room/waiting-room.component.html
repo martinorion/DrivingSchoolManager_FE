@@ -1,5 +1,5 @@
 <section class="container">
-  <h1>Waiting room</h1>
+<!--  <h1>Waiting room</h1>-->
 
   @if (error()) {<div class="alert alert--error">{{ error() }}</div>}
   @if (success()) {<div class="alert alert--success">{{ success() }}</div>}
@@ -37,6 +37,19 @@
             </div>
           }
           @if (!students().length) { <div>Žiadni študenti v čakárni.</div> }
+        </div>
+
+        <h3>Inštruktori čakajúci na schválenie</h3>
+        <div class="list">
+          @for (r of instructorRequests(); track r.id) {
+            <div class="row">
+              <div>Žiadosť inštruktora ID: {{ r.instructorId }} (org ID: {{ r.organizationId }})</div>
+              <div class="actions">
+                <button class="approve" (click)="approveInstructor(r)">Pridať inštruktora</button>
+              </div>
+            </div>
+          }
+          @if (!instructorRequests().length) { <div>Žiadni inštruktori v čakárni.</div> }
         </div>
       }
     }

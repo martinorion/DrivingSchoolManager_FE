@@ -10,6 +10,8 @@ import { StudentsComponent } from './students/students.component';
 import { instructorOrgRedirectGuard } from './auth/guards/instructor-org-redirect.guard';
 import { authGuard } from './auth/guards/auth.guard';
 import { ConfirmVerificationComponent } from './auth/confirm-verification/confirm-verification.component';
+import { InstructorsComponent } from './instructors/instructors.component';
+import { instructorNoOrgGuard } from './auth/guards/instructor-no-org.guard';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -21,5 +23,6 @@ export const routes: Routes = [
   { path: 'confirm-verification', component: ConfirmVerificationComponent, data: { title: 'Overenie účtu' } },
   { path: 'waiting-room', component: WaitingRoomComponent, canActivate: [authGuard], data: { title: 'Čakáreň' } },
   { path: 'students', component: StudentsComponent, canActivate: [authGuard], data: { title: 'Študenti' } },
+  { path: 'instructors', component: InstructorsComponent, canActivate: [instructorNoOrgGuard], data: { title: 'Inštruktori' } },
   { path: '**', redirectTo: 'dashboard' }
 ];

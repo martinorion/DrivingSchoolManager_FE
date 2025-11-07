@@ -61,6 +61,7 @@ export class App {
     } else {
       this.hasOrg.set(null);
     }
+    console.log(this.hasOrg())
   }
 
   protected logout() {

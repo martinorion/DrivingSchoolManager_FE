@@ -10,6 +10,9 @@
         <input type="text" placeholder="Názov organizácie" formControlName="name" />
         <button type="submit" [disabled]="createForm.invalid">Vytvoriť organizáciu</button>
       </form>
+      <div class="alt-option">
+        <a routerLink="/instructors">Alebo sa pripojiť k existujúcej organizácii ako inštruktor</a>
+      </div>
     } @else if (hasOrg() === true) {
       <div class="alert">Už máte vytvorenú organizáciu. Použite stránky Čakáreň a Študenti.</div>
     }
@@ -25,6 +28,7 @@
           @if (isStudent() && auth.isAuthenticated()) {
             <button class="join" (click)="join(org)">Pripojiť sa</button>
           }
+          <!-- Removed instructor request button from dashboard -->
         </div>
       }
     </div>
