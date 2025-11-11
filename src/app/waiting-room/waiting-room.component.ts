@@ -4,11 +4,12 @@ import { WaitingRoomService, WaitingRoomDTO, UserDTO } from '../services/waiting
 import { AuthService } from '../services/auth.service';
 import { OrganizationService } from '../services/organization.service';
 import { InstructorRequestService, InstructorRequestDTO } from '../services/instructor-request.service';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-waiting-room',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatPaginatorModule],
   templateUrl: './waiting-room.component.html',
   styleUrl: './waiting-room.component.css'
 })
@@ -23,9 +24,30 @@ export class WaitingRoomComponent {
 
   hasOrg = signal<boolean | null>(null);
 
+  // Data
   myWaiting = signal<WaitingRoomDTO[]>([]);
   students = signal<UserDTO[]>([]);
   instructorRequests = signal<InstructorRequestDTO[]>([]);
+
+  // Pagination
+  readonly pageSize = 10;
+  studentsPageIndex = signal(0);
+  instructorsPageIndex = signal(0);
+  myWaitingPageIndex = signal(0);
+
+  pagedStudents = computed(() => {
+    const start = this.studentsPageIndex() * this.pageSize;
+    return this.students().slice(start, start + this.pageSize);
+  });
+  pagedInstructorRequests = computed(() => {
+    const start = this.instructorsPageIndex() * this.pageSize;
+    return this.instructorRequests().slice(start, start + this.pageSize);
+  });
+  pagedMyWaiting = computed(() => {
+    const start = this.myWaitingPageIndex() * this.pageSize;
+    return this.myWaiting().slice(start, start + this.pageSize);
+  });
+
   loading = signal(false);
   error = signal<string | null>(null);
   success = signal<string | null>(null);
@@ -50,22 +72,26 @@ export class WaitingRoomComponent {
     this.error.set(null);
     if (this.isStudent()) {
       this.service.getUsersWaitingRoom().subscribe({
-        next: (r) => { this.myWaiting.set(r); this.loading.set(false); },
+        next: (r) => { this.myWaiting.set(r); this.myWaitingPageIndex.set(0); this.loading.set(false); },
         error: () => { this.error.set('Nepodarilo sa načítať čakáreň.'); this.loading.set(false); }
       });
     } else if (this.isInstructor() && this.hasOrg()) {
       this.service.getAllStudentsInWaitingRoom().subscribe({
-        next: (r) => { this.students.set(r); },
+        next: (r) => { this.students.set(r); this.studentsPageIndex.set(0); },
         error: () => { this.error.set('Nepodarilo sa načítať študentov.'); }
       });
       this.instructorReq.getAllRequests().subscribe({
-        next: (r) => { this.instructorRequests.set(r ?? []); this.loading.set(false); },
+        next: (r) => { this.instructorRequests.set(r ?? []); this.instructorsPageIndex.set(0); this.loading.set(false); },
         error: () => { this.loading.set(false); }
       });
     } else {
       this.loading.set(false);
     }
   }
+
+  onStudentsPage(e: PageEvent) { this.studentsPageIndex.set(e.pageIndex); }
+  onInstructorsPage(e: PageEvent) { this.instructorsPageIndex.set(e.pageIndex); }
+  onMyWaitingPage(e: PageEvent) { this.myWaitingPageIndex.set(e.pageIndex); }
 
   approve(student: UserDTO) {
     this.success.set(null);

@@ -21,16 +21,24 @@
   @if (loading()) {
     <div>Načítavam...</div>
   } @else {
-    <div class="grid">
-      @for (org of organizations(); track org.id) {
-        <div class="card">
-          <div class="card__title">{{ org.name }}</div>
-          @if (isStudent() && auth.isAuthenticated()) {
-            <button class="join" (click)="join(org)">Pripojiť sa</button>
-          }
-          <!-- Removed instructor request button from dashboard -->
-        </div>
-      }
-    </div>
+    @if (isStudent() && auth.isAuthenticated() && studentHasPending()) {
+      <div class="waiting-block" role="status" aria-live="polite">
+        <div class="waiting-block__icon" aria-hidden="true">⏳</div>
+        <h2>Žiadosť odoslaná</h2>
+        <p>Čakáte na schválenie organizácie <strong>{{ pendingOrgName() }}</strong>.</p>
+        <p class="muted">Po schválení získate prístup k ďalším funkcionalitám.</p>
+      </div>
+    } @else {
+      <div class="grid">
+        @for (org of organizations(); track org.id) {
+          <div class="card">
+            <div class="card__title">{{ org.name }}</div>
+            @if (isStudent() && auth.isAuthenticated()) {
+              <button class="join" (click)="join(org)" [disabled]="studentHasPending()">Pripojiť sa</button>
+            }
+          </div>
+        }
+      </div>
+    }
   }
 </section>

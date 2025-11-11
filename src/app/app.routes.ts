@@ -6,12 +6,12 @@ import { ResetPasswordComponent } from './auth/reset-password/reset-password.com
 import { ConfirmAccountComponent } from './auth/reset-account/confirm-account.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { WaitingRoomComponent } from './waiting-room/waiting-room.component';
-import { StudentsComponent } from './students/students.component';
 import { instructorOrgRedirectGuard } from './auth/guards/instructor-org-redirect.guard';
 import { authGuard } from './auth/guards/auth.guard';
 import { ConfirmVerificationComponent } from './auth/confirm-verification/confirm-verification.component';
 import { InstructorsComponent } from './instructors/instructors.component';
 import { instructorNoOrgGuard } from './auth/guards/instructor-no-org.guard';
+import { MembersComponent } from './members/members.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -22,7 +22,7 @@ export const routes: Routes = [
   { path: 'reset-account', component: ConfirmAccountComponent, canActivate: [guestGuard], data: { title: 'Potvrdenie účtu' } },
   { path: 'confirm-verification', component: ConfirmVerificationComponent, data: { title: 'Overenie účtu' } },
   { path: 'waiting-room', component: WaitingRoomComponent, canActivate: [authGuard], data: { title: 'Čakáreň' } },
-  { path: 'students', component: StudentsComponent, canActivate: [authGuard], data: { title: 'Študenti' } },
+  { path: 'members', component: MembersComponent, canActivate: [authGuard], data: { title: 'Členovia' } },
   { path: 'instructors', component: InstructorsComponent, canActivate: [instructorNoOrgGuard], data: { title: 'Inštruktori' } },
   { path: '**', redirectTo: 'dashboard' }
 ];

@@ -1,6 +1,4 @@
 <section class="container">
-<!--  <h1>Waiting room</h1>-->
-
   @if (error()) {<div class="alert alert--error">{{ error() }}</div>}
   @if (success()) {<div class="alert alert--success">{{ success() }}</div>}
 
@@ -8,7 +6,7 @@
     @if (isStudent()) {
       <h3>Moje žiadosti</h3>
       <div class="list">
-        @for (w of myWaiting(); track w.id) {
+        @for (w of pagedMyWaiting(); track w.id) {
           <div class="row">
             <div>Org ID: {{ w.organizationId }}</div>
             <button (click)="cancel(w)">Zrušiť žiadosť</button>
@@ -16,40 +14,51 @@
         }
         @if (!myWaiting().length) { <div>Nemáte žiadne otvorené žiadosti.</div> }
       </div>
+      <!-- Paginator always visible -->
+      <mat-paginator [length]="myWaiting().length" [pageSize]="pageSize" [pageIndex]="myWaitingPageIndex()" [pageSizeOptions]="[pageSize]" (page)="onMyWaitingPage($event)"></mat-paginator>
     }
 
     @if (isInstructor()) {
       @if (hasOrg() === false) {
         <div class="alert">Na zobrazenie čakárne musíte mať vytvorenú organizáciu.</div>
       } @else {
-        <h3>Študenti čakajúci na schválenie</h3>
-        <div class="list">
-          @for (s of students(); track s.id) {
-            <div class="row">
-              <div>
-                {{ s.firstName || '' }} {{ s.surname || '' }}
-                <span class="muted">ID: {{ s.id }}</span>
-              </div>
-              <div class="actions">
-                <button class="approve" (click)="approve(s)">Schváliť</button>
-                <button class="reject" (click)="reject(s)">Odmietnuť</button>
-              </div>
+        <div class="requests-grid">
+          <div class="requests-col">
+            <h3>Študenti čakajúci na schválenie</h3>
+            <div class="list">
+              @for (s of pagedStudents(); track s.id) {
+                <div class="row">
+                  <div>
+                    {{ s.firstName || '' }} {{ s.surname || '' }}
+                    <span class="muted">ID: {{ s.id }}</span>
+                  </div>
+                  <div class="actions">
+                    <button class="approve" (click)="approve(s)">Schváliť</button>
+                    <button class="reject" (click)="reject(s)">Odmietnuť</button>
+                  </div>
+                </div>
+              }
+              @if (!students().length) { <div>Žiadni študenti v čakárni.</div> }
             </div>
-          }
-          @if (!students().length) { <div>Žiadni študenti v čakárni.</div> }
-        </div>
-
-        <h3>Inštruktori čakajúci na schválenie</h3>
-        <div class="list">
-          @for (r of instructorRequests(); track r.id) {
-            <div class="row">
-              <div>Žiadosť inštruktora ID: {{ r.instructorId }} (org ID: {{ r.organizationId }})</div>
-              <div class="actions">
-                <button class="approve" (click)="approveInstructor(r)">Pridať inštruktora</button>
-              </div>
+            <!-- Paginator always visible -->
+            <mat-paginator [length]="students().length" [pageSize]="pageSize" [pageIndex]="studentsPageIndex()" [pageSizeOptions]="[pageSize]" (page)="onStudentsPage($event)"></mat-paginator>
+          </div>
+          <div class="requests-col">
+            <h3>Inštruktori čakajúci na schválenie</h3>
+            <div class="list">
+              @for (r of pagedInstructorRequests(); track r.id) {
+                <div class="row">
+                  <div>Žiadosť inštruktora ID: {{ r.instructorId }} (org ID: {{ r.organizationId }})</div>
+                  <div class="actions">
+                    <button class="approve" (click)="approveInstructor(r)">Pridať inštruktora</button>
+                  </div>
+                </div>
+              }
+              @if (!instructorRequests().length) { <div>Žiadni inštruktori v čakárni.</div> }
             </div>
-          }
-          @if (!instructorRequests().length) { <div>Žiadni inštruktori v čakárni.</div> }
+            <!-- Paginator always visible -->
+            <mat-paginator [length]="instructorRequests().length" [pageSize]="pageSize" [pageIndex]="instructorsPageIndex()" [pageSizeOptions]="[pageSize]" (page)="onInstructorsPage($event)"></mat-paginator>
+          </div>
         </div>
       }
     }

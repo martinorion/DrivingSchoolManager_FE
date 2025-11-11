@@ -34,7 +34,7 @@ export class WaitingRoomService {
   }
 
   getUsersWaitingRoom(): Observable<WaitingRoomDTO[]> {
-    return this.http.get<WaitingRoomDTO[]>(`${this.baseUrl}/getAllWaitingRooms`);
+    return this.http.get<WaitingRoomDTO[]>(`${this.baseUrl}/getUsersWaitingRoom`);
   }
 
   getAllStudentsInWaitingRoom(): Observable<UserDTO[]> {

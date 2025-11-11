@@ -11,5 +11,8 @@ h3 { margin: 1rem 0 .5rem; }
 .approve { background: #10b981; border: 1px solid #059669; color: #fff; border-radius: .4rem; padding: .35rem .6rem; }
 .reject { background: #fff; border: 1px solid #ef4444; color: #b91c1c; border-radius: .4rem; padding: .35rem .6rem; }
 button { cursor: pointer; }
-
-
+.requests-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+.requests-col { min-width: 0; }
+@media (max-width: 900px) {
+  .requests-grid { grid-template-columns: 1fr; }
+}

@@ -1,8 +1,8 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { OrganizationService, Organization } from '../services/organization.service';
-import { WaitingRoomService } from '../services/waiting-room.service';
+import { WaitingRoomService, WaitingRoomDTO } from '../services/waiting-room.service';
 import { AuthService } from '../services/auth.service';
 import {Router, RouterLink} from '@angular/router';
 import { InstructorRequestService, InstructorRequestDTO } from '../services/instructor-request.service';
@@ -14,7 +14,7 @@ import { InstructorRequestService, InstructorRequestDTO } from '../services/inst
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.css'
 })
-export class MainPageComponent {
+export class MainPageComponent implements OnInit {
   private readonly orgService = inject(OrganizationService);
   private readonly fb = inject(FormBuilder);
   private readonly waiting = inject(WaitingRoomService);
@@ -27,8 +27,17 @@ export class MainPageComponent {
   error = signal<string | null>(null);
   success = signal<string | null>(null);
 
-  // Instructor request list (for disabling button if already requested)
   instructorRequests = signal<InstructorRequestDTO[]>([]);
+
+  // Student pending waiting-room requests
+  private readonly studentRequests = signal<WaitingRoomDTO[]>([]);
+  readonly studentHasPending = computed(() => this.studentRequests().length > 0);
+  pendingOrgName(): string {
+    const first = this.studentRequests()[0];
+    if (!first?.organizationId) return '';
+    const org = this.organizations().find(o => o.id === first.organizationId);
+    return org?.name || 'Názov organizácie';
+  }
 
   isStudent = computed(() => this.auth.hasRole('STUDENT'));
   isInstructor = computed(() => this.auth.hasRole('INSTRUCTOR'));
@@ -41,6 +50,7 @@ export class MainPageComponent {
 
   ngOnInit() {
     this.fetchOrganizations();
+    this.fetchStudentRequests();
     if (this.isInstructor()) {
       this.orgService.checkHasOrganization().subscribe({
         next: v => { this.hasOrg.set(v); if (!v) this.fetchInstructorRequests(); },
@@ -65,26 +75,27 @@ export class MainPageComponent {
     });
   }
 
-  hasInstructorRequested(orgId: number): boolean {
-    return this.instructorRequests().some(r => r.organizationId === orgId);
-  }
-
-  join(org: Organization) {
-    this.error.set(null);
-    this.success.set(null);
-    this.waiting.saveToWaitingRoom({ organizationId: org.id }).subscribe({
-      next: () => { this.success.set('Žiadosť o pripojenie bola odoslaná.'); },
-      error: (err) => this.error.set(err?.error?.message || 'Pripojenie zlyhalo.')
+  fetchStudentRequests() {
+    // Get current student's pending waiting-room requests
+    this.waiting.getUsersWaitingRoom().subscribe({
+      next: (list) => this.studentRequests.set(list ?? []),
+      error: () => this.studentRequests.set([])
     });
   }
 
-  requestInstructor(org: Organization) {
-    if (this.hasInstructorRequested(org.id)) return;
+  join(org: Organization) {
+    // Prevent multiple pending joins
+    if (this.studentHasPending()) return;
     this.error.set(null);
     this.success.set(null);
-    this.instructorReq.sendInstructorRequest(org.id).subscribe({
-      next: () => { this.success.set('Inštruktorská žiadosť bola odoslaná.'); this.fetchInstructorRequests(); },
-      error: (err) => this.error.set(err?.error?.message || 'Odoslanie žiadosti zlyhalo.')
+    this.waiting.saveToWaitingRoom({ organizationId: org.id }).subscribe({
+      next: () => {
+        this.success.set('Žiadosť o pripojenie bola odoslaná.');
+        // Optimistically reflect pending state; backend will confirm on next fetch
+        const current = this.studentRequests();
+        this.studentRequests.set([...current, { organizationId: org.id } as WaitingRoomDTO]);
+      },
+      error: (err) => this.error.set(err?.error?.message || 'Pripojenie zlyhalo.')
     });
   }
 

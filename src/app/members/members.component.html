@@ -1,0 +1,46 @@
+<section class="container">
+  <h1>Členovia organizácie</h1>
+
+  @if (error()) {<div class="alert alert--error">{{ error() }}</div>}
+
+  @if (!isInstructor()) {
+    <div class="alert">Táto stránka je určená pre inštruktorov.</div>
+  } @else if (hasOrg() === false) {
+    <div class="alert">Na zobrazenie členov musíte mať vytvorenú organizáciu.</div>
+  } @else {
+    <div class="grid">
+      <section class="panel">
+        <h2>Študenti v organizácii</h2>
+        @if (studentsLoading()) { <div>Načítavam...</div> } @else {
+          <div class="list">
+            @for (s of pagedStudents(); track s.id) {
+              <div class="row">
+                <div class="name">{{ s.firstName || '' }} {{ s.surname || '' }}</div>
+                <div class="meta">{{ s.email || s.username }}</div>
+              </div>
+            }
+            @if (!students().length) { <div>Zatiaľ tu nie sú žiadni študenti.</div> }
+          </div>
+        }
+        <mat-paginator [length]="students().length" [pageSize]="pageSize" [pageIndex]="studentsPageIndex()" [pageSizeOptions]="[pageSize]" (page)="onStudentsPage($event)"></mat-paginator>
+      </section>
+
+      <section class="panel">
+        <h2>Inštruktori v organizácii</h2>
+        @if (instructorsLoading()) { <div>Načítavam...</div> } @else {
+          <div class="list">
+            @for (i of pagedInstructors(); track i.id) {
+              <div class="row">
+                <div class="name">{{ i.firstName || '' }} {{ i.surname || '' }}</div>
+                <div class="meta">{{ i.email || i.username }}</div>
+              </div>
+            }
+            @if (!instructors().length) { <div>Zatiaľ tu nie sú žiadni inštruktori.</div> }
+          </div>
+        }
+        <mat-paginator [length]="instructors().length" [pageSize]="pageSize" [pageIndex]="instructorsPageIndex()" [pageSizeOptions]="[pageSize]" (page)="onInstructorsPage($event)"></mat-paginator>
+      </section>
+    </div>
+  }
+</section>
+
