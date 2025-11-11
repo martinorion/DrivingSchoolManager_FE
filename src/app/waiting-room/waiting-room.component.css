@@ -1,9 +1,6 @@
 .container { max-width: 900px; margin: 0 auto; padding: 1rem; }
 h1 { margin: 0 0 .75rem; }
 h3 { margin: 1rem 0 .5rem; }
-.alert { padding: .6rem .9rem; border-radius: .5rem; margin: .5rem 0; }
-.alert--error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
-.alert--success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
 .list { display: grid; gap: .5rem; }
 .row { display: flex; justify-content: space-between; align-items: center; border: 1px solid #e5e7eb; border-radius: .5rem; padding: .6rem .8rem; background: #fff; }
 .muted { color: #6b7280; margin-left: .35rem; font-size: .9rem; }

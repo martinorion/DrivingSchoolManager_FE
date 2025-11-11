@@ -1,7 +1,6 @@
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
+﻿@import '@angular/material/prebuilt-themes/indigo-pink.css';
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 /* You can add global styles to this file, and also import other style files */
-
 /* Global orange-yellow theme */
 :root {
   --color-primary: #ff8c00; /* orange */
@@ -12,12 +11,14 @@
   --color-surface: #ffffff;
   --color-text: #1f2937; /* slate-800 */
   --color-text-muted: #6b7280; /* slate-500 */
+  /* Added unified gradient and semantic colors */
+  --gradient-primary: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  --color-error: #b91c1c;
+  --color-success: #065f46;
 }
-
 html, body {
   height: 100%;
 }
-
 /* Make the entire app a full-height flex column */
 body {
   margin: 0;
@@ -25,12 +26,11 @@ body {
   color: var(--color-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans,  Helvetica Neue, Arial, Apple Color Emoji, Segoe UI Emoji;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
-
 /* Ensure Angular root fills and stacks its children vertically */
 body > app-root {
   display: flex;
@@ -39,17 +39,14 @@ body > app-root {
   flex: 1 0 auto;
   width: 100%;
 }
-
 /* Defensive width and overflow for top-level sections */
 app-root nav,
 app-root header,
 app-root main,
 app-root footer { width: 100%; max-width: 100vw; }
-
 /* Layout safety: avoid horizontal scroll and make sizing predictable */
 *, *::before, *::after { box-sizing: border-box; }
 html, body { overflow-x: hidden; }
-
 /* Global container utility for non-encapsulated content */
 .container {
   width: 100%;
@@ -58,26 +55,20 @@ html, body { overflow-x: hidden; }
   padding-left: 16px;
   padding-right: 16px;
 }
-
 /* Links */
 a {
   color: var(--color-primary-dark);
   text-decoration: none;
 }
-
 a:hover {
   text-decoration: underline;
 }
-
 /* Images should be responsive */
 img { max-width: 100%; height: auto; }
-
 /* Make SVGs responsive like images */
 svg { max-width: 100%; height: auto; display: block; }
-
 /* Prefer soft wrapping to reduce overflow risks */
 body { overflow-wrap: anywhere; }
-
 /* Auth shared styles (centralized) */
 .auth-wrapper {
   display: flex;
@@ -86,23 +77,19 @@ body { overflow-wrap: anywhere; }
   padding: 1rem;
   width: 100%;
 }
-
 .auth-card {
   width: 100%;
   margin: 0 auto;
 }
-
 /* Size modifiers */
 .auth-card--sm { max-width: 480px; }
 .auth-card--md { max-width: 560px; }
-
 /* Ensure Material card paddings are symmetric */
 .auth-card .mat-mdc-card-content,
 .auth-card .mat-mdc-card-header {
   padding-left: 16px;
   padding-right: 16px;
 }
-
 /* Ensure shadow on Angular Material mat-card used as auth-card */
 .auth-card.mat-mdc-card,
 .auth-card .mat-mdc-card {
@@ -111,32 +98,40 @@ body { overflow-wrap: anywhere; }
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12) !important;
   border: none;
 }
-
 /* Form spacing and helpers */
 .auth-form { display: flex; flex-direction: column; margin-top: 0.5rem; width: 100%; }
 .w-100 { width: 100%; }
 .links { margin-top: 0.5rem; }
-.error { color: #b91c1c; margin-top: 0.5rem; }
-.success { color: #065f46; margin-top: 0.5rem; }
+.error { color: var(--color-error); margin-top: 0.5rem; }
+.success { color: var(--color-success); margin-top: 0.5rem; }
 .mb-4 { margin-bottom: 1rem; }
-
 /* Two-column responsive grid used in registration */
 .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
 @media (max-width: 720px) { .row-2 { grid-template-columns: 1fr; } }
-
-/* Optional plain-HTML field styling (fallback if not using Material) */
-.field { display: flex; flex-direction: column; gap: 4px; }
-.label { font-weight: 600; color: #374151; }
-.input {
-  display: block; width: 100%; padding: 10px 12px;
-  border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; color: #111827;
-}
-.input:focus { outline: none; border-color: #ffb347; box-shadow: 0 0 0 3px rgba(255, 179, 71, 0.25); }
-
 /* Themed primary button for non-Material buttons */
 .btn.btn-primary {
-  background: linear-gradient(90deg, #ff8c00 0%, #ffcc00 100%);
+  background: var(--gradient-primary);
   color: #fff; border: none; border-radius: 10px;
   padding: 10px 14px; font-weight: 600; cursor: pointer;
 }
 .btn.btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
+/* Global alerts */
+.alert {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+}
+.alert--error {
+  background: rgba(185, 28, 28, 0.06);
+  border-color: rgba(185, 28, 28, 0.35);
+  color: var(--color-error);
+}
+.alert--success {
+  background: rgba(6, 95, 70, 0.06);
+  border-color: rgba(6, 95, 70, 0.35);
+  color: var(--color-success);
+}

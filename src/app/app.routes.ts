@@ -12,6 +12,8 @@ import { ConfirmVerificationComponent } from './auth/confirm-verification/confir
 import { InstructorsComponent } from './instructors/instructors.component';
 import { instructorNoOrgGuard } from './auth/guards/instructor-no-org.guard';
 import { MembersComponent } from './members/members.component';
+import { VehiclesMaterialComponent } from './vehicles/vehicles-material.component';
+import { instructorWithOrgGuard } from './auth/guards/instructor-with-org.guard';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -24,5 +26,6 @@ export const routes: Routes = [
   { path: 'waiting-room', component: WaitingRoomComponent, canActivate: [authGuard], data: { title: 'Čakáreň' } },
   { path: 'members', component: MembersComponent, canActivate: [authGuard], data: { title: 'Členovia' } },
   { path: 'instructors', component: InstructorsComponent, canActivate: [instructorNoOrgGuard], data: { title: 'Inštruktori' } },
+  { path: 'vehicles', component: VehiclesMaterialComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Vozidlá' } },
   { path: '**', redirectTo: 'dashboard' }
 ];

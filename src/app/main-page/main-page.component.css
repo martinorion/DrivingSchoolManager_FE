@@ -1,8 +1,5 @@
 .container { max-width: 1000px; margin: 0 auto; padding: 1rem; }
 h1 { margin: 0 0 1rem; }
-.alert { padding: .75rem 1rem; border-radius: .5rem; margin-bottom: .75rem; }
-.alert--error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
-.alert--success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
 .create { display: flex; gap: .5rem; margin: .5rem 0 1rem; }
 .create input { flex: 1; padding: .6rem .75rem; border: 1px solid #e5e7eb; border-radius: .5rem; }
 .create button { padding: .6rem .9rem; border-radius: .5rem; border: 1px solid #f59e0b; background: #fbbf24; }
@@ -10,5 +7,3 @@ h1 { margin: 0 0 1rem; }
 .card { border: 1px solid #e5e7eb; border-radius: .75rem; padding: 1rem; background: #fff; display: flex; justify-content: space-between; align-items: center; }
 .card__title { font-weight: 600; }
 .join { border: 1px solid #e5e7eb; background: #fff; border-radius: .5rem; padding: .4rem .7rem; }
-
-

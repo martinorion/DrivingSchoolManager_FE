@@ -16,7 +16,7 @@
           @for (org of organizations(); track org.id) {
             <div class="org-card">
               <div class="org-card__name">{{ org.name }}</div>
-              <button (click)="requestJoin(org)">Požiadať</button>
+              <button class="btn btn-primary" (click)="requestJoin(org)">Požiadať</button>
             </div>
           }
         </div>
