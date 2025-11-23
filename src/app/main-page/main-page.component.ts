@@ -49,13 +49,20 @@ export class MainPageComponent implements OnInit {
   });
 
   ngOnInit() {
+    // Public (or harmless) fetch
     this.fetchOrganizations();
-    this.fetchStudentRequests();
-    if (this.isInstructor()) {
-      this.orgService.checkHasOrganization().subscribe({
-        next: v => { this.hasOrg.set(v); if (!v) this.fetchInstructorRequests(); },
-        error: () => { this.hasOrg.set(false); this.fetchInstructorRequests(); }
-      });
+
+    // Only invoke protected calls if authenticated
+    if (this.auth.isAuthenticated()) {
+      if (this.isStudent()) {
+        this.fetchStudentRequests();
+      }
+      if (this.isInstructor()) {
+        this.orgService.checkHasOrganization().subscribe({
+          next: v => { this.hasOrg.set(v); if (!v) this.fetchInstructorRequests(); },
+          error: () => { this.hasOrg.set(false); this.fetchInstructorRequests(); }
+        });
+      }
     }
   }
 

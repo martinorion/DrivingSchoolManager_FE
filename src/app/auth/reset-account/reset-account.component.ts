@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, AbstractControl, ValidationErrors } from '@angular/forms';
+import {ReactiveFormsModule, FormBuilder, AbstractControl, ValidationErrors, Validators} from '@angular/forms';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MatCardModule } from '@angular/material/card';
@@ -12,10 +12,10 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'app-reset-account',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule],
-  templateUrl: './confirm-account.component.html',
-  styleUrl: './confirm-account.component.css'
+  templateUrl: './reset-account.component.html',
+  styleUrls: ['./reset-account.component.css']
 })
-export class ConfirmAccountComponent {
+export class ResetAccountComponent {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private auth = inject(AuthService);
@@ -27,11 +27,19 @@ export class ConfirmAccountComponent {
 
   form = this.fb.group(
     {
-      password: [''],
-      confirmPassword: [''],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30), Validators.pattern(/.*\d.*/)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30), Validators.pattern(/.*\d.*/)]],
     },
     { validators: [this.passwordsMatchValidator] }
   );
+
+  get passwordControl() {
+    return this.form.controls.password;
+  }
+
+  get confirmPasswordControl() {
+    return this.form.controls.confirmPassword;
+  }
 
   private passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
     const password = group.get('password')?.value as string | undefined;
