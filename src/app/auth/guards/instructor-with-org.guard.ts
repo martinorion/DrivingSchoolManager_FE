@@ -5,7 +5,7 @@ import { OrganizationService } from '../../services/organization.service';
 import { catchError, map, of } from 'rxjs';
 
 // Allow only authenticated INSTRUCTORs who already belong to an organization.
-// If instructor has no organization, redirect to the instructors page to request/join.
+// If instructor has no organization, redirect to the instructor-request page to request/join.
 export const instructorWithOrgGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const org = inject(OrganizationService);
@@ -16,8 +16,8 @@ export const instructorWithOrgGuard: CanActivateFn = () => {
   }
 
   return org.getCurrentOrganization().pipe(
-    map(current => (current ? true : router.createUrlTree(['/instructors']))),
-    catchError(() => of(router.createUrlTree(['/instructors'])))
+    map(current => (current ? true : router.createUrlTree(['/instructor-request']))),
+    catchError(() => of(router.createUrlTree(['/instructor-request'])))
   );
 };
 

@@ -20,47 +20,39 @@ export class MainPageComponent implements OnInit {
   private readonly waiting = inject(WaitingRoomService);
   protected readonly auth = inject(AuthService);
   private readonly router = inject(Router);
-  private readonly instructorReq = inject(InstructorRequestService);
 
   organizations = signal<Organization[]>([]);
   loading = signal(false);
   error = signal<string | null>(null);
   success = signal<string | null>(null);
 
-  instructorRequests = signal<InstructorRequestDTO[]>([]);
-
   // Student pending waiting-room requests
   private readonly studentRequests = signal<WaitingRoomDTO[]>([]);
   readonly studentHasPending = computed(() => this.studentRequests().length > 0);
-  pendingOrgName(): string {
-    const first = this.studentRequests()[0];
-    if (!first?.organizationId) return '';
-    const org = this.organizations().find(o => o.id === first.organizationId);
-    return org?.name || 'Názov organizácie';
-  }
 
   isStudent = computed(() => this.auth.hasRole('STUDENT'));
   isInstructor = computed(() => this.auth.hasRole('INSTRUCTOR'));
-
   hasOrg = signal<boolean | null>(null);
 
   createForm = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(3)]]
+    name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
   });
 
   ngOnInit() {
-    // Public (or harmless) fetch
     this.fetchOrganizations();
 
-    // Only invoke protected calls if authenticated
     if (this.auth.isAuthenticated()) {
       if (this.isStudent()) {
         this.fetchStudentRequests();
       }
       if (this.isInstructor()) {
         this.orgService.checkHasOrganization().subscribe({
-          next: v => { this.hasOrg.set(v); if (!v) this.fetchInstructorRequests(); },
-          error: () => { this.hasOrg.set(false); this.fetchInstructorRequests(); }
+          next: v => {
+            this.hasOrg.set(v);
+          },
+          error: () => {
+            this.hasOrg.set(false);
+          }
         });
       }
     }
@@ -75,11 +67,11 @@ export class MainPageComponent implements OnInit {
     });
   }
 
-  fetchInstructorRequests() {
-    this.instructorReq.getAllRequests().subscribe({
-      next: r => this.instructorRequests.set(r ?? []),
-      error: () => {},
-    });
+  pendingOrgName(): string {
+    const first = this.studentRequests()[0];
+    if (!first?.organizationId) return '';
+    const org = this.organizations().find(o => o.id === first.organizationId);
+    return org?.name || 'Názov organizácie';
   }
 
   fetchStudentRequests() {
@@ -90,15 +82,13 @@ export class MainPageComponent implements OnInit {
     });
   }
 
-  join(org: Organization) {
-    // Prevent multiple pending joins
+  joinSendRequest(org: Organization) {
     if (this.studentHasPending()) return;
     this.error.set(null);
     this.success.set(null);
     this.waiting.saveToWaitingRoom({ organizationId: org.id }).subscribe({
       next: () => {
         this.success.set('Žiadosť o pripojenie bola odoslaná.');
-        // Optimistically reflect pending state; backend will confirm on next fetch
         const current = this.studentRequests();
         this.studentRequests.set([...current, { organizationId: org.id } as WaitingRoomDTO]);
       },
@@ -106,7 +96,7 @@ export class MainPageComponent implements OnInit {
     });
   }
 
-  create() {
+  createOrganization() {
     if (this.createForm.invalid || this.hasOrg()) return;
     const { name } = this.createForm.getRawValue();
     this.error.set(null);

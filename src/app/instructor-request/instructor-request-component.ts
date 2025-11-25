@@ -7,13 +7,13 @@ import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-instructors',
+  selector: 'app-instructor-request',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './instructors.component.html',
-  styleUrl: './instructors.component.css'
+  templateUrl: './instructor-request-component.html',
+  styleUrl: './instructor-request-component.css'
 })
-export class InstructorsComponent {
+export class InstructorRequestComponent {
   private readonly org = inject(OrganizationService);
   private readonly reqService = inject(InstructorRequestService);
   protected readonly auth = inject(AuthService);

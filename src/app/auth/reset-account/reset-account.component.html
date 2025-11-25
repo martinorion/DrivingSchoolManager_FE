@@ -31,16 +31,12 @@
           <mat-label>Potvrdenie hesla</mat-label>
           <input matInput type="password" formControlName="confirmPassword" />
 
-          @if (confirmPasswordControl.dirty || confirmPasswordControl.touched) {
-            <mat-error>
-              @if (confirmPasswordControl.hasError('required')) {
-                Potvrdenie hesla je povinné.
-              } @else {
-                @if (form.hasError('passwordMismatch')) {
-                  Heslá sa nezhodujú.
-                }
-              }
-            </mat-error>
+          @if (form.hasError('passwordMismatch') && (passwordControl.dirty || passwordControl.touched || confirmPasswordControl.dirty || confirmPasswordControl.touched)) {
+            <mat-error>Heslá sa nezhodujú.</mat-error>
+          }
+
+          @if (!form.hasError('passwordMismatch') && (confirmPasswordControl.dirty || confirmPasswordControl.touched) && confirmPasswordControl.hasError('required')) {
+            <mat-error>Potvrdenie hesla je povinné.</mat-error>
           }
         </mat-form-field>
 

@@ -2,11 +2,11 @@
   <h1>Organizácie</h1>
 
   @if (error()) {<div class="alert alert--error">{{ error() }}</div>}
-  @if (success()) {<div class="alert alert--success">{{ success() }}</div>}
+<!--  @if (success()) {<div class="alert alert&#45;&#45;success">{{ success() }}</div>}-->
 
   @if (isInstructor()) {
     @if (hasOrg() === false) {
-      <form class="create" [formGroup]="createForm" (ngSubmit)="create()">
+      <form class="create" [formGroup]="createForm" (ngSubmit)="createOrganization()">
         <input type="text" placeholder="Názov organizácie" formControlName="name" />
         <button type="submit" [disabled]="createForm.invalid">Vytvoriť organizáciu</button>
       </form>
@@ -34,7 +34,7 @@
           <div class="card">
             <div class="card__title">{{ org.name }}</div>
             @if (isStudent() && auth.isAuthenticated()) {
-              <button class="join" (click)="join(org)" [disabled]="studentHasPending()">Pripojiť sa</button>
+              <button class="join" (click)="joinSendRequest(org)" [disabled]="studentHasPending()">Pripojiť sa</button>
             }
           </div>
         }

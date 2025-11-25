@@ -92,7 +92,6 @@
   height: 100%;
 }
 
-/* Page container spacing */
 .page {
   padding-top: 1.25rem;
   padding-bottom: 2rem;
@@ -101,26 +100,24 @@
   background: #fff; /* page backgrounds pure white */
 }
 
-/* Footer always at bottom */
 .site-footer {
   margin-top: 0;
-  background: #fff7e0; /* soft warm base */
+  background: #ffd692;
   border-top: 1px solid rgba(0,0,0,0.06);
-  color: #6b7280;
-  flex-shrink: 0; /* don't let footer shrink away */
+  color: black;
 }
 
 .footer-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 1rem;
   padding: 1rem 0;
 }
 
 .footer-brand {
   font-weight: 700;
-  color: #1f2937;
+  color: black;
 }
 
 /* Hamburger toggle button (hidden by default, shown on small screens) */

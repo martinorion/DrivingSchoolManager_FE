@@ -33,9 +33,14 @@
     <div class="page-header-content">
       <h1 class="page-title">{{ pageTitle() }}</h1>
     </div>
-    <div class="header-divider" aria-hidden="true">
+    <div class="header-divider">
       <svg viewBox="0 0 1440 100" preserveAspectRatio="none" focusable="false">
         <path d="M0,40 C240,80 480,0 720,30 C960,60 1200,20 1440,40 L1440,100 L0,100 Z" fill="#fff"></path>
+<!--        M0,40 = move to x=0,y=40.-->
+<!--        C... = cubic Bézier curve segments (control points and end point) that create the smooth wave.-->
+<!--        L1440,100 and L0,100 = straight lines to the bottom corners.-->
+<!--        Z = close the path.-->
+<!--        fill="#fff" fills the closed shape with white.-->
       </svg>
     </div>
   </header>

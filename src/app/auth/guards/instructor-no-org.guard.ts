@@ -11,7 +11,7 @@ export const instructorNoOrgGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (!auth.isAuthenticated() || !auth.hasRole('INSTRUCTOR')) {
-    return router.createUrlTree(['/login']);
+    return router.createUrlTree(['/login']); // object containing the target URL
   }
 
   return org.getCurrentOrganization().pipe(

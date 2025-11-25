@@ -14,7 +14,6 @@
         }
         @if (!myWaiting().length) { <div>Nemáte žiadne otvorené žiadosti.</div> }
       </div>
-      <!-- Paginator always visible -->
       <mat-paginator [length]="myWaiting().length" [pageSize]="pageSize" [pageIndex]="myWaitingPageIndex()" [pageSizeOptions]="[pageSize]" (page)="onMyWaitingPage($event)"></mat-paginator>
     }
 

@@ -14,7 +14,6 @@
             </mat-error>
           }
         </mat-form-field>
-
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Heslo</mat-label>
           <input matInput type="password" formControlName="password" required />
@@ -24,16 +23,13 @@
             </mat-error>
           }
         </mat-form-field>
-
         <button class="btn btn-primary" type="submit" [disabled]="form.invalid || loading()">
           Prihlásiť
         </button>
-
         <div class="links">
           <a routerLink="/register">Nemáte účet? Registrujte sa</a>
           <a routerLink="/reset-password">Zabudnuté heslo?</a>
         </div>
-
         @if (error()) {
           <p class="error">{{ error() }}</p>
         }

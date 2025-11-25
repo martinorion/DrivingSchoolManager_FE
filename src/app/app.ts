@@ -23,9 +23,9 @@ export class App {
   protected readonly hasOrg = signal<boolean | null>(null);
 
   constructor() {
-    // Initialize and react to route changes
     this.updatePageTitle();
     this.refreshOrgState();
+    // listen to route changes
     this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
       .subscribe(() => {
@@ -41,9 +41,11 @@ export class App {
   }
 
   private updatePageTitle() {
-    let r: ActivatedRoute | null = this.route;
+    // find deepest activated route
+    let r: ActivatedRoute | null = this.route; // current route or null
+   // find deepest child, ? because firstChild may be null
     while (r?.firstChild) r = r.firstChild;
-
+    // get title from data property of route in app routes
     const dataTitle = r?.snapshot.data?.['title'] as string | undefined;
     if (dataTitle) {
       this.pageTitle.set(dataTitle);
@@ -52,7 +54,6 @@ export class App {
   }
 
   private refreshOrgState() {
-    // Only relevant for instructors
     if (this.auth.hasRole('INSTRUCTOR')) {
       this.org.checkHasOrganization().subscribe({
         next: v => this.hasOrg.set(v),
