@@ -49,8 +49,10 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
         }),
         catchError((err) => {
           isRefreshing = false;
-          auth.forceLogout();
-          router.navigateByUrl('/login');
+          if (err.status === 401) {
+            auth.forceLogout();
+            router.navigateByUrl('/login');
+          }
           return throwError(() => err);
         })
       );

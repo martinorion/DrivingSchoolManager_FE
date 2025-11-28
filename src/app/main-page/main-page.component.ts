@@ -5,7 +5,6 @@ import { OrganizationService, Organization } from '../services/organization.serv
 import { WaitingRoomService, WaitingRoomDTO } from '../services/waiting-room.service';
 import { AuthService } from '../services/auth.service';
 import {Router, RouterLink} from '@angular/router';
-import { InstructorRequestService, InstructorRequestDTO } from '../services/instructor-request.service';
 
 @Component({
   selector: 'app-main-page',
@@ -26,9 +25,13 @@ export class MainPageComponent implements OnInit {
   error = signal<string | null>(null);
   success = signal<string | null>(null);
 
-  // Student pending waiting-room requests
-  private readonly studentRequests = signal<WaitingRoomDTO[]>([]);
-  readonly studentHasPending = computed(() => this.studentRequests().length > 0);
+  // Student pending waiting-room request (single)
+  private readonly studentRequest = signal<WaitingRoomDTO | null>(null);
+  readonly studentHasPending = computed(() => !!this.studentRequest());
+
+  // If a student already belongs to an organization, store it here
+  private readonly myOrganization = signal<Organization | null>(null);
+  readonly isStudentInOrg = computed(() => this.auth.hasRole('STUDENT') && !!this.myOrganization());
 
   isStudent = computed(() => this.auth.hasRole('STUDENT'));
   isInstructor = computed(() => this.auth.hasRole('INSTRUCTOR'));
@@ -39,22 +42,40 @@ export class MainPageComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.fetchOrganizations();
-
-    if (this.auth.isAuthenticated()) {
-      if (this.isStudent()) {
-        this.fetchStudentRequests();
-      }
-      if (this.isInstructor()) {
-        this.orgService.checkHasOrganization().subscribe({
-          next: v => {
-            this.hasOrg.set(v);
-          },
-          error: () => {
-            this.hasOrg.set(false);
+    // For students, first check if they already belong to an organization. If yes, display only that one.
+    if (this.auth.isAuthenticated() && this.isStudent()) {
+      this.loading.set(true);
+      this.orgService.getCurrentOrganization().subscribe({
+        next: (org) => {
+          this.myOrganization.set(org);
+          if (org) {
+            this.organizations.set([org]);
+            this.loading.set(false);
+          } else {
+            this.fetchOrganizations();
           }
-        });
-      }
+        },
+        error: () => {
+          this.fetchOrganizations();
+        }
+      });
+      // Also reflect pending request state to disable join buttons
+      this.fetchStudentRequest();
+    } else {
+      // Non-students or unauthenticated users just see the list
+      this.fetchOrganizations();
+    }
+
+    // Instructor-specific metadata
+    if (this.auth.isAuthenticated() && this.isInstructor()) {
+      this.orgService.checkHasOrganization().subscribe({
+        next: v => {
+          this.hasOrg.set(v);
+        },
+        error: () => {
+          this.hasOrg.set(false);
+        }
+      });
     }
   }
 
@@ -67,30 +88,23 @@ export class MainPageComponent implements OnInit {
     });
   }
 
-  pendingOrgName(): string {
-    const first = this.studentRequests()[0];
-    if (!first?.organizationId) return '';
-    const org = this.organizations().find(o => o.id === first.organizationId);
-    return org?.name || 'Názov organizácie';
-  }
-
-  fetchStudentRequests() {
-    // Get current student's pending waiting-room requests
+  fetchStudentRequest() {
     this.waiting.getUsersWaitingRoom().subscribe({
-      next: (list) => this.studentRequests.set(list ?? []),
-      error: () => this.studentRequests.set([])
+      next: (dto) => this.studentRequest.set(dto ?? null),
+      error: () => this.studentRequest.set(null)
     });
   }
 
   joinSendRequest(org: Organization) {
-    if (this.studentHasPending()) return;
+    if (this.studentHasPending() || this.isStudentInOrg()) return;
     this.error.set(null);
     this.success.set(null);
     this.waiting.saveToWaitingRoom({ organizationId: org.id }).subscribe({
       next: () => {
         this.success.set('Žiadosť o pripojenie bola odoslaná.');
-        const current = this.studentRequests();
-        this.studentRequests.set([...current, { organizationId: org.id } as WaitingRoomDTO]);
+        this.studentRequest.set({ organizationId: org.id } as WaitingRoomDTO);
+        // redirect student to the waiting-room so they see the waiting UI
+        this.router.navigateByUrl('/waiting-room');
       },
       error: (err) => this.error.set(err?.error?.message || 'Pripojenie zlyhalo.')
     });

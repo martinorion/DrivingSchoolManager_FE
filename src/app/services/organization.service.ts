@@ -32,7 +32,6 @@ export class OrganizationService {
     return this.http.post<void>(`${this.baseUrl}/createOrganization`, body);
   }
 
-  // Fetch current user's organization (null if none)
   getCurrentOrganization(): Observable<Organization | null> {
     return this.http.get<Organization>(`${this.baseUrl}/getCurrentOrganization`).pipe(
       catchError(() => of(null))

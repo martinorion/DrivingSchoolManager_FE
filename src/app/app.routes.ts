@@ -14,10 +14,11 @@ import { instructorNoOrgGuard } from './auth/guards/instructor-no-org.guard';
 import { MembersComponent } from './members/members.component';
 import { VehiclesMaterialComponent } from './vehicles/vehicles-material.component';
 import { instructorWithOrgGuard } from './auth/guards/instructor-with-org.guard';
+import { studentWaitingRedirectGuard } from './auth/guards/student-waiting-redirect.guard';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-  { path: 'dashboard', component: MainPageComponent, canActivate: [instructorOrgRedirectGuard], data: { title: 'Organizácie' } },
+  { path: 'dashboard', component: MainPageComponent, canActivate: [instructorOrgRedirectGuard, studentWaitingRedirectGuard], data: { title: 'Organizácie' } },
   { path: 'login', component: LoginComponent, canActivate: [guestGuard], data: { title: 'Prihlásenie' } },
   { path: 'register', component: RegisterComponent, canActivate: [guestGuard], data: { title: 'Registrácia' } },
   { path: 'reset-password', component: ResetPasswordComponent, canActivate: [guestGuard], data: { title: 'Obnovenie hesla' } },

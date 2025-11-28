@@ -1,39 +1,44 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WaitingRoomService, WaitingRoomDTO, UserDTO } from '../services/waiting-room.service';
 import { AuthService } from '../services/auth.service';
-import { OrganizationService } from '../services/organization.service';
+import { OrganizationService, Organization } from '../services/organization.service';
 import { InstructorRequestService, InstructorRequestDTO } from '../services/instructor-request.service';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-waiting-room',
   standalone: true,
-  imports: [CommonModule, MatPaginatorModule],
+  imports: [CommonModule, MatPaginatorModule, MatCardModule, MatButtonModule],
   templateUrl: './waiting-room.component.html',
   styleUrl: './waiting-room.component.css'
 })
-export class WaitingRoomComponent {
+export class WaitingRoomComponent implements OnInit {
   private readonly service = inject(WaitingRoomService);
   protected readonly auth = inject(AuthService);
   private readonly org = inject(OrganizationService);
   private readonly instructorReq = inject(InstructorRequestService);
+  private readonly router = inject(Router);
 
   isStudent = computed(() => this.auth.hasRole('STUDENT'));
   isInstructor = computed(() => this.auth.hasRole('INSTRUCTOR'));
 
   hasOrg = signal<boolean | null>(null);
 
-  // Data
-  myWaiting = signal<WaitingRoomDTO[]>([]);
+  // Student has at most one pending waiting-room request
+  myWaiting = signal<WaitingRoomDTO | null>(null);
+  // Lightweight org cache for name lookup
+  organizations = signal<Organization[]>([]);
+
   students = signal<UserDTO[]>([]);
   instructorRequests = signal<InstructorRequestDTO[]>([]);
 
-  // Pagination
   readonly pageSize = 10;
   studentsPageIndex = signal(0);
   instructorsPageIndex = signal(0);
-  myWaitingPageIndex = signal(0);
 
   pagedStudents = computed(() => {
     const start = this.studentsPageIndex() * this.pageSize;
@@ -42,10 +47,6 @@ export class WaitingRoomComponent {
   pagedInstructorRequests = computed(() => {
     const start = this.instructorsPageIndex() * this.pageSize;
     return this.instructorRequests().slice(start, start + this.pageSize);
-  });
-  pagedMyWaiting = computed(() => {
-    const start = this.myWaitingPageIndex() * this.pageSize;
-    return this.myWaiting().slice(start, start + this.pageSize);
   });
 
   loading = signal(false);
@@ -57,14 +58,40 @@ export class WaitingRoomComponent {
   }
 
   private initialize() {
+    this.org.getAllOrganizations().subscribe({
+      next: (list) => this.organizations.set(list),
+      error: () => this.organizations.set([])
+    });
+
     if (this.isInstructor()) {
       this.org.checkHasOrganization().subscribe({
         next: (v) => { this.hasOrg.set(v); this.refresh(); },
         error: () => { this.hasOrg.set(false); this.refresh(); }
       });
+    } else if (this.isStudent()) {
+      // If the user is a student and already belongs to an organization, always redirect to main page
+      this.org.getCurrentOrganization().subscribe({
+        next: (org) => {
+          if (org) {
+            this.router.navigateByUrl('/dashboard');
+          } else {
+            this.refresh();
+          }
+        },
+        error: () => {
+          this.refresh();
+        }
+      });
     } else {
       this.refresh();
     }
+  }
+
+  orgNameForMyWaiting(): string {
+    const w = this.myWaiting();
+    if (!w?.organizationId) return '';
+    const org = this.organizations().find(o => o.id === w.organizationId);
+    return org?.name || `Organizácia #${w.organizationId}`;
   }
 
   refresh() {
@@ -72,7 +99,7 @@ export class WaitingRoomComponent {
     this.error.set(null);
     if (this.isStudent()) {
       this.service.getUsersWaitingRoom().subscribe({
-        next: (r) => { this.myWaiting.set(r); this.myWaitingPageIndex.set(0); this.loading.set(false); },
+        next: (r) => { this.myWaiting.set(r ?? null); this.loading.set(false); },
         error: () => { this.error.set('Nepodarilo sa načítať čakáreň.'); this.loading.set(false); }
       });
     } else if (this.isInstructor() && this.hasOrg()) {
@@ -91,7 +118,6 @@ export class WaitingRoomComponent {
 
   onStudentsPage(e: PageEvent) { this.studentsPageIndex.set(e.pageIndex); }
   onInstructorsPage(e: PageEvent) { this.instructorsPageIndex.set(e.pageIndex); }
-  onMyWaitingPage(e: PageEvent) { this.myWaitingPageIndex.set(e.pageIndex); }
 
   approve(student: UserDTO) {
     this.success.set(null);
@@ -105,16 +131,17 @@ export class WaitingRoomComponent {
   reject(student: UserDTO) {
     this.success.set(null);
     this.error.set(null);
-    this.service.removeFromWaitingRoom({ studentId: student.id }).subscribe({
+    this.service.removeFromWaitingRoom(student).subscribe({
       next: () => { this.success.set('Žiadosť bola odmietnutá.'); this.refresh(); },
       error: () => this.error.set('Odmietnutie zlyhalo.')
     });
   }
 
-  cancel(wait: WaitingRoomDTO) {
+  cancelStudentsRequest() {
+    if (!this.myWaiting()) return;
     this.success.set(null);
     this.error.set(null);
-    this.service.removeFromWaitingRoom({ id: wait.id, organizationId: wait.organizationId }).subscribe({
+    this.service.deleteStudentRequest().subscribe({
       next: () => { this.success.set('Žiadosť bola zrušená.'); this.refresh(); },
       error: () => this.error.set('Zrušenie zlyhalo.')
     });

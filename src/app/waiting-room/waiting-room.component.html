@@ -4,17 +4,28 @@
 
   @if (loading()) {<div>Načítavam...</div>} @else {
     @if (isStudent()) {
-      <h3>Moje žiadosti</h3>
-      <div class="list">
-        @for (w of pagedMyWaiting(); track w.id) {
-          <div class="row">
-            <div>Org ID: {{ w.organizationId }}</div>
-            <button (click)="cancel(w)">Zrušiť žiadosť</button>
-          </div>
-        }
-        @if (!myWaiting().length) { <div>Nemáte žiadne otvorené žiadosti.</div> }
-      </div>
-      <mat-paginator [length]="myWaiting().length" [pageSize]="pageSize" [pageIndex]="myWaitingPageIndex()" [pageSizeOptions]="[pageSize]" (page)="onMyWaitingPage($event)"></mat-paginator>
+      @if (myWaiting()) {
+        <div class="full-center">
+          <mat-card class="waiting-card">
+            <mat-card-header>
+              <mat-card-title>Vitajte, študent</mat-card-title>
+              <mat-card-subtitle>Ste v čakárni organizácie</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p class="mb-8"><span class="waiting-icon" aria-hidden="true">⏳</span>Čakáte, kým vás nepotvrdí inštruktor v <span class="underline">{{ orgNameForMyWaiting() }}</span>.</p>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-raised-button color="warn" (click)="cancelStudentsRequest()">Zrušiť žiadosť</button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      } @else {
+        <div class="full-center">
+          <mat-card class="waiting-card">
+            <mat-card-title>Nemáte žiadne otvorené žiadosti.</mat-card-title>
+          </mat-card>
+        </div>
+      }
     }
 
     @if (isInstructor()) {
@@ -39,7 +50,6 @@
               }
               @if (!students().length) { <div>Žiadni študenti v čakárni.</div> }
             </div>
-            <!-- Paginator always visible -->
             <mat-paginator [length]="students().length" [pageSize]="pageSize" [pageIndex]="studentsPageIndex()" [pageSizeOptions]="[pageSize]" (page)="onStudentsPage($event)"></mat-paginator>
           </div>
           <div class="requests-col">
@@ -55,7 +65,6 @@
               }
               @if (!instructorRequests().length) { <div>Žiadni inštruktori v čakárni.</div> }
             </div>
-            <!-- Paginator always visible -->
             <mat-paginator [length]="instructorRequests().length" [pageSize]="pageSize" [pageIndex]="instructorsPageIndex()" [pageSizeOptions]="[pageSize]" (page)="onInstructorsPage($event)"></mat-paginator>
           </div>
         </div>

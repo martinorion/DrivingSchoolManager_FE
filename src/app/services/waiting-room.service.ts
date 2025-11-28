@@ -29,17 +29,19 @@ export class WaitingRoomService {
     return this.http.post<void>(`${this.baseUrl}/addMembersToOrganization`, dto);
   }
 
-  removeFromWaitingRoom(dto: WaitingRoomDTO): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/removeFromWaitingRoom`, dto);
+  getUsersWaitingRoom(): Observable<WaitingRoomDTO | null> {
+    return this.http.get<WaitingRoomDTO>(`${this.baseUrl}/getUsersWaitingRoom`);
   }
 
-  getUsersWaitingRoom(): Observable<WaitingRoomDTO[]> {
-    return this.http.get<WaitingRoomDTO[]>(`${this.baseUrl}/getUsersWaitingRoom`);
+  deleteStudentRequest(): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/deleteStudentRequest`);
+  }
+
+  removeFromWaitingRoom(student: UserDTO): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/deleteStudentRequestById/${student.id}`);
   }
 
   getAllStudentsInWaitingRoom(): Observable<UserDTO[]> {
     return this.http.get<UserDTO[]>(`${this.baseUrl}/getAllStudentsInWaitingRoom`);
   }
 }
-
-
