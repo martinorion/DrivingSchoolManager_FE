@@ -14,7 +14,7 @@
         <a routerLink="/instructors">Alebo sa pripojiť k existujúcej organizácii ako inštruktor</a>
       </div>
     } @else if (hasOrg() === true) {
-      <div class="alert">Už máte vytvorenú organizáciu. Použite stránky Čakáreň a Študenti.</div>
+      <div class="alert">Už máte vytvorenú organizáciu. Použite stránky <a routerLink="/waiting-room">Čakáreň</a>, <a routerLink="/members">Študenti</a>, <a routerLink="/vehicles">Vozidlá</a> a <a routerLink="/groups">Skupiny</a>.</div>
     }
   }
 

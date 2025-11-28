@@ -15,8 +15,151 @@
 .meta { font-size:.85rem; color: var(--color-text-muted); }
 .empty { padding:.5rem; color: var(--color-text-muted); }
 
-/* Edit layout */
-.main.edit { display:grid; gap:.5rem; grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); align-items:start; }
+/* Edit layout: inputs inline + buttons on the right */
+.main.edit {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+  flex: 1 1 auto;
+}
+
+/* Ensure each field can shrink/grow but has a reasonable minimum width */
+.main.edit mat-form-field {
+  flex: 1 1 160px; /* grow and shrink, min 160px */
+  min-width: 120px;
+  margin: 0; /* rely on gap for spacing */
+}
+
+/* Keep the actions aligned to the right and not shrink too much */
+.row > .actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex: 0 0 auto; /* don't shrink; stay to the right */
+}
+
+/* Ensure that when a row is in editing mode, actions sit under the inputs */
+.row.editing {
+  flex-direction: column; /* stack inputs area above actions */
+  align-items: stretch;
+  gap: 8px;
+}
+
+/* Keep inputs in .main.edit in a single horizontal line when possible, but allow wrapping */
+.row.editing .main.edit {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; /* allow inputs to wrap if there's not enough space */
+  gap: 12px;
+}
+
+/* Actions container under inputs, right-aligned on wide screens */
+.row.editing > .actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 4px;
+  /* keep actions from shrinking too much */
+  flex: 0 0 auto;
+}
+
+/* Ensure buttons keep a consistent height on shrink */
+.row.editing > .actions button {
+  min-height: 40px;
+  height: 40px; /* keep consistent height */
+  padding: 0 14px;
+}
+
+/* Force Material button height and prevent vertical stretch */
+:host ::ng-deep .row.editing > .actions .mat-mdc-button,
+.row.editing > .actions button {
+  min-height: auto;
+  height: auto;
+  line-height: 40px;
+  padding-top: 0;
+  padding-bottom: 0;
+  box-sizing: border-box;
+}
+
+/* Make mat-form-field compact in edit mode without touching label positioning */
+.row.editing .main.edit .mat-mdc-form-field {
+  /* limit overall size but don't force alignment changes to inner label */
+  max-height: 72px;
+  box-sizing: border-box;
+}
+
+/* FINAL TWEAK: allow labels to sit above inputs and prevent big empty input boxes */
+.row.editing .main.edit .mat-mdc-form-field-infix {
+  min-height: 0 !important;    /* let the input content decide height */
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+  overflow: visible !important; /* allow label rendering */
+}
+.row.editing .main.edit .mat-mdc-form-field-flex {
+  align-items: stretch !important; /* ensure label above input */
+}
+.row.editing .main.edit .mat-mdc-form-field-label-wrapper {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+.row.editing textarea.mat-mdc-textarea-element,
+.row.editing textarea {
+  min-height: 40px !important;
+  max-height: 120px !important;
+  height: auto !important;
+}
+
+/* Keep action buttons compact and fixed-height */
+.row.editing > .actions button,
+:host ::ng-deep .row.editing > .actions .mat-mdc-button {
+  min-height: 36px;
+  height: 36px;
+}
+
+/* Do not override floating-label transform/origin to avoid label misplacement */
+:host ::ng-deep .row.editing .mat-mdc-form-field-label-wrapper .mat-mdc-floating-label {
+  transform-origin: initial !important;
+  padding-bottom: initial !important;
+}
+
+/* Make floating label have minimal bottom padding so it doesn't push the input down */
+.row.editing .main.edit .mat-mdc-form-field-label-wrapper {
+  padding-bottom: 2px;
+}
+
+/* On small screens stack the inputs and buttons vertically for usability */
+@media (max-width: 700px) {
+  .main.edit {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .row > .actions { justify-content: flex-end; }
+  .row.editing .main.edit {
+    flex-direction: column;
+  }
+  .row.editing > .actions {
+    justify-content: flex-end; /* keep buttons to the right within the row */
+    width: 100%;
+  }
+  .row.editing > .actions button { width: auto; }
+}
+
+/* On very small screens keep actions full-width but buttons keep height */
+@media (max-width: 420px) {
+  .row.editing > .actions {
+    justify-content: center;
+  }
+  :host ::ng-deep .row.editing > .actions .mat-mdc-button,
+  .row.editing > .actions button {
+    width: 48%;
+  }
+}
 
 /* Sticky paginator */
 :host ::ng-deep mat-paginator { position:sticky; bottom:0; background:#fff; border-top:1px solid #eee; border-radius:0 0 12px 12px; }

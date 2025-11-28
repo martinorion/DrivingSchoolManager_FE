@@ -37,6 +37,31 @@ export interface ConfirmAccountRequestDTO {
   password?: string;
 }
 
+export interface EditProfileDTO {
+  username?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  firstName?: string | null;
+  surname?: string | null;
+  password?: string | null; // optional change
+}
+
+export interface EditProfileResponseDTO {
+  status: 'success' | 'error';
+  message: string;
+  user?: any;
+}
+
+export interface UserDTO {
+  id?: number;
+  username: string;
+  email: string;
+  phone?: string | null;
+  firstName?: string | null;
+  surname?: string | null;
+  authority?: string;
+}
+
 const AUTH_STATE_KEY = 'auth_state';
 const REFRESH_IN_COOKIE = true;
 
@@ -68,6 +93,15 @@ export class AuthService {
 
   register(registerRequest: RegisterRequest): Observable<RegisterResponseDTO> {
     return this.http.post<RegisterResponseDTO>(`${this.baseUrl}/register`, registerRequest);
+  }
+
+  getUserProfile(): Observable<UserDTO> {
+    return this.http.get<UserDTO>(`${this.baseUrl}/get-profile`, { withCredentials: true });
+  }
+
+  // Add edit-profile call. Backend returns status/message/user in body.
+  editProfile(dto: EditProfileDTO): Observable<EditProfileResponseDTO> {
+    return this.http.put<EditProfileResponseDTO>(`${this.baseUrl}/edit-profile`, dto, { withCredentials: true });
   }
 
   confirmAccount(token: string, password?: string): Observable<void> {

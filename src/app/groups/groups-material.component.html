@@ -1,0 +1,124 @@
+<div class="groups-wrapper">
+  <mat-card class="create-card">
+    <h2>Vytvoriť skupinu</h2>
+    <form [formGroup]="createForm" (ngSubmit)="submitCreate()" class="create-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Názov</mat-label>
+        <input matInput formControlName="name" maxlength="30" />
+        @if (createForm.controls.name.hasError('required')) { <mat-error>Názov je povinný.</mat-error> }
+        @if (createForm.controls.name.hasError('minlength')) { <mat-error>Minimálne 3 znaky.</mat-error> }
+        @if (createForm.controls.name.hasError('maxlength')) { <mat-error>Maximálne 30 znakov.</mat-error> }
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Popis</mat-label>
+        <textarea matInput rows="3" formControlName="description"></textarea>
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit" [disabled]="createForm.invalid || creating()">Vytvoriť</button>
+      @if (creating()) { <mat-progress-spinner diameter="24" mode="indeterminate"></mat-progress-spinner> }
+    </form>
+  </mat-card>
+
+  <mat-card class="list-card">
+    <div class="header-row">
+      <h2>Skupiny ({{ filteredGroups().length }})</h2>
+      <div class="search-box">
+        <mat-form-field appearance="outline">
+          <mat-label>Hľadať</mat-label>
+          <input matInput (input)="onSearch($any($event.target).value)" placeholder="Názov alebo popis" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    @if (loadingGroups()) { <div class="loading"><mat-progress-spinner diameter="40" mode="indeterminate"></mat-progress-spinner></div> }
+    @if (!loadingGroups() && pagedGroups().length === 0) { <div class="empty">Žiadne skupiny.</div> }
+
+    @if (!loadingGroups()) {
+      <div class="groups-list">
+        @for (g of pagedGroups(); track g.id) {
+          <div class="group-item">
+            <div class="group-main" [class.expanded]="isExpanded(g)">
+              <div class="info">
+                <div class="title-row">
+                  <h3>{{ g.name }}</h3>
+                  @if (g.createdByInstructorUsername || g.createdByInstructorFirstName) { <span class="creator">Vytvoril: {{ g.createdByInstructorFirstName || '' }} {{ g.createdByInstructorSurname || '' }} ({{ g.createdByInstructorUsername || '' }})</span> }
+                </div>
+                @if (g.description) { <p class="desc">{{ g.description }}</p> }
+              </div>
+
+              @if (editingId() !== g.id) {
+                <div class="actions">
+                  <button mat-icon-button color="primary" (click)="startEdit(g)" matTooltip="Upraviť">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" (click)="deleteGroup(g)" matTooltip="Odstrániť">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="toggleExpand(g)" [matTooltip]="isExpanded(g) ? 'Zatvoriť' : 'Členovia'">
+                    <mat-icon>{{ isExpanded(g) ? 'expand_less' : 'group' }}</mat-icon>
+                  </button>
+                </div>
+              }
+
+              @if (editingId() === g.id) {
+                <form [formGroup]="editForm" (ngSubmit)="saveEdit(g)" class="edit-form">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Názov</mat-label>
+                    <input matInput formControlName="name" maxlength="30" />
+                    @if (editForm.controls.name.hasError('required')) { <mat-error>Názov je povinný.</mat-error> }
+                    @if (editForm.controls.name.hasError('minlength')) { <mat-error>Minimálne 3 znaky.</mat-error> }
+                    @if (editForm.controls.name.hasError('maxlength')) { <mat-error>Maximálne 30 znakov.</mat-error> }
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Popis</mat-label>
+                    <textarea matInput rows="3" formControlName="description"></textarea>
+                  </mat-form-field>
+                  <div class="edit-actions">
+                    <button mat-button type="button" (click)="cancelEdit()">Zrušiť</button>
+                    <button mat-raised-button color="primary" type="submit" [disabled]="editForm.invalid || savingEdit()">Uložiť</button>
+                    @if (savingEdit()) { <mat-progress-spinner diameter="24" mode="indeterminate"></mat-progress-spinner> }
+                  </div>
+                </form>
+              }
+            </div>
+
+               @if (isExpanded(g)) {
+                 <div class="members-panel">
+                   <h4>Členovia</h4>
+                 @if ((g.members || []).length === 0) { <div class="member-list">Zatiaľ žiadni členovia.</div> }
+                 @if ((g.members || []).length > 0) {
+                   <ul class="member-list">
+                     @for (m of g.members; track m.id) { <li>
+                       {{ m.studentFirstName || '' }} {{ m.studentSurname || '' }} <span class="username">{{ m.studentUsername || '' }}</span>
+                     </li> }
+                   </ul>
+                 }
+                 <form [formGroup]="addMemberForm" (ngSubmit)="submitAddMember(g)" class="add-member-form">
+                   <mat-form-field appearance="outline">
+                     <mat-label>Študent</mat-label>
+                    <mat-select formControlName="studentId">
+                      @for (s of students(); track s.id) { <mat-option [value]="s.id">{{ s.firstName || '' }} {{ s.surname || '' }} ({{ s.username || s.email }})</mat-option> }
+                    </mat-select>
+                     @if (addMemberForm.controls.studentId.hasError('required')) { <mat-error>Vyberte študenta.</mat-error> }
+                   </mat-form-field>
+                   <button mat-raised-button color="primary" type="submit" [disabled]="addMemberForm.invalid || addingMember()">Pridať</button>
+                   @if (addingMember()) { <mat-progress-spinner diameter="24" mode="indeterminate"></mat-progress-spinner> }
+                 </form>
+               </div>
+             }
+          </div>
+        <mat-divider></mat-divider>
+        }
+      </div>
+
+      <mat-paginator [length]="filteredGroups().length" [pageSize]="pageSize" [pageIndex]="pageIndex()" [pageSizeOptions]="[pageSize]" (page)="onPage($event)"></mat-paginator>
+    }
+    @if (error()) {
+      <div class="header-message error">{{ error() }}</div>
+    } @else {
+      @if (success()) {
+        <div class="header-message success">{{ success() }}</div>
+      }
+    }
+  </mat-card>
+
+</div>

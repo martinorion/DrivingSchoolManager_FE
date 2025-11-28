@@ -7,23 +7,23 @@
         <mat-form-field appearance="outline">
           <mat-label>Názov</mat-label>
           <input matInput formControlName="name" placeholder="Auto pre kurz B" />
-          <mat-error *ngIf="form.controls.name.hasError('required') && (form.controls.name.touched || form.controls.name.dirty)">Povinné pole</mat-error>
+          @if (form.controls.name.hasError('required') && (form.controls.name.touched || form.controls.name.dirty)) { <mat-error>Povinné pole</mat-error> }
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Značka</mat-label>
           <input matInput formControlName="brand" placeholder="Škoda" />
-          <mat-error *ngIf="form.controls.brand.hasError('required') && (form.controls.brand.touched || form.controls.brand.dirty)">Povinné pole</mat-error>
+          @if (form.controls.brand.hasError('required') && (form.controls.brand.touched || form.controls.brand.dirty)) { <mat-error>Povinné pole</mat-error> }
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Model</mat-label>
           <input matInput formControlName="model" placeholder="Fabia" />
-          <mat-error *ngIf="form.controls.model.hasError('required') && (form.controls.model.touched || form.controls.model.dirty)">Povinné pole</mat-error>
+          @if (form.controls.model.hasError('required') && (form.controls.model.touched || form.controls.model.dirty)) { <mat-error>Povinné pole</mat-error> }
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>ŠPZ</mat-label>
           <input matInput formControlName="plateNumber" placeholder="BA123XY" />
-          <mat-error *ngIf="form.controls.plateNumber.hasError('required') && (form.controls.plateNumber.touched || form.controls.plateNumber.dirty)">Povinné pole</mat-error>
-          <mat-error *ngIf="form.controls.plateNumber.hasError('duplicate')">Vozidlo so zadanou ŠPZ už existuje.</mat-error>
+          @if (form.controls.plateNumber.hasError('required') && (form.controls.plateNumber.touched || form.controls.plateNumber.dirty)) { <mat-error>Povinné pole</mat-error> }
+          @if (form.controls.plateNumber.hasError('duplicate')) { <mat-error>Vozidlo so zadanou ŠPZ už existuje.</mat-error> }
         </mat-form-field>
       </div>
       <button mat-flat-button type="submit" class="accent-btn" [disabled]="form.invalid || creating()">
@@ -37,36 +37,34 @@
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>Hľadať</mat-label>
       <input matInput type="search" [value]="searchTerm()" (input)="onSearch($any($event.target).value)" placeholder="Názov, značka, model alebo ŠPZ" />
-      <button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchTerm()" (click)="onSearch('')">
+      @if (searchTerm()) { <button matSuffix mat-icon-button aria-label="Clear" (click)="onSearch('')">
         <mat-icon>close</mat-icon>
-      </button>
+      </button> }
     </mat-form-field>
   </div>
 
   <div class="list-wrapper">
     @if (loading()) { <div>Načítavam vozidlá...</div> } @else {
       <div class="list">
-        @if (!filteredVehicles().length) {
-          <div class="empty">Žiadne vozidlá nevyhovujú hľadaniu.</div>
-        } @else {
+        @if (!filteredVehicles().length) { <div class="empty">Žiadne vozidlá nevyhovujú hľadaniu.</div> } @else {
           @for (v of pagedVehicles(); track v.id) {
-            <div class="row">
+            <div class="row" [class.editing]="editingId() === v.id">
               @if (editingId() === v.id) {
                 <div class="main edit">
                   <mat-form-field appearance="outline"><mat-label>Názov</mat-label><input matInput [formControl]="editForm.controls.name" />
-                    <mat-error *ngIf="editForm.controls.name.hasError('required') && (editForm.controls.name.touched || editForm.controls.name.dirty)">Povinné pole</mat-error>
+                    @if (editForm.controls.name.hasError('required') && (editForm.controls.name.touched || editForm.controls.name.dirty)) { <mat-error>Povinné pole</mat-error> }
                   </mat-form-field>
                   <mat-form-field appearance="outline"><mat-label>Značka</mat-label><input matInput [formControl]="editForm.controls.brand" />
-                    <mat-error *ngIf="editForm.controls.brand.hasError('required') && (editForm.controls.brand.touched || editForm.controls.brand.dirty)">Povinné pole</mat-error>
+                    @if (editForm.controls.brand.hasError('required') && (editForm.controls.brand.touched || editForm.controls.brand.dirty)) { <mat-error>Povinné pole</mat-error> }
                   </mat-form-field>
                   <mat-form-field appearance="outline"><mat-label>Model</mat-label><input matInput [formControl]="editForm.controls.model" />
-                    <mat-error *ngIf="editForm.controls.model.hasError('required') && (editForm.controls.model.touched || editForm.controls.model.dirty)">Povinné pole</mat-error>
+                    @if (editForm.controls.model.hasError('required') && (editForm.controls.model.touched || editForm.controls.model.dirty)) { <mat-error>Povinné pole</mat-error> }
                   </mat-form-field>
                   <mat-form-field appearance="outline">
                     <mat-label>ŠPZ</mat-label>
                     <input matInput [formControl]="editForm.controls.plateNumber" />
-                    <mat-error *ngIf="editForm.controls.plateNumber.hasError('required') && (editForm.controls.plateNumber.touched || editForm.controls.plateNumber.dirty)">Povinné pole</mat-error>
-                    <mat-error *ngIf="editForm.controls.plateNumber.hasError('duplicate')">Duplicitná ŠPZ</mat-error>
+                    @if (editForm.controls.plateNumber.hasError('required') && (editForm.controls.plateNumber.touched || editForm.controls.plateNumber.dirty)) { <mat-error>Povinné pole</mat-error> }
+                    @if (editForm.controls.plateNumber.hasError('duplicate')) { <mat-error>Duplicitná ŠPZ</mat-error> }
                   </mat-form-field>
                 </div>
                 <div class="actions">

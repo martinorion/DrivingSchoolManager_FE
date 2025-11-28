@@ -1,0 +1,25 @@
+.groups-wrapper { display: flex; flex-direction: column; gap: 24px; padding: 16px; }
+.create-card, .list-card { padding: 16px; }
+.create-form, .edit-form, .add-member-form { display: flex; flex-direction: column; gap: 12px; }
+.header-row { display: flex; justify-content: space-between; align-items: center; }
+.groups-list { display: flex; flex-direction: column; gap: 8px; }
+.group-item { padding: 8px 0; }
+.group-main { display: flex; flex-direction: column; gap: 8px; }
+.group-main.expanded { background: #fafafa; border-radius: 4px; padding: 8px; }
+.title-row { display: flex; align-items: baseline; gap: 16px; }
+.title-row h3 { margin: 0; font-size: 18px; }
+.creator { font-size: 12px; color: #555; }
+.desc { margin: 0; color: #333; }
+.actions { display: flex; gap: 4px; }
+.edit-actions { display: flex; gap: 12px; align-items: center; }
+.members-panel { margin-top: 8px; display: flex; flex-direction: column; gap: 12px; }
+.member-list { list-style: none; margin: 0; padding: 0; }
+.member-list li { padding: 4px 0; font-size: 14px; }
+.member-list .username { color: #666; font-size: 12px; margin-left: 4px; }
+.search-box { width: 240px; }
+.loading, .empty { text-align: center; padding: 24px; }
+.messages { position: fixed; bottom: 16px; left: 16px; display: flex; flex-direction: column; gap: 8px; }
+.error { background: #ffebee; color: #c62828; padding: 8px 12px; border-radius: 4px; }
+.success { background: #e8f5e9; color: #2e7d32; padding: 8px 12px; border-radius: 4px; }
+@media (min-width: 900px) { .groups-wrapper { flex-direction: row; align-items: flex-start; } .create-card { flex: 0 0 320px; } .list-card { flex: 1; } }
+
