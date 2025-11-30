@@ -17,6 +17,7 @@ import { instructorWithOrgGuard } from './auth/guards/instructor-with-org.guard'
 import { studentWaitingRedirectGuard } from './auth/guards/student-waiting-redirect.guard';
 import { GroupsMaterialComponent } from './groups/groups-material.component';
 import { MyProfileComponent } from './profile/my-profile.component';
+import { VehicleReservationsComponent } from './vehicle-reservations/vehicle-reservations.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -31,6 +32,7 @@ export const routes: Routes = [
   { path: 'instructors', component: InstructorRequestComponent, canActivate: [instructorNoOrgGuard], data: { title: 'Inštruktori' } },
   { path: 'vehicles', component: VehiclesMaterialComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Vozidlá' } },
   { path: 'groups', component: GroupsMaterialComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Skupiny' } },
+  { path: 'car-reservations', component: VehicleReservationsComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Rezervácie vozidiel' } },
   { path: 'my-profile', component: MyProfileComponent, canActivate: [authGuard], data: { title: 'Môj profil' } },
   { path: '**', redirectTo: 'dashboard' }
 ];

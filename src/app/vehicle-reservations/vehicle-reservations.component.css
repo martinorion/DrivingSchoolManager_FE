@@ -1,0 +1,46 @@
+/* Create form: one row with equal-width columns */
+.create {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: .75rem;
+  border: 1px solid #eee;
+  padding: 1rem;
+  border-radius: 12px;
+  background:#fff;
+  align-items: stretch;
+}
+
+/* Make material fields fill column width and consistent height */
+.create .mat-mdc-form-field { width: 100%; }
+.create .mat-mdc-text-field-wrapper { height: 56px; }
+.create .mat-mdc-form-field .mdc-text-field { height: 56px; }
+
+/* Submit button full height to align with inputs */
+.create .submit-btn { padding: .6rem .9rem; border-radius: 10px; font-weight: 700; background: var(--gradient-primary); color:#fff; height: 56px; }
+.create .submit-btn[disabled] { opacity:.65; filter: grayscale(.3); }
+
+/* Responsive: stack on narrow screens */
+@media (max-width: 700px) {
+  .create { grid-template-columns: 1fr; }
+  .create .submit-btn { height: auto; }
+}
+
+/* Search */
+.search-field { width: 100%; max-width: 480px; }
+.search-field .mat-mdc-text-field-wrapper { border-radius: 999px; }
+
+/* List */
+.list ul { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; }
+.item { display: flex; align-items: center; justify-content: space-between; gap: 1rem; border: 1px solid #eee; border-radius: 10px; padding: .75rem; background: #fafafa; }
+.item__title { font-weight: 600; }
+.item__dates { display: flex; align-items: center; gap: .5rem; font-size: .95rem; color: var(--color-text-muted); }
+.item__datetime { font-weight: 600; color: var(--color-text); background: rgba(0,0,0,0.02); padding: .15rem .4rem; border-radius: 6px; }
+.item__arrow { color: #888; font-weight: 700; }
+.item__actions button { border-radius: 8px; }
+.item__actions button.mat-warn { font-weight:600; }
+.item__actions button:hover { filter: brightness(.92); }
+
+.empty { color: var(--color-text-muted); }
+.loading { padding: .5rem 0; color: var(--color-text-muted); }
+
+@media (min-width: 700px) { .create { grid-template-columns: 2fr 1fr 1fr auto; align-items: end; } .create .submit-btn { align-self: stretch; } }

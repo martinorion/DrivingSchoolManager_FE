@@ -2,9 +2,9 @@
   @if (error()) {<div class="alert alert--error">{{ error() }}</div>}
 
   @if (!isInstructor()) {
-    <div class="alert">Táto stránka je určená pre inštruktorov.</div>
+    <div class="alert alert--info">Táto stránka je určená pre inštruktorov.</div>
   } @else if (hasOrg() === false) {
-    <div class="alert">Na zobrazenie členov musíte mať vytvorenú organizáciu.</div>
+    <div class="alert alert--info">Na zobrazenie členov musíte mať vytvorenú organizáciu.</div>
   } @else {
     <div class="grid">
       <section class="panel">
@@ -41,4 +41,3 @@
     </div>
   }
 </section>
-

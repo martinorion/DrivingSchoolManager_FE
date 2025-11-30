@@ -113,11 +113,9 @@
       <mat-paginator [length]="filteredGroups().length" [pageSize]="pageSize" [pageIndex]="pageIndex()" [pageSizeOptions]="[pageSize]" (page)="onPage($event)"></mat-paginator>
     }
     @if (error()) {
-      <div class="header-message error">{{ error() }}</div>
-    } @else {
-      @if (success()) {
-        <div class="header-message success">{{ success() }}</div>
-      }
+      <div class="header-message alert alert--error">{{ error() }}</div>
+    } @else if (success()) {
+      <div class="header-message alert alert--success">{{ success() }}</div>
     }
   </mat-card>
 

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -15,7 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './my-profile.component.html',
   styleUrl: './my-profile.component.css'
 })
-export class MyProfileComponent {
+export class MyProfileComponent implements OnInit {
   private fb = inject(FormBuilder);
   private auth = inject(AuthService);
 
@@ -26,9 +26,10 @@ export class MyProfileComponent {
   form = this.fb.group({
     username: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20), Validators.pattern(/^[a-zA-Z][a-zA-Z0-9._-]*$/)]],
     email: ['', [Validators.required, Validators.email]],
-    phone: ['', [Validators.pattern(/^[0-9+\s-]*$/)]],
-    firstName: ['', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ž' -]+$/)]],
-    surname: ['', [Validators.required, Validators.pattern(/^[A-Za-zÀ-ž' -]+$/)]],
+    phone: ['', [Validators.required, Validators.pattern(/^\+?[0-9]{7,15}$/)]],
+    // allow Unicode letters (diacritics), spaces, hyphens and apostrophes in names
+    firstName: ['', [Validators.required, Validators.pattern(/^[\p{L}' \-]+$/u)]],
+    surname: ['', [Validators.required, Validators.pattern(/^[\p{L}' \-]+$/u)]],
     password: ['', [Validators.minLength(8), Validators.maxLength(30), Validators.pattern(/.*\d.*/)]], // optional
   });
 
@@ -60,7 +61,6 @@ export class MyProfileComponent {
     this.success.set(null);
 
     const dto: EditProfileDTO = this.form.getRawValue();
-    // if password is empty string, send null to avoid backend change (optional)
     if (dto.password !== undefined && dto.password !== null && String(dto.password).trim() === '') {
       dto.password = null;
     }

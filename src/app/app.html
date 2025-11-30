@@ -15,6 +15,7 @@
           <a routerLink="/waiting-room" routerLinkActive="active">Čakáreň</a>
           <a routerLink="/members" routerLinkActive="active">Členovia</a>
           <a routerLink="/vehicles" routerLinkActive="active">Vozidlá</a>
+          <a routerLink="/car-reservations" routerLinkActive="active">Rezervácie</a>
           <a routerLink="/groups" routerLinkActive="active">Skupiny</a>
         } @else if (auth.hasRole('INSTRUCTOR') && hasOrg() !== true) {
           <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>

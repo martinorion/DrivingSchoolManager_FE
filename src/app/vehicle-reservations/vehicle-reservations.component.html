@@ -1,0 +1,98 @@
+<section class="container">
+  <h1>Rezervácie vozidiel</h1>
+
+  @if (error()) {<div class="alert alert--error">{{ error() }}</div>}
+  @if (success()) {<div class="alert alert--success">{{ success() }}</div>}
+  @if (form.controls.endTime.hasError('range') && form.controls.endTime.touched) {
+    <div class="alert alert--error">Koniec musí byť po začiatku.</div>
+  }
+
+  <form class="create" [formGroup]="form" (ngSubmit)="submit()">
+    <!-- Vozidlo -->
+    <mat-form-field appearance="outline">
+      <mat-label>Vozidlo</mat-label>
+      <mat-select formControlName="vehicleId">
+        <mat-option [value]="0">-- vyberte vozidlo --</mat-option>
+        @for (v of vehicles(); track v.id) {
+          <mat-option [value]="v.id">{{ v.name }} · {{ v.brand }} {{ v.model }} · {{ v.plateNumber }}</mat-option>
+        }
+      </mat-select>
+      @if (form.controls.vehicleId.touched && form.controls.vehicleId.invalid) {
+        <mat-error>Vyberte vozidlo.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Dátum</mat-label>
+      <input matInput [matDatepicker]="startPicker" formControlName="startDate"/>
+      @if (form.controls.startDate.touched && form.controls.startDate.invalid) {
+        <mat-error>Zadajte začiatok.</mat-error>
+      }
+      <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+      <mat-datepicker #startPicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field  appearance="outline">
+      <mat-label>Začiatok</mat-label>
+      <input matInput [matTimepicker]="timepicker_start" formControlName="startTime">
+      @if (form.controls.startTime.touched && form.controls.startTime.invalid) {
+        <mat-error>Zadajte čas začiatku.</mat-error>
+      }
+      <mat-timepicker-toggle matIconSuffix [for]="timepicker_start"></mat-timepicker-toggle>
+      <mat-timepicker #timepicker_start></mat-timepicker>
+    </mat-form-field>
+
+    <mat-form-field  appearance="outline">
+      <mat-label>Koniec</mat-label>
+      <input matInput [matTimepicker]="timepicker_end" formControlName="endTime">
+      @if (form.controls.endTime.touched && form.controls.endTime.invalid && !form.controls.endTime.hasError('range')) {
+        <mat-error>Zadajte koniec.</mat-error>
+      }
+      @if (form.controls.endTime.touched && form.controls.endTime.hasError('range')) {
+        <mat-error>Koniec musí byť po začiatku.</mat-error>
+      }
+      <mat-timepicker-toggle matIconSuffix [for]="timepicker_end"></mat-timepicker-toggle>
+      <mat-timepicker #timepicker_end></mat-timepicker>
+    </mat-form-field>
+
+    <button mat-raised-button type="submit" class="submit-btn" [disabled]="form.invalid || creating()">Vytvoriť rezerváciu</button>
+  </form>
+
+  <div class="search">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Hľadať</mat-label>
+      <input matInput #queryBox type="text" placeholder="Hľadať podľa vozidla, ŠPZ alebo času" (input)="onSearch(queryBox.value)" />
+      <button *ngIf="searchTerm()" mat-icon-button matSuffix aria-label="Vyčistiť" (click)="onSearch(''); queryBox.value=''">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  @if (loading()) {
+    <div class="loading"><span>Načítavam...</span></div>
+  } @else {
+    <div class="list">
+      @if (ordered().length === 0) {
+        <div class="empty">Žiadne rezervácie.</div>
+      } @else {
+        <ul>
+          @for (r of ordered(); track r.id) {
+            <li class="item">
+              <div class="item__main">
+                <div class="item__title">{{ vehicleLabel(r.vehicleId) }}</div>
+                <div class="item__dates">
+                  <span class="item__datetime">{{ formatDateTime(r.start) }}</span>
+                  <span class="item__arrow">→</span>
+                  <span class="item__datetime">{{ formatDateTime(r.end) }}</span>
+                </div>
+              </div>
+              <div class="item__actions">
+                <button mat-raised-button color="warn" (click)="delete(r)">Zmazať</button>
+              </div>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  }
+</section>

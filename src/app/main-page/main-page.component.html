@@ -2,7 +2,7 @@
   @if (isStudentInOrg()) {<h1>Ste členom organizácie</h1>} @else {<h1>Organizácie</h1>}
 
   @if (error()) {<div class="alert alert--error">{{ error() }}</div>}
-<!--  @if (success()) {<div class="alert alert&#45;&#45;success">{{ success() }}</div>}-->
+<!--  @if (success()) {<div class="alert alert--success">{{ success() }}</div>}-->
 
   @if (isInstructor()) {
     @if (hasOrg() === false) {
@@ -14,7 +14,7 @@
         <a routerLink="/instructors">Alebo sa pripojiť k existujúcej organizácii ako inštruktor</a>
       </div>
     } @else if (hasOrg() === true) {
-      <div class="alert">Už máte vytvorenú organizáciu. Použite stránky <a routerLink="/waiting-room">Čakáreň</a>, <a routerLink="/members">Študenti</a>, <a routerLink="/vehicles">Vozidlá</a> a <a routerLink="/groups">Skupiny</a>.</div>
+      <div class="alert alert--info">Už máte vytvorenú organizáciu. Použite stránky <a routerLink="/waiting-room">Čakáreň</a>, <a routerLink="/members">Študenti</a>, <a routerLink="/vehicles">Vozidlá</a>, <a routerLink="/groups">Skupiny</a> a <a routerLink="/reservations">Rezervácie</a>.</div>
     }
   }
 

@@ -8,25 +8,32 @@
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Používateľské meno</mat-label>
           <input matInput type="text" formControlName="username" required />
-          <mat-error *ngIf="form.get('username')?.hasError('required')">Povinné pole</mat-error>
-          <mat-error *ngIf="form.get('username')?.hasError('minlength')">Minimálne 4 znaky</mat-error>
-          <mat-error *ngIf="form.get('username')?.hasError('maxlength')">Maximálne 20 znakov</mat-error>
-          <mat-error *ngIf="form.get('username')?.hasError('pattern')">Povolené znaky sú písmená, čísla, bodka, podčiarkovník a pomlčka; musí začínať písmenom.</mat-error>
+          @if (form.controls.username.invalid && (form.controls.username.dirty || form.controls.username.touched)) {
+            <mat-error>
+              Používateľské meno je povinné.
+            </mat-error>
+          }
         </mat-form-field>
 
         <div class="row-2">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Meno</mat-label>
             <input matInput type="text" formControlName="firstName" required />
-            <mat-error *ngIf="form.get('firstName')?.hasError('required')">Povinné pole</mat-error>
-            <mat-error *ngIf="form.get('firstName')?.hasError('pattern')">Neplatné znaky</mat-error>
+            @if (form.controls.firstName.invalid && (form.controls.firstName.dirty || form.controls.firstName.touched)) {
+              <mat-error>
+                Meno je povinné.
+              </mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Priezvisko</mat-label>
             <input matInput type="text" formControlName="surname" required />
-            <mat-error *ngIf="form.get('surname')?.hasError('required')">Povinné pole</mat-error>
-            <mat-error *ngIf="form.get('surname')?.hasError('pattern')">Neplatné znaky</mat-error>
+            @if (form.controls.surname.invalid && (form.controls.surname.dirty || form.controls.surname.touched)) {
+              <mat-error>
+                Priezvisko je povinné.
+              </mat-error>
+            }
           </mat-form-field>
         </div>
 
@@ -34,14 +41,21 @@
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Email</mat-label>
             <input matInput type="email" formControlName="email" required />
-            <mat-error *ngIf="form.get('email')?.hasError('required')">Povinné pole</mat-error>
-            <mat-error *ngIf="form.get('email')?.hasError('email')">Neplatný email</mat-error>
+            @if (form.controls.email.invalid && (form.controls.email.dirty || form.controls.email.touched)) {
+              <mat-error>
+                Zadajte platný email.
+              </mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Telefón</mat-label>
-            <input matInput type="tel" formControlName="phone" />
-            <mat-hint>Neplatné znaky sa odstránia, uloží sa posledných 9 číslic.</mat-hint>
+            <input matInput type="tel" formControlName="phone" required />
+            @if (form.controls.phone.invalid && (form.controls.phone.dirty || form.controls.phone.touched)) {
+              <mat-error>
+                Telefón je povinný.
+              </mat-error>
+            }
           </mat-form-field>
         </div>
 
@@ -49,9 +63,11 @@
           <mat-label>Nové heslo (voliteľné)</mat-label>
           <input matInput type="password" formControlName="password" />
           <mat-hint>Ak pole necháte prázdne, heslo sa nezmení.</mat-hint>
-          <mat-error *ngIf="form.get('password')?.hasError('minlength')">Minimálne 8 znakov</mat-error>
-          <mat-error *ngIf="form.get('password')?.hasError('maxlength')">Maximálne 30 znakov</mat-error>
-          <mat-error *ngIf="form.get('password')?.hasError('pattern')">Heslo musí obsahovať aspoň jedno číslo</mat-error>
+          @if (form.controls.password.invalid && (form.controls.password.dirty || form.controls.password.touched)) {
+            <mat-error>
+              Heslo musí mať aspoň 8 znakov a obsahovať číslo.
+            </mat-error>
+          }
         </mat-form-field>
 
         <button class="btn btn-primary" type="submit" [disabled]="form.invalid || loading()">
@@ -62,8 +78,12 @@
           <a routerLink="/dashboard">Späť na Dashboard</a>
         </div>
 
-        <p class="error" *ngIf="error()">{{ error() }}</p>
-        <p class="success" *ngIf="success()">{{ success() }}</p>
+        @if (error()) {
+          <p class="error">{{ error() }}</p>
+        }
+        @if (success()) {
+          <p class="success">{{ success() }}</p>
+        }
       </form>
     </mat-card-content>
   </mat-card>
