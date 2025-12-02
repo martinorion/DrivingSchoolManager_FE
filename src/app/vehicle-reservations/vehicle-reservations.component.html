@@ -62,9 +62,11 @@
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>Hľadať</mat-label>
       <input matInput #queryBox type="text" placeholder="Hľadať podľa vozidla, ŠPZ alebo času" (input)="onSearch(queryBox.value)" />
-      <button *ngIf="searchTerm()" mat-icon-button matSuffix aria-label="Vyčistiť" (click)="onSearch(''); queryBox.value=''">
-        <mat-icon>close</mat-icon>
-      </button>
+      @if (searchTerm()) {
+        <button mat-icon-button matSuffix aria-label="Vyčistiť" (click)="onSearch(''); queryBox.value=''">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
     </mat-form-field>
   </div>
 

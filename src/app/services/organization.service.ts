@@ -38,9 +38,12 @@ export class OrganizationService {
     );
   }
 
-  // Returns instructor-request in the current user's organization (backend derives org from authenticated user)
   getOrganizationInstructors(): Observable<UserDTO[]> {
     return this.http.get<UserDTO[]>(`${this.baseUrl}/getOrganizationInstructors`);
+  }
+
+  getOrganizationInstructorsForStudent(): Observable<UserDTO[]> {
+    return this.http.get<UserDTO[]>(`${this.baseUrl}/getOrganizationInstructorsForStudent`);
   }
 
   // Returns all accepted students in the current user's organization

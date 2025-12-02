@@ -1,0 +1,94 @@
+<div class="page">
+  <h2>Žiadosti o jazdy (študent)</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Inštruktor</mat-label>
+      <mat-select formControlName="instructorId">
+        <mat-option [value]="0">-- vyberte inštruktora --</mat-option>
+        @for (i of instructors(); track i.id) {
+          <mat-option [value]="i.id">{{ i.firstName }} {{ i.surname }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Dátum</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="startDate" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field  appearance="outline">
+      <mat-label>Začiatok</mat-label>
+      <input matInput [matTimepicker]="timepicker_start" formControlName="startTime">
+      @if (form.controls.startTime.touched && form.controls.startTime.invalid) {
+        <mat-error>Zadajte čas začiatku.</mat-error>
+      }
+      <mat-timepicker-toggle matIconSuffix [for]="timepicker_start"></mat-timepicker-toggle>
+      <mat-timepicker #timepicker_start></mat-timepicker>
+    </mat-form-field>
+
+    <mat-form-field  appearance="outline">
+      <mat-label>Koniec</mat-label>
+      <input matInput [matTimepicker]="timepicker_end" formControlName="endTime">
+      @if (form.controls.endTime.touched && form.controls.endTime.invalid && !form.controls.endTime.hasError('range')) {
+        <mat-error>Zadajte koniec.</mat-error>
+      }
+      @if (form.controls.endTime.touched && form.controls.endTime.hasError('range')) {
+        <mat-error>Koniec musí byť po začiatku.</mat-error>
+      }
+      <mat-timepicker-toggle matIconSuffix [for]="timepicker_end"></mat-timepicker-toggle>
+      <mat-timepicker #timepicker_end></mat-timepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field full">
+      <mat-label>Poznámka (nepovinné)</mat-label>
+      <textarea matInput rows="3" formControlName="note"></textarea>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="creating() || form.invalid">Odoslať žiadosť</button>
+  </form>
+
+  <div class="alerts">
+    @if (error()) {
+      <div class="error">{{ error() }}</div>
+    }
+    @if (success()) {
+      <div class="success">{{ success() }}</div>
+    }
+  </div>
+
+  <div class="list">
+    <div class="list-controls">
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Hľadať</mat-label>
+        <input matInput (input)="onSearch($any($event.target).value)" placeholder="ID, dátum, status, poznámka" />
+      </mat-form-field>
+    </div>
+
+    @if (loading()) {
+      <div>Načítavam...</div>
+    }
+    @if (!loading() && ordered().length === 0) {
+      <div>Žiadne žiadosti zatiaľ.</div>
+    }
+
+    @for (r of ordered(); track r.id) {
+      <div class="item">
+        <div class="row">
+          <div>
+            <strong>{{ formatDateTime(r.start) }}</strong> - <strong>{{ formatDateTime(r.end) }}</strong>
+          </div>
+          <div>Status: {{ r.status || 'PENDING' }}</div>
+        </div>
+        <div class="row small">
+          Meno inštruktora: {{ r.instructorFullName }}
+        </div>
+        @if (r.note) {
+          <div class="row small">Poznámka: {{ r.note }}</div>
+        }
+      </div>
+    }
+  </div>
+</div>

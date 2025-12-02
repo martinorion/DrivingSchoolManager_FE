@@ -47,15 +47,15 @@ export class VehicleReservationsComponent implements OnInit {
   searchTerm = signal('');
   filtered = computed(() => {
     const q = this.searchTerm().trim().toLowerCase();
-    if (!q) return this.reservations();
-    const vehiclesMap = new Map(this.vehicles().map(v => [v.id, v] as const));
+    if (!q) return this.reservations(); // no filtering because empty search
+    const vehiclesMap = new Map(this.vehicles().map(v => [v.id, v] as const)); // map for quick lookup Map<vehicleId, vehicleObject>.
     return this.reservations().filter(r => {
-      const v = vehiclesMap.get(r.vehicleId);
-      const haystack = [r.id, r.vehicleId, v?.name, v?.brand, v?.model, v?.plateNumber, r.start, r.end]
-        .filter(Boolean)
-        .join(' ')
+      const v = vehiclesMap.get(r.vehicleId); // get vehicle for this reservation
+      const haystack = [r.id, r.vehicleId, v?.name, v?.brand, v?.model, v?.plateNumber, r.start, r.end] // build searchable string vehicle + reservation
+        .filter(Boolean) // remove null/undefined
+        .join(' ') // join to single string separated by spaces
         .toLowerCase();
-      return haystack.includes(q);
+      return haystack.includes(q); // return whether search term is found
     });
   });
 
@@ -95,33 +95,37 @@ export class VehicleReservationsComponent implements OnInit {
     // Start from provided date if available, otherwise try to take date from time if it's a Date, otherwise use now
     let d: Date;
     if (date) d = new Date(date);
-    else if (time instanceof Date) d = new Date(time);
-    else if (typeof time === 'number') d = new Date(time);
-    else d = new Date();
+    else if (time instanceof Date) d = new Date(time); // if time is Date, use its date part
+    else if (typeof time === 'number') d = new Date(time); // if time is timestamp, use its date part
+    else d = new Date(); // otherwise use current date
 
     let hours = 0;
     let minutes = 0;
 
     if (time == null || time === '') {
       // keep 00:00
-    } else if (typeof time === 'string') {
+    }
+    else if (typeof time === 'string') {
       const parts = time.split(':');
       hours = Number(parts[0]) || 0;
       minutes = Number(parts[1]) || 0;
-    } else if (time instanceof Date) {
+    }
+    else if (time instanceof Date) {
       hours = time.getHours();
       minutes = time.getMinutes();
-    } else if (typeof time === 'number') {
+    }
+    else if (typeof time === 'number') {
       const tmp = new Date(time);
       hours = tmp.getHours();
       minutes = tmp.getMinutes();
-    } else if (typeof time === 'object') {
+    }
+    else if (typeof time === 'object') {
       // common shapes: { hour: 8, minute: 30 } or { hours: 8, minutes: 30 }
       hours = Number(time.hour ?? time.hours ?? time.h ?? 0) || 0;
       minutes = Number(time.minute ?? time.minutes ?? time.m ?? 0) || 0;
     }
 
-    d.setHours(hours, minutes, 0, 0);
+    d.setHours(hours, minutes, 0, 0); // set hours and minutes, zero seconds and ms
     return d;
   }
 
@@ -132,10 +136,10 @@ export class VehicleReservationsComponent implements OnInit {
 
   // New helper: format a Date as local naive ISO datetime (no offset) e.g. 2025-11-30T11:00:00
   private formatLocalNaiveISO(d: Date): string {
-    const pad = (n: number) => String(n).padStart(2, '0');
+    const pad = (n: number) => String(n).padStart(2, '0'); // function to pad numbers to 2 digits, e.g. 5 -> "05"
     const year = d.getFullYear();
     const month = pad(d.getMonth() + 1);
-    const day = pad(d.getDate());
+    const day = pad(d.getDate()); // getDate() is day of month
     const hour = pad(d.getHours());
     const minute = pad(d.getMinutes());
     const second = pad(d.getSeconds());

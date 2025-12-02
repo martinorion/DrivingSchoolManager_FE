@@ -1,0 +1,43 @@
+<div class="page">
+  <h2>Prichádzajúce žiadosti o jazdy (inštruktor)</h2>
+
+  <div class="alerts">
+    @if (error()) {
+      <div class="error">{{ error() }}</div>
+    }
+    @if (success()) {
+      <div class="success">{{ success() }}</div>
+    }
+  </div>
+
+  <mat-form-field appearance="outline" class="field">
+    <mat-label>Hľadať</mat-label>
+    <input matInput (input)="onSearch($any($event.target).value)" placeholder="ID, dátum, status, poznámka" />
+  </mat-form-field>
+
+  @if (loading()) {
+    <div>Načítavam...</div>
+  }
+  @if (!loading() && ordered().length === 0) {
+    <div>Žiadne žiadosti.</div>
+  }
+
+  @for (r of ordered(); track r.id) {
+    <div class="item">
+      <div class="row">
+        <div>
+          <strong>{{ formatDateTime(r.start) }}</strong> - <strong>{{ formatDateTime(r.end) }}</strong>
+        </div>
+        <div>Status: {{ r.status || 'PENDING' }}</div>
+      </div>
+      @if (r.note) {
+        <div class="row small">Poznámka: {{ r.note }}</div>
+      }
+
+      <div class="actions">
+        <button mat-raised-button color="primary" (click)="approve(r)" [disabled]="r.status === 'APPROVED'">Schváliť</button>
+        <button mat-button color="warn" (click)="reject(r)" [disabled]="r.status === 'REJECTED'">Zamietnuť</button>
+      </div>
+    </div>
+  }
+</div>
