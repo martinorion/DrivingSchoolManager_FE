@@ -27,7 +27,9 @@ export class InstructorIncomingRequestsComponent implements OnInit {
     const q = this.searchTerm().trim().toLowerCase();
     if (!q) return this.requests();
     return this.requests().filter(r => {
-      const s = `${r.id ?? ''} ${r.start} ${r.end} ${r.status ?? ''} ${r.note ?? ''}`.toLowerCase();
+      const startStr = this.formatDateTime(r.start);
+      const endStr = this.formatDateTime(r.end);
+      const s = `${r.studentFullName} ${startStr} ${endStr} ${r.status ?? ''} ${r.note ?? ''}`.toLowerCase();
       return s.includes(q);
     });
   });
@@ -85,4 +87,3 @@ export class InstructorIncomingRequestsComponent implements OnInit {
     }
   }
 }
-

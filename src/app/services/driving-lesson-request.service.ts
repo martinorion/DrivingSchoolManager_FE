@@ -2,17 +2,16 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export type DrivingLessonRequestStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
-
 export interface DrivingLessonRequestDTO {
   id?: number;
   organizationId?: number;
   instructorId: number;
   start: string; // naive local ISO e.g. 2025-11-30T10:00:00
   end: string;
-  status?: DrivingLessonRequestStatus;
+  status?: String;
   note?: string;
   instructorFullName?: string;
+  studentFullName?: string;
 }
 
 @Injectable({ providedIn: 'root' })

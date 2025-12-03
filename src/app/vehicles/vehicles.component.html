@@ -1,6 +1,5 @@
 <section class="container">
   @if (error()) { <mat-card class="mb-4"><div class="alert alert--error access-message">{{ error() }}</div></mat-card> }
-
   <div class="form">
     <form class="auth-form" (ngSubmit)="submit()" [formGroup]="form">
       <div class="fields">
@@ -26,7 +25,7 @@
           @if (form.controls.plateNumber.hasError('duplicate')) { <mat-error>Vozidlo so zadanou ŠPZ už existuje.</mat-error> }
         </mat-form-field>
       </div>
-      <button mat-flat-button type="submit" class="accent-btn" [disabled]="form.invalid || creating()">
+      <button mat-flat-button type="submit" class="btn btn-primary" [disabled]="form.invalid || creating()">
         @if (!creating()) { Vytvoriť vozidlo } @else { <span>Ukladám...</span> }
       </button>
       @if (success()) { <div class="alert alert--success access-message" style="margin-top:.5rem;"><mat-icon>check_circle</mat-icon> {{ success() }}</div> }
@@ -37,7 +36,7 @@
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>Hľadať</mat-label>
       <input matInput type="search" [value]="searchTerm()" (input)="onSearch($any($event.target).value)" placeholder="Názov, značka, model alebo ŠPZ" />
-      @if (searchTerm()) { <button matSuffix mat-icon-button aria-label="Clear" (click)="onSearch('')">
+      @if (searchTerm()) { <button matSuffix mat-icon-button aria-label="Vyčistiť" (click)="onSearch('')">
         <mat-icon>close</mat-icon>
       </button> }
     </mat-form-field>
@@ -50,27 +49,31 @@
           @for (v of pagedVehicles(); track v.id) {
             <div class="row" [class.editing]="editingId() === v.id">
               @if (editingId() === v.id) {
-                <div class="main edit">
-                  <mat-form-field appearance="outline"><mat-label>Názov</mat-label><input matInput [formControl]="editForm.controls.name" />
-                    @if (editForm.controls.name.hasError('required') && (editForm.controls.name.touched || editForm.controls.name.dirty)) { <mat-error>Povinné pole</mat-error> }
-                  </mat-form-field>
-                  <mat-form-field appearance="outline"><mat-label>Značka</mat-label><input matInput [formControl]="editForm.controls.brand" />
-                    @if (editForm.controls.brand.hasError('required') && (editForm.controls.brand.touched || editForm.controls.brand.dirty)) { <mat-error>Povinné pole</mat-error> }
-                  </mat-form-field>
-                  <mat-form-field appearance="outline"><mat-label>Model</mat-label><input matInput [formControl]="editForm.controls.model" />
-                    @if (editForm.controls.model.hasError('required') && (editForm.controls.model.touched || editForm.controls.model.dirty)) { <mat-error>Povinné pole</mat-error> }
-                  </mat-form-field>
-                  <mat-form-field appearance="outline">
-                    <mat-label>ŠPZ</mat-label>
-                    <input matInput [formControl]="editForm.controls.plateNumber" />
-                    @if (editForm.controls.plateNumber.hasError('required') && (editForm.controls.plateNumber.touched || editForm.controls.plateNumber.dirty)) { <mat-error>Povinné pole</mat-error> }
-                    @if (editForm.controls.plateNumber.hasError('duplicate')) { <mat-error>Duplicitná ŠPZ</mat-error> }
-                  </mat-form-field>
-                </div>
-                <div class="actions">
-                  <button mat-stroked-button type="button" (click)="cancelEdit()">Zrušiť</button>
-                  <button mat-flat-button type="button" class="accent-btn" [disabled]="editForm.invalid || savingEdit()" (click)="saveEdit(v)">Uložiť</button>
-                </div>
+                <div class="form">
+                  <form class="auth-form">
+                    <div class="fields">
+                      <mat-form-field appearance="outline"><mat-label>Názov</mat-label><input matInput [formControl]="editForm.controls.name" />
+                        @if (editForm.controls.name.hasError('required') && (editForm.controls.name.touched || editForm.controls.name.dirty)) { <mat-error>Povinné pole</mat-error> }
+                      </mat-form-field>
+                      <mat-form-field appearance="outline"><mat-label>Značka</mat-label><input matInput [formControl]="editForm.controls.brand" />
+                        @if (editForm.controls.brand.hasError('required') && (editForm.controls.brand.touched || editForm.controls.brand.dirty)) { <mat-error>Povinné pole</mat-error> }
+                      </mat-form-field>
+                      <mat-form-field appearance="outline"><mat-label>Model</mat-label><input matInput [formControl]="editForm.controls.model" />
+                        @if (editForm.controls.model.hasError('required') && (editForm.controls.model.touched || editForm.controls.model.dirty)) { <mat-error>Povinné pole</mat-error> }
+                      </mat-form-field>
+                      <mat-form-field appearance="outline">
+                        <mat-label>ŠPZ</mat-label>
+                        <input matInput [formControl]="editForm.controls.plateNumber" />
+                        @if (editForm.controls.plateNumber.hasError('required') && (editForm.controls.plateNumber.touched || editForm.controls.plateNumber.dirty)) { <mat-error>Povinné pole</mat-error> }
+                        @if (editForm.controls.plateNumber.hasError('duplicate')) { <mat-error>Duplicitná ŠPZ</mat-error> }
+                      </mat-form-field>
+                  </div>
+                    <div class="actions">
+                      <button mat-stroked-button type="button" (click)="cancelEdit()">Zrušiť</button>
+                      <button mat-flat-button type="button" class="btn btn-primary" [disabled]="editForm.invalid || savingEdit()" (click)="saveEdit(v)">Uložiť</button>
+                    </div>
+                </form>
+              </div>
               } @else {
                 <div class="main">
                   <div class="name">{{ v.name }}</div>

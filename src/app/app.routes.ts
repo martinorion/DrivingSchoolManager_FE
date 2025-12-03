@@ -12,11 +12,11 @@ import { ConfirmVerificationComponent } from './auth/confirm-verification/confir
 import { InstructorRequestComponent } from './instructor-request/instructor-request-component';
 import { instructorNoOrgGuard } from './auth/guards/instructor-no-org.guard';
 import { MembersComponent } from './members/members.component';
-import { VehiclesMaterialComponent } from './vehicles/vehicles-material.component';
+import { VehiclesComponent } from './vehicles/vehicles.component';
 import { instructorWithOrgGuard } from './auth/guards/instructor-with-org.guard';
 import { studentWaitingRedirectGuard } from './auth/guards/student-waiting-redirect.guard';
 import { GroupsMaterialComponent } from './groups/groups-material.component';
-import { MyProfileComponent } from './profile/my-profile.component';
+import { MyProfileComponent } from './auth/profile/my-profile.component';
 import { VehicleReservationsComponent } from './vehicle-reservations/vehicle-reservations.component';
 import { StudentLessonRequestsComponent } from './lessons/student-lesson-requests.component';
 import { InstructorIncomingRequestsComponent } from './lessons/instructor-incoming-requests.component';
@@ -32,7 +32,7 @@ export const routes: Routes = [
   { path: 'waiting-room', component: WaitingRoomComponent, canActivate: [authGuard], data: { title: 'Čakáreň' } },
   { path: 'members', component: MembersComponent, canActivate: [authGuard], data: { title: 'Členovia' } },
   { path: 'instructors', component: InstructorRequestComponent, canActivate: [instructorNoOrgGuard], data: { title: 'Inštruktori' } },
-  { path: 'vehicles', component: VehiclesMaterialComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Vozidlá' } },
+  { path: 'vehicles', component: VehiclesComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Vozidlá' } },
   { path: 'groups', component: GroupsMaterialComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Skupiny' } },
   { path: 'car-reservations', component: VehicleReservationsComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Rezervácie vozidiel' } },
   { path: 'lesson-requests', component: StudentLessonRequestsComponent, canActivate: [authGuard], data: { title: 'Žiadosti o jazdy' } },

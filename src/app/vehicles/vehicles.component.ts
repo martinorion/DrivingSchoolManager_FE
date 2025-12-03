@@ -13,10 +13,10 @@ import { VehicleDTO, VehicleService } from '../services/vehicle.service';
   selector: 'app-vehicles',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatPaginatorModule],
-  templateUrl: './vehicles-material.component.html',
-  styleUrl: './vehicles-material.component.css'
+  templateUrl: './vehicles.component.html',
+  styleUrl: './vehicles.component.css'
 })
-export class VehiclesMaterialComponent implements OnInit {
+export class VehiclesComponent implements OnInit {
   private readonly vehicleService = inject(VehicleService);
   private readonly fb = inject(FormBuilder);
 

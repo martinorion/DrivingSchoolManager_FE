@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { usernameValidators, passwordValidators, emailValidators, phoneValidators, nameValidators, matchValidator, getErrorMessage } from '../../validators/form-validators';
 
 @Component({
   selector: 'app-register',
@@ -27,24 +28,24 @@ export class RegisterComponent {
 
   form = this.fb.group(
     {
-      username: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20), Validators.pattern(/^[a-zA-Z][a-zA-Z0-9._-]*$/)]],
-      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30), Validators.pattern(/.*\d.*/)]],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern(/^\+?[0-9]{7,15}$/)]],
-      confirmPassword: ['', [Validators.required]],
-      firstName: ['', [Validators.required, Validators.pattern(/^[\p{L}' \-]+$/u)]],
-      surname: ['', [Validators.required, Validators.pattern(/^[\p{L}' \-]+$/u)]],
+      username: ['', usernameValidators],
+      password: ['', passwordValidators],
+      email: ['', emailValidators],
+      phone: ['', phoneValidators],
+      confirmPassword: ['', [Validators.required, matchValidator('password')]],
+      firstName: ['', nameValidators],
+      surname: ['', nameValidators],
       authority: ['STUDENT', [Validators.required]],
       registrationKey: [''],
     },
-    { validators: [this.passwordsMatchValidator, this.registrationKeyRequiredValidator] }
+    { validators: [this.registrationKeyRequiredValidator] }
   );
 
-  private passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
-    const password = group.get('password')?.value as string | undefined;
-    const confirm = group.get('confirmPassword')?.value as string | undefined;
-    if (!password || !confirm) return null;
-    return password === confirm ? null : { passwordMismatch: true };
+  constructor() {
+    // Revalidate confirmPassword when password changes so mismatch updates live
+    this.form.get('password')?.valueChanges.subscribe(() => {
+      this.form.get('confirmPassword')?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+    });
   }
 
   private registrationKeyRequiredValidator(group: AbstractControl): ValidationErrors | null {
@@ -53,6 +54,12 @@ export class RegisterComponent {
     const needsKey = role === 'INSTRUCTOR' || role === 'ADMIN' || role === 'ADMINISTRATOR';
     if (!needsKey) return null;
     return key && key.trim().length > 0 ? null : { registrationKeyRequired: true };
+  }
+
+  // Delegate to shared error message helper
+  getMessage(controlName: keyof typeof this.form.controls): string | null {
+    const control = this.form.controls[controlName];
+    return getErrorMessage(controlName as string, control, this.form);
   }
 
   onSubmit() {

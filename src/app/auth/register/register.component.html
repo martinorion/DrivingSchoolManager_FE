@@ -9,9 +9,7 @@
           <mat-label>Používateľské meno</mat-label>
           <input matInput type="text" formControlName="username" required />
           @if (form.controls.username.invalid && (form.controls.username.dirty || form.controls.username.touched)) {
-            <mat-error>
-              Používateľské meno je povinné.
-            </mat-error>
+            <mat-error>{{ getMessage('username') }}</mat-error>
           }
         </mat-form-field>
 
@@ -20,9 +18,7 @@
             <mat-label>Meno</mat-label>
             <input matInput type="text" formControlName="firstName" required />
             @if (form.controls.firstName.invalid && (form.controls.firstName.dirty || form.controls.firstName.touched)) {
-              <mat-error>
-                Meno je povinné.
-              </mat-error>
+              <mat-error>{{ getMessage('firstName') }}</mat-error>
             }
           </mat-form-field>
 
@@ -30,9 +26,7 @@
             <mat-label>Priezvisko</mat-label>
             <input matInput type="text" formControlName="surname" required />
             @if (form.controls.surname.invalid && (form.controls.surname.dirty || form.controls.surname.touched)) {
-              <mat-error>
-                Priezvisko je povinné.
-              </mat-error>
+              <mat-error>{{ getMessage('surname') }}</mat-error>
             }
           </mat-form-field>
         </div>
@@ -42,9 +36,7 @@
             <mat-label>Email</mat-label>
             <input matInput type="email" formControlName="email" required />
             @if (form.controls.email.invalid && (form.controls.email.dirty || form.controls.email.touched)) {
-              <mat-error>
-                Zadajte platný email.
-              </mat-error>
+              <mat-error>{{ getMessage('email') }}</mat-error>
             }
           </mat-form-field>
 
@@ -52,9 +44,7 @@
             <mat-label>Telefón</mat-label>
             <input matInput type="tel" formControlName="phone" required />
             @if (form.controls.phone.invalid && (form.controls.phone.dirty || form.controls.phone.touched)) {
-              <mat-error>
-                Telefón je povinný.
-              </mat-error>
+              <mat-error>{{ getMessage('phone') }}</mat-error>
             }
           </mat-form-field>
         </div>
@@ -64,19 +54,15 @@
             <mat-label>Heslo</mat-label>
             <input matInput type="password" formControlName="password" required />
             @if (form.controls.password.invalid && (form.controls.password.dirty || form.controls.password.touched)) {
-              <mat-error>
-                Heslo je povinné.
-              </mat-error>
+              <mat-error>{{ getMessage('password') }}</mat-error>
             }
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Potvrdenie hesla</mat-label>
             <input matInput type="password" formControlName="confirmPassword" required />
-            @if ((form.errors?.['passwordMismatch']) && (form.controls.confirmPassword.dirty || form.controls.confirmPassword.touched)) {
-              <mat-error>
-                Heslá sa nezhodujú.
-              </mat-error>
+            @if (form.controls.confirmPassword.invalid && (form.controls.confirmPassword.dirty || form.controls.confirmPassword.touched)) {
+              <mat-error>{{ getMessage('confirmPassword') }}</mat-error>
             }
           </mat-form-field>
         </div>
@@ -89,9 +75,7 @@
             <mat-option value="ADMINISTRATOR">Admin</mat-option>
           </mat-select>
           @if (form.controls.authority.invalid && (form.controls.authority.dirty || form.controls.authority.touched)) {
-            <mat-error>
-              Rola je povinná.
-            </mat-error>
+            <mat-error>{{ getMessage('authority') }}</mat-error>
           }
         </mat-form-field>
 
@@ -100,10 +84,8 @@
             <mat-label>Registračný kľúč</mat-label>
             <input matInput type="text" formControlName="registrationKey" />
             <mat-hint>Povinné pre rolu Inštruktor a Admin</mat-hint>
-            @if (form.errors?.['registrationKeyRequired'] && (form.controls.registrationKey.dirty || form.controls.registrationKey.touched)) {
-              <mat-error>
-                Pri tejto role je registračný kľúč povinný.
-              </mat-error>
+            @if ((form.errors?.['registrationKeyRequired']) && (form.controls.registrationKey.dirty || form.controls.registrationKey.touched)) {
+              <mat-error>{{ getMessage('registrationKey') }}</mat-error>
             }
           </mat-form-field>
         }

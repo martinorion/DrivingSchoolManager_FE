@@ -1,29 +1,8 @@
-/* Create form: one row with equal-width columns */
-.create {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: .75rem;
-  border: 1px solid #eee;
-  padding: 1rem;
-  border-radius: 12px;
-  background:#fff;
-  align-items: stretch;
-}
+.form { display: flex; flex-direction: column; gap: .75rem; border: 1px solid #eee; padding: 1rem; border-radius: 12px; background:#fff; }
+.fields { display: grid; gap: .75rem; grid-template-columns: 1fr; }
+@media (min-width: 700px) { .fields { grid-template-columns: 5fr 3fr 3fr 3fr; }}
 
-/* Make material fields fill column width and consistent height */
-.create .mat-mdc-form-field { width: 100%; }
-.create .mat-mdc-text-field-wrapper { height: 56px; }
-.create .mat-mdc-form-field .mdc-text-field { height: 56px; }
-
-/* Submit button full height to align with inputs */
-.create .submit-btn { padding: .6rem .9rem; border-radius: 10px; font-weight: 700; background: var(--gradient-primary); color:#fff; height: 56px; }
-.create .submit-btn[disabled] { opacity:.65; filter: grayscale(.3); }
-
-/* Responsive: stack on narrow screens */
-@media (max-width: 700px) {
-  .create { grid-template-columns: 1fr; }
-  .create .submit-btn { height: auto; }
-}
+.toolbar { display:flex; justify-content:center; }
 
 /* Search */
 .search-field { width: 100%; max-width: 480px; }
@@ -42,5 +21,7 @@
 
 .empty { color: var(--color-text-muted); }
 .loading { padding: .5rem 0; color: var(--color-text-muted); }
+@media (max-width: 700px) {
+  .item { flex-direction: column; align-items: flex-start; }
+}
 
-@media (min-width: 700px) { .create { grid-template-columns: 2fr 1fr 1fr auto; align-items: end; } .create .submit-btn { align-self: stretch; } }

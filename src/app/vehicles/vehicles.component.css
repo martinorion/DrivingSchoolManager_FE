@@ -1,0 +1,19 @@
+.form { display: flex; flex-direction: column; gap: .75rem; border: 1px solid #eee; padding: 1rem; border-radius: 12px; background:#fff; width: -webkit-fill-available }
+.fields { display: grid; gap: .75rem; grid-template-columns: 1fr; }
+@media (min-width: 700px) { .fields { grid-template-columns: repeat(4, 1fr); } }
+
+/* Center toolbar and constrain search width */
+.toolbar { display:flex; justify-content:center; }
+.search-field { width: 100%; max-width: 520px; margin: 0 auto; }
+
+/* List layout */
+.list-wrapper { border:1px solid #eee; background:#fff; border-radius:12px; padding:1rem; display:flex; flex-direction:column; gap:.75rem; min-height:300px; }
+.list { display:grid; gap:.5rem; overflow:auto; max-height:55vh; padding-bottom:.25rem; }
+.row { display:flex; padding:.75rem 1rem; border:1px solid #eee; border-radius:8px; background:#fafafa; align-items:center; justify-content:space-between; gap:1rem; }
+.main { display:flex; flex-direction:column; gap:.25rem; }
+.name { font-weight:600; }
+.meta { font-size:.85rem; color: var(--color-text-muted); }
+.empty { padding:.5rem; color: var(--color-text-muted); }
+.actions { display:flex; flex-direction:row; gap:.5rem; justify-content: flex-end; width:-webkit-fill-available }
+
+

@@ -1,12 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { usernameValidators, passwordValidators, getErrorMessage } from '../../validators/form-validators';
 
 @Component({
   selector: 'app-login',
@@ -24,9 +25,15 @@ export class LoginComponent {
   error = signal<string | null>(null);
 
   form = this.fb.group({
-    username: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20), Validators.pattern(/^[a-zA-Z][a-zA-Z0-9._-]*$/)]],
-    password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30), Validators.pattern(/.*\d.*/)]],
+    username: ['', usernameValidators],
+    password: ['', passwordValidators],
   });
+
+  // Delegate to shared error message helper
+  getMessage(controlName: keyof typeof this.form.controls): string | null {
+    const control = this.form.controls[controlName];
+    return getErrorMessage(controlName as string, control, this.form);
+  }
 
   onSubmit() {
     if (this.form.invalid) return;

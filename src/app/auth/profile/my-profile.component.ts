@@ -2,11 +2,12 @@ import {Component, inject, OnInit, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { AuthService, EditProfileDTO, EditProfileResponseDTO, UserDTO } from '../services/auth.service';
+import { AuthService, EditProfileDTO, EditProfileResponseDTO, UserDTO } from '../../services/auth.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { usernameValidators, emailValidators, phoneValidators, nameValidators, getErrorMessage } from '../../validators/form-validators';
 
 @Component({
   selector: 'app-my-profile',
@@ -24,13 +25,13 @@ export class MyProfileComponent implements OnInit {
   success = signal<string | null>(null);
 
   form = this.fb.group({
-    username: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20), Validators.pattern(/^[a-zA-Z][a-zA-Z0-9._-]*$/)]],
-    email: ['', [Validators.required, Validators.email]],
-    phone: ['', [Validators.required, Validators.pattern(/^\+?[0-9]{7,15}$/)]],
-    // allow Unicode letters (diacritics), spaces, hyphens and apostrophes in names
-    firstName: ['', [Validators.required, Validators.pattern(/^[\p{L}' \-]+$/u)]],
-    surname: ['', [Validators.required, Validators.pattern(/^[\p{L}' \-]+$/u)]],
-    password: ['', [Validators.minLength(8), Validators.maxLength(30), Validators.pattern(/.*\d.*/)]], // optional
+    username: ['', usernameValidators],
+    email: ['', emailValidators],
+    phone: ['', phoneValidators],
+    firstName: ['', nameValidators],
+    surname: ['', nameValidators],
+    // optional password: reuse same rules but not required; keep hints
+    password: ['', [Validators.minLength(8), Validators.maxLength(30), Validators.pattern(/.*\d.*/)]],
   });
 
   // load current profile and prefill
@@ -52,6 +53,12 @@ export class MyProfileComponent implements OnInit {
         this.loading.set(false);
       }
     });
+  }
+
+  // Delegate to shared error message helper
+  getMessage(controlName: keyof typeof this.form.controls): string | null {
+    const control = this.form.controls[controlName];
+    return getErrorMessage(controlName as string, control, this.form);
   }
 
   onSubmit() {

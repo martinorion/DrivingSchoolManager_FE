@@ -1,7 +1,6 @@
-<div class="page">
-  <h2>Žiadosti o jazdy (študent)</h2>
-
-  <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+ <div class="form">
+  <form class="auth-form" [formGroup]="form" (ngSubmit)="submit()" >
+    <div class="fields">
     <mat-form-field appearance="outline" class="field">
       <mat-label>Inštruktor</mat-label>
       <mat-select formControlName="instructorId">
@@ -46,9 +45,11 @@
       <mat-label>Poznámka (nepovinné)</mat-label>
       <textarea matInput rows="3" formControlName="note"></textarea>
     </mat-form-field>
+    </div>
+    <button mat-raised-button class="btn btn-primary" type="submit" [disabled]="creating() || form.invalid">Odoslať žiadosť</button>
 
-    <button mat-raised-button color="primary" type="submit" [disabled]="creating() || form.invalid">Odoslať žiadosť</button>
   </form>
+  </div>
 
   <div class="alerts">
     @if (error()) {
@@ -60,10 +61,14 @@
   </div>
 
   <div class="list">
-    <div class="list-controls">
-      <mat-form-field appearance="outline" class="field">
+
+    <div class="toolbar">
+      <mat-form-field appearance="outline" class="search-field">
         <mat-label>Hľadať</mat-label>
-        <input matInput (input)="onSearch($any($event.target).value)" placeholder="ID, dátum, status, poznámka" />
+        <input matInput type="search" [value]="searchTerm()" (input)="onSearch($any($event.target).value)"  placeholder="ID, dátum, status, poznámka" />
+        @if (searchTerm()) { <button matSuffix mat-icon-button aria-label="Vyčistiť" (click)="onSearch('')">
+          <mat-icon>close</mat-icon>
+        </button> }
       </mat-form-field>
     </div>
 
@@ -80,7 +85,16 @@
           <div>
             <strong>{{ formatDateTime(r.start) }}</strong> - <strong>{{ formatDateTime(r.end) }}</strong>
           </div>
-          <div>Status: {{ r.status || 'PENDING' }}</div>
+          <div>Status:
+            <span
+              class="status-badge"
+              [class.status-rejected]="r.status === 'ZAMIETNUTÉ'"
+              [class.status-approved]="r.status === 'SCHVÁLENE'"
+              [class.status-pending]="!r.status || r.status === 'V PROCESE'"
+            >
+            {{ r.status || 'V PROCESE' }}
+          </span>
+          </div>
         </div>
         <div class="row small">
           Meno inštruktora: {{ r.instructorFullName }}
@@ -91,4 +105,4 @@
       </div>
     }
   </div>
-</div>
+

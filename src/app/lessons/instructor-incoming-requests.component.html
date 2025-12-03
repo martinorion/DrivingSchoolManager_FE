@@ -1,6 +1,4 @@
 <div class="page">
-  <h2>Prichádzajúce žiadosti o jazdy (inštruktor)</h2>
-
   <div class="alerts">
     @if (error()) {
       <div class="error">{{ error() }}</div>
@@ -10,10 +8,15 @@
     }
   </div>
 
-  <mat-form-field appearance="outline" class="field">
-    <mat-label>Hľadať</mat-label>
-    <input matInput (input)="onSearch($any($event.target).value)" placeholder="ID, dátum, status, poznámka" />
-  </mat-form-field>
+  <div class="toolbar">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Hľadať</mat-label>
+      <input matInput type="search" [value]="searchTerm()" (input)="onSearch($any($event.target).value)"  placeholder="ID, dátum, status, poznámka" />
+      @if (searchTerm()) { <button matSuffix mat-icon-button aria-label="Vyčistiť" (click)="onSearch('')">
+        <mat-icon>close</mat-icon>
+      </button> }
+    </mat-form-field>
+  </div>
 
   @if (loading()) {
     <div>Načítavam...</div>
@@ -28,15 +31,26 @@
         <div>
           <strong>{{ formatDateTime(r.start) }}</strong> - <strong>{{ formatDateTime(r.end) }}</strong>
         </div>
-        <div>Status: {{ r.status || 'PENDING' }}</div>
+        <div>Meno študenta: {{r.studentFullName}}</div>
+        <div>
+          Status:
+          <span
+            class="status-badge"
+            [class.status-rejected]="r.status === 'ZAMIETNUTÉ'"
+            [class.status-approved]="r.status === 'SCHVÁLENE'"
+            [class.status-pending]="!r.status || r.status === 'V PROCESE'"
+          >
+            {{ r.status || 'V PROCESE' }}
+          </span>
+        </div>
       </div>
       @if (r.note) {
         <div class="row small">Poznámka: {{ r.note }}</div>
       }
 
       <div class="actions">
-        <button mat-raised-button color="primary" (click)="approve(r)" [disabled]="r.status === 'APPROVED'">Schváliť</button>
-        <button mat-button color="warn" (click)="reject(r)" [disabled]="r.status === 'REJECTED'">Zamietnuť</button>
+        <button class="btn btn-primary" mat-raised-button (click)="approve(r)" [disabled]="r.status === 'SCHVÁLENE'">Schváliť</button>
+        <button mat-stroked-button color="warn" (click)="reject(r)" [disabled]="r.status === 'ZAMIETNUTÉ'">Zamietnuť</button>
       </div>
     </div>
   }

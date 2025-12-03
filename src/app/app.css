@@ -100,6 +100,17 @@
   background: #fff; /* page backgrounds pure white */
 }
 
+/* Reusable width container for consistent page max-width */
+.container {
+  max-width: 1120px; /* tweak to your preference, e.g., 960/1120/1280 */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .site-footer {
   margin-top: 0;
   background:  var(--gradient-primary);
@@ -145,8 +156,12 @@
   border-radius: 1px;
 }
 
-@media (max-width: 700px) {
-  .nav-toggle { display: inline-flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; }
+@media (max-width: 970px) {
+  .nav-toggle { display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px; }
 
   /* Stack the links vertically and hide by default */
   .top-nav .nav-links {

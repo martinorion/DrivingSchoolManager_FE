@@ -50,7 +50,7 @@ export class StudentLessonRequestsComponent implements OnInit {
     const q = this.searchTerm().trim().toLowerCase();
     if (!q) return this.requests();
     return this.requests().filter(r => {
-      const s = `${r.id ?? ''} ${r.instructorId} ${r.start} ${r.end} ${r.status ?? ''} ${r.note ?? ''}`.toLowerCase();
+      const s = `${r.instructorFullName} ${r.start} ${r.end} ${r.status ?? ''} ${r.note ?? ''}`.toLowerCase();
       return s.includes(q);
     });
   });

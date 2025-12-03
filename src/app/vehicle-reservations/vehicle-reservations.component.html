@@ -1,14 +1,12 @@
 <section class="container">
-  <h1>Rezervácie vozidiel</h1>
-
   @if (error()) {<div class="alert alert--error">{{ error() }}</div>}
   @if (success()) {<div class="alert alert--success">{{ success() }}</div>}
   @if (form.controls.endTime.hasError('range') && form.controls.endTime.touched) {
     <div class="alert alert--error">Koniec musí byť po začiatku.</div>
   }
-
-  <form class="create" [formGroup]="form" (ngSubmit)="submit()">
-    <!-- Vozidlo -->
+  <div class="form">
+  <form class="auth-form" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="fields">
     <mat-form-field appearance="outline">
       <mat-label>Vozidlo</mat-label>
       <mat-select formControlName="vehicleId">
@@ -54,11 +52,11 @@
       <mat-timepicker-toggle matIconSuffix [for]="timepicker_end"></mat-timepicker-toggle>
       <mat-timepicker #timepicker_end></mat-timepicker>
     </mat-form-field>
-
-    <button mat-raised-button type="submit" class="submit-btn" [disabled]="form.invalid || creating()">Vytvoriť rezerváciu</button>
+    </div>
+    <button mat-flat-button type="submit" class="btn btn-primary" [disabled]="form.invalid || creating()">Vytvoriť rezerváciu</button>
   </form>
-
-  <div class="search">
+  </div>
+  <div class="toolbar">
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>Hľadať</mat-label>
       <input matInput #queryBox type="text" placeholder="Hľadať podľa vozidla, ŠPZ alebo času" (input)="onSearch(queryBox.value)" />

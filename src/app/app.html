@@ -3,13 +3,13 @@
       <a routerLink="/dashboard" routerLinkActive="active">{{ title() }}</a>
     </div>
 
-    <button class="nav-toggle" type="button" (click)="toggleMenu()" aria-label="Menu" [attr.aria-expanded]="menuOpen()">
+    <button class="nav-toggle" type="button" (click)="toggleMenu()" aria-label="Menu" [attr.aria-expanded]="menuOpen()" aria-controls="primary-nav">
       <span class="nav-toggle-bar"></span>
       <span class="nav-toggle-bar"></span>
       <span class="nav-toggle-bar"></span>
     </button>
 
-    <div class="nav-links" [class.open]="menuOpen()">
+    <div class="nav-links" [class.open]="menuOpen()" id="primary-nav">
       @if (auth.isAuthenticated()) {
         @if (auth.hasRole('INSTRUCTOR') && hasOrg() === true) {
           <a routerLink="/waiting-room" routerLinkActive="active">Čakáreň</a>
@@ -37,7 +37,7 @@
   </nav>
 
   <header class="page-header">
-    <div class="page-header-content">
+    <div class="page-header-content container">
       <h1 class="page-title">{{ pageTitle() }}</h1>
     </div>
     <div class="header-divider">
@@ -53,11 +53,13 @@
   </header>
 
   <main class="page">
-    <router-outlet></router-outlet>
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
   </main>
 
   <footer class="site-footer">
-    <div class="footer-inner">
+    <div class="footer-inner container">
       <div class="footer-brand">{{ title() }}</div>
       <div class="footer-copy">© 2025 Všetky práva vyhradené</div>
     </div>
