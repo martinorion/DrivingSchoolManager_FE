@@ -75,14 +75,16 @@
                 </form>
               </div>
               } @else {
-                <div class="main">
-                  <div class="name">{{ v.name }}</div>
-                  <div class="meta">{{ v.brand }} {{ v.model }} • {{ v.plateNumber }}</div>
-                </div>
-                <div class="actions">
-                  <button mat-stroked-button type="button" (click)="startEdit(v)">Upraviť</button>
-                  <button mat-flat-button color="warn" type="button" (click)="delete(v)">Odstrániť</button>
-                </div>
+                <div class="item">
+                  <div class="main">
+                    <div class="name">{{ v.name }}</div>
+                    <div class="meta">{{ v.brand }} {{ v.model }} • {{ v.plateNumber }}</div>
+                  </div>
+                  <div class="actions">
+                    <button mat-stroked-button type="button" (click)="startEdit(v)">Upraviť</button>
+                    <button mat-flat-button color="warn" type="button" (click)="delete(v)">Odstrániť</button>
+                  </div>
+              </div>
               }
             </div>
           }

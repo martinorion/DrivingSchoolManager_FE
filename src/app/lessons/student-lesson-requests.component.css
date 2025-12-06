@@ -54,4 +54,5 @@
   .row { flex-direction: column; align-items: flex-start; gap: 4px; }
   .row > div { margin: 0; }
   .field { max-width: 100%; }
+  .fields {gap: 0}
 }

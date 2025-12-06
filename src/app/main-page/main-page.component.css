@@ -3,6 +3,6 @@ h1 { margin: 0 0 1rem; }
 .create input { flex: 1; padding: .6rem .75rem; border: 1px solid #e5e7eb; border-radius: .5rem; }
 .create button { padding: .6rem .9rem; border-radius: .5rem; border: 1px solid #f59e0b; background: #fbbf24; }
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .75rem; }
-.card { border: 1px solid #e5e7eb; border-radius: .75rem; padding: 1rem; background: #fff; display: flex; justify-content: space-between; align-items: center; }
+.card { border: 1px solid #e5e7eb; border-radius: .75rem; padding: 1rem; background: #fff; display: flex; justify-content: center; align-items: center; }
 .card__title { font-weight: 600; }
 .join { border: 1px solid #e5e7eb; background: #fff; border-radius: .5rem; padding: .4rem .7rem; }

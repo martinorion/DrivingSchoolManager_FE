@@ -1,7 +1,0 @@
-.profile-card { max-width: 720px; margin: 24px auto; padding: 8px; }
-.title { margin: 8px 16px 16px; font-weight: 600; }
-.profile-form .row { display: flex; gap: 16px; margin-bottom: 12px; }
-.profile-form .row.two-cols > * { flex: 1; }
-.profile-form .full { width: 100%; }
-.actions { margin-top: 16px; display: flex; justify-content: flex-end; }
-.messages { margin-top: 12px; }
