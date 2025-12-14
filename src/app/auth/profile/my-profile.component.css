@@ -1,0 +1,6 @@
+.preview { display: flex; align-items: center; gap: 10px; margin: 8px 0 12px; flex-direction: column; }
+.preview img { width: 80%; height: 220px; object-fit: cover; display: block; }
+
+#update {
+  width: 100%;
+}

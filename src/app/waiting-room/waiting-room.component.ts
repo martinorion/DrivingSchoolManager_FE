@@ -142,7 +142,7 @@ export class WaitingRoomComponent implements OnInit {
     this.success.set(null);
     this.error.set(null);
     this.service.deleteStudentRequest().subscribe({
-      next: () => { this.success.set('Žiadosť bola zrušená.'); this.refresh(); },
+      next: () => { this.success.set('Žiadosť bola zrušená.'); this.router.navigateByUrl('/dashboard'); },
       error: () => this.error.set('Zrušenie zlyhalo.')
     });
   }

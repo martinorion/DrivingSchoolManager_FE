@@ -1,8 +1,47 @@
-h1 { margin: 0 0 1rem; }
-.create { display: flex; gap: .5rem; margin: .5rem 0 1rem; }
-.create input { flex: 1; padding: .6rem .75rem; border: 1px solid #e5e7eb; border-radius: .5rem; }
-.create button { padding: .6rem .9rem; border-radius: .5rem; border: 1px solid #f59e0b; background: #fbbf24; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .75rem; }
-.card { border: 1px solid #e5e7eb; border-radius: .75rem; padding: 1rem; background: #fff; display: flex; justify-content: center; align-items: center; }
+.create {
+  display: flex;
+  gap: .5rem;
+  margin: .5rem 0 1rem;
+  width: 50%;
+  flex-direction: column;
+}
+
+.create-org-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/*Preview image*/
+.preview { display: flex; align-items: center; gap: 10px; margin: 8px 0 12px; flex-direction: column; }
+.preview .img-box { width: 80%; height: 200px; border-radius: 8px; overflow: hidden; box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
+.preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /*many columns as fit in the container with a minimum width of 220px for each column*/
+  gap: .75rem;
+}
+
+.card {
+  border: 1px solid #e5e7eb;
+  border-radius: .75rem;
+  padding: 1rem;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 .card__title { font-weight: 600; }
-.join { border: 1px solid #e5e7eb; background: #fff; border-radius: .5rem; padding: .4rem .7rem; }
+
+.card__image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  margin-top: 8px;
+  display: block;
+  border-radius: 6px;
+}
+

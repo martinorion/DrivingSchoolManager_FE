@@ -5,6 +5,9 @@ import { Observable, catchError, map, of } from 'rxjs';
 export interface Organization {
   id: number;
   name: string;
+  imageBase64Data?: string | null;
+  contentType?: string | null; // optional if backand send that
+  imageUrl?: string | null; // convience for rendering
 }
 
 export interface CreateOrganizationRequest {
@@ -25,15 +28,35 @@ export class OrganizationService {
   private readonly baseUrl = 'http://localhost:8080/api/organization';
 
   getAllOrganizations(): Observable<Organization[]> {
-    return this.http.get<Organization[]>(`${this.baseUrl}/allOrganization`);
+    return this.http.get<Organization[]>(`${this.baseUrl}/allOrganization`, { params: { includeImage: true as any } }).pipe(
+      map(list => list.map(org => {
+        const ct = org.contentType || 'image/jpeg';
+        const img = org.imageBase64Data || null;
+        return {
+          ...org,
+          imageUrl: img ? `data:${ct};base64,${img}` : null
+        } as Organization;
+      }))
+    );
   }
 
-  createOrganization(body: CreateOrganizationRequest): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/createOrganization`, body);
+  // Multipart create with required image file
+  createOrganizationWithImage(dto: CreateOrganizationRequest, file: File): Observable<void> {
+    const formData = new FormData();
+    // Send dto as JSON blob under key "dto" to match backend
+    formData.append('dto', new Blob([JSON.stringify(dto)], { type: 'application/json' }));
+    formData.append('file', file);
+    return this.http.post<void>(`${this.baseUrl}/createOrganization`, formData);
   }
 
   getCurrentOrganization(): Observable<Organization | null> {
     return this.http.get<Organization>(`${this.baseUrl}/getCurrentOrganization`).pipe(
+      map(org => {
+        if (!org) return null as any;
+        const ct = org.contentType || 'image/jpeg';
+        const img = org.imageBase64Data || null;
+        return { ...org, imageUrl: img ? `data:${ct};base64,${img}` : null } as Organization;
+      }),
       catchError(() => of(null))
     );
   }
@@ -54,5 +77,15 @@ export class OrganizationService {
   // Deprecated helper; prefer getCurrentOrganization
   checkHasOrganization(): Observable<boolean> {
     return this.getCurrentOrganization().pipe(map(org => !!org), catchError(() => of(false)));
+  }
+
+  // Multipart update with optional image; dto should include at least id and name
+  updateOrganizationWithOptionalImage(dto: Partial<Organization>, file?: File | null): Observable<void> {
+    const formData = new FormData();
+    formData.append('dto', new Blob([JSON.stringify(dto)], { type: 'application/json' }));
+    if (file) {
+      formData.append('file', file);
+    }
+    return this.http.post<void>(`${this.baseUrl}/update`, formData);
   }
 }

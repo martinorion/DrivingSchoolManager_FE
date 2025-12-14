@@ -1,15 +1,34 @@
 <section class="container">
-  @if (isStudentInOrg()) {<h1>Ste členom organizácie</h1>} @else {<h1>Organizácie</h1>}
+  @if (isStudentInOrg()) {<h1>Ste členom organizácie</h1>}
 
   @if (error()) {<div class="alert alert--error">{{ error() }}</div>}
-<!--  @if (success()) {<div class="alert alert--success">{{ success() }}</div>}-->
 
   @if (isInstructor()) {
     @if (hasOrg() === false) {
+      <div class="create-org-section">
+      <h2>Vytvoriť novú organizáciu</h2>
       <form class="create" [formGroup]="createForm" (ngSubmit)="createOrganization()">
-        <input type="text" placeholder="Názov organizácie" formControlName="name" />
-        <button type="submit" [disabled]="createForm.invalid">Vytvoriť organizáciu</button>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Názov organizácie</mat-label>
+          <input matInput type="text" formControlName="name" required />
+          @if (createForm.controls.name.hasError('required') && (createForm.controls.name.touched || createForm.controls.name.dirty)) { <mat-error>Povinné pole</mat-error> }
+        </mat-form-field>
+        @if (imagePreviewUrl()) {
+          <div class="preview">
+            <div class="img-box">
+              <img [src]="imagePreviewUrl()" alt="Náhľad obrázka" />
+            </div>
+            <button mat-flat-button color="warn" type="button" (click)="removeSelectedImage()">Odstrániť</button>
+          </div>
+        } @else {
+          <div class="file-row">
+            <input id="org-image-create" type="file" accept="image/*" (change)="onFileSelected($event)" style="display:none" />
+            <div class="preview"><button mat-stroked-button type="button" (click)="triggerFileInput('org-image-create')">Vložiť obrázok</button></div>
+          </div>
+        }
+        <button type="submit" class="btn btn-primary" [disabled]="createForm.invalid">Vytvoriť organizáciu</button>
       </form>
+      </div>
       <div class="alt-option">
         <a routerLink="/instructors">Alebo sa pripojiť k existujúcej organizácii ako inštruktor</a>
       </div>
@@ -25,8 +44,12 @@
       @for (org of organizations(); track org.id) {
         <div class="card">
           <div class="card__title">{{ org.name }}</div>
+          @if (org.imageUrl) {
+            <img [src]="org.imageUrl" alt="Logo organizácie" class="card__image" />
+          }
           @if (isStudent() && auth.isAuthenticated() && !isStudentInOrg()) {
-            <button class="join" (click)="joinSendRequest(org)" [disabled]="studentHasPending()">Pripojiť sa</button>
+            <br>
+            <button class="btn btn-primary" (click)="joinSendRequest(org)" [disabled]="studentHasPending()">Pripojiť sa</button>
           }
         </div>
       }

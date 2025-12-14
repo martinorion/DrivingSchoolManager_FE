@@ -5,11 +5,14 @@ import { OrganizationService, Organization } from '../services/organization.serv
 import { WaitingRoomService, WaitingRoomDTO } from '../services/waiting-room.service';
 import { AuthService } from '../services/auth.service';
 import {Router, RouterLink} from '@angular/router';
+import {MatButton} from '@angular/material/button';
+import {MatError, MatFormField} from '@angular/material/form-field';
+import {MatInput, MatLabel} from '@angular/material/input';
 
 @Component({
   selector: 'app-main-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, MatButton, MatFormField, MatInput, MatLabel, MatError],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.css'
 })
@@ -36,6 +39,10 @@ export class MainPageComponent implements OnInit {
   isStudent = computed(() => this.auth.hasRole('STUDENT'));
   isInstructor = computed(() => this.auth.hasRole('INSTRUCTOR'));
   hasOrg = signal<boolean | null>(null);
+
+  // Image file required for creating organization
+  imageFile = signal<File | null>(null);
+  imagePreviewUrl = signal<string | null>(null);
 
   createForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
@@ -83,7 +90,7 @@ export class MainPageComponent implements OnInit {
     this.loading.set(true);
     this.error.set(null);
     this.orgService.getAllOrganizations().subscribe({
-      next: (list) => { this.organizations.set(list); this.loading.set(false); },
+      next: (list) => { this.organizations.set(list); this.loading.set(false); console.log(list)},
       error: (err) => { this.error.set(err?.error?.message || 'Nepodarilo sa načítať organizácie.'); this.loading.set(false); }
     });
   }
@@ -110,19 +117,44 @@ export class MainPageComponent implements OnInit {
     });
   }
 
+  // Handle image selection
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files && input.files[0] ? input.files[0] : null;
+    this.imageFile.set(file);
+    this.imagePreviewUrl.set(file ? URL.createObjectURL(file) : null);
+  }
+
+  removeSelectedImage() {
+    this.imageFile.set(null);
+    this.imagePreviewUrl.set(null);
+  }
+
   createOrganization() {
     if (this.createForm.invalid || this.hasOrg()) return;
     const { name } = this.createForm.getRawValue();
+    // Require image file
+    const file = this.imageFile();
+    if (!file) {
+      this.error.set('Prosím nahrajte obrázok organizácie.');
+      return;
+    }
     this.error.set(null);
     this.success.set(null);
-    this.orgService.createOrganization({ name: name as string }).subscribe({
+    this.orgService.createOrganizationWithImage({ name: name as string }, file).subscribe({
       next: () => {
         this.success.set('Organizácia bola vytvorená.');
         this.createForm.reset();
+        this.imageFile.set(null);
         this.hasOrg.set(true);
         this.router.navigateByUrl('/waiting-room');
       },
       error: (err) => this.error.set(err?.error?.message || 'Vytvorenie zlyhalo.')
     });
+  }
+
+  triggerFileInput(inputId: string) {
+    const el = document.getElementById(inputId) as HTMLInputElement | null;
+    el?.click();
   }
 }
