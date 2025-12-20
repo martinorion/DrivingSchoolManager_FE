@@ -20,13 +20,14 @@
           <a routerLink="/groups" routerLinkActive="active">Skupiny</a>
         } @else if (auth.hasRole('INSTRUCTOR') && hasOrg() !== true) {
           <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-          <a routerLink="/instructors" routerLinkActive="active">Inštruktori</a>
+          <a routerLink="/instructors" routerLinkActive="active">Pripojenie k organizácii</a>
         } @else if (auth.hasRole('STUDENT'))  {
           <a routerLink="/lesson-requests" routerLinkActive="active">Jazdy</a>
         }
-        @else {
-          <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+        @else if (auth.hasRole('ADMINISTRATOR')) {
+          <a routerLink="/admin" routerLinkActive="active">Admin portal</a>
         }
+        <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
         <a routerLink="/my-profile" routerLinkActive="active">Môj profil</a>
         <button type="button" (click)="logout()">Odhlásiť</button>
       } @else {
@@ -57,6 +58,12 @@
       <router-outlet></router-outlet>
     </div>
   </main>
+
+  @if (auth.hasRole('INSTRUCTOR') && orgPending()) {
+    <div class="pending-floating" title="Vaša organizácia zatiaľ nie je schválená a nie je verejná.">
+      Organizácia nie je schválená a nie je verejná
+    </div>
+  }
 
   <footer class="site-footer">
     <div class="footer-inner container">

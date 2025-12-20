@@ -4,3 +4,10 @@
 #update {
   width: 100%;
 }
+
+.delete-org-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}

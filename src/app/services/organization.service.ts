@@ -5,6 +5,8 @@ import { Observable, catchError, map, of } from 'rxjs';
 export interface Organization {
   id: number;
   name: string;
+  isAccepted?: boolean; // new flag from backend
+  ownerId?: number; // owner user id for ownership checks
   imageBase64Data?: string | null;
   contentType?: string | null; // optional if backand send that
   imageUrl?: string | null; // convience for rendering
@@ -87,5 +89,32 @@ export class OrganizationService {
       formData.append('file', file);
     }
     return this.http.post<void>(`${this.baseUrl}/update`, formData);
+  }
+
+  // --- Admin-only endpoints ---
+  // List organizations awaiting acceptance
+  getAllUnacceptedOrganizations(): Observable<Organization[]> {
+    return this.http.get<Organization[]>(`${this.baseUrl}/getAllUnacceptedOrganizations`).pipe(
+      map(list => list.map(org => {
+        const ct = org.contentType || 'image/jpeg';
+        const img = org.imageBase64Data || null;
+        return { ...org, imageUrl: img ? `data:${ct};base64,${img}` : null } as Organization;
+      }))
+    );
+  }
+
+  // Accept an organization by id
+  acceptOrganization(organizationId: number): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/acceptOrganization/${organizationId}`, {});
+  }
+
+  // Delete an organization by id
+  deleteOrganizationAsAdmin(organizationId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/deleteOrganization/${organizationId}`);
+  }
+
+  // Delete my organization (as instructor/owner)
+  deleteMyOrganization(organizationId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/deleteMyOrganization/${organizationId}`);
   }
 }

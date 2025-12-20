@@ -1,0 +1,132 @@
+<div class="admin-portal">
+  <div class="org-columns">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Neschválené organizácie</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Hľadať organizáciu</mat-label>
+          <input matInput [value]="unacceptedQuery()" (input)="onUnacceptedQueryInput($event)">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        @if (orgLoading()) {
+          <div class="center">
+            <mat-progress-spinner mode="indeterminate" diameter="32"></mat-progress-spinner>
+          </div>
+        }
+        @if (orgError()) {
+          <div class="error">{{ orgError() }}</div>
+        }
+        @if (!orgLoading() && !orgError()) {
+          <mat-list class="org-list">
+            @for (org of pagedUnaccepted(); track org.id) {
+              <mat-list-item>
+                <div class="item-content">
+                  <span class="name">{{ org.name }}</span>
+                  <span class="spacer"></span>
+                  <div class="buttons">
+                  <button mat-raised-button class="btn btn-primary" (click)="acceptOrg(org.id)">
+                    <mat-icon>check_circle</mat-icon>
+                    Schváliť
+                  </button>
+                  <button mat-stroked-button color="warn" (click)="deleteOrg(org.id)">
+                    <mat-icon>delete</mat-icon>
+                    Zmazať
+                  </button>
+                    </div>
+                </div>
+              </mat-list-item>
+            }
+          </mat-list>
+        }
+      </mat-card-content>
+      <mat-card-actions class="card-actions">
+        <mat-paginator [length]="filteredUnaccepted().length" [pageIndex]="unacceptedPageIndex()" [pageSize]="pageSize" [pageSizeOptions]="[pageSize]" (page)="onUnacceptedPage($event)"></mat-paginator>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Schválené organizácie</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Hľadať organizáciu</mat-label>
+          <input matInput [value]="approvedQuery()" (input)="onApprovedQueryInput($event)">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        @if (approvedLoading()) {
+          <div class="center">
+            <mat-progress-spinner mode="indeterminate" diameter="32"></mat-progress-spinner>
+          </div>
+        }
+        @if (approvedError()) {
+          <div class="error">{{ approvedError() }}</div>
+        }
+        @if (!approvedLoading() && !approvedError()) {
+          <mat-list class="org-list">
+            @for (org of pagedApproved(); track org.id) {
+              <mat-list-item>
+                <div class="item-content">
+                  <span class="name">{{ org.name }}</span>
+                  <span class="spacer"></span>
+                  <button mat-stroked-button color="warn" (click)="deleteOrg(org.id)">
+                    <mat-icon>delete</mat-icon>
+                    Zmazať
+                  </button>
+                </div>
+              </mat-list-item>
+            }
+          </mat-list>
+        }
+      </mat-card-content>
+      <mat-card-actions class="card-actions">
+        <mat-paginator [length]="filteredApproved().length" [pageIndex]="approvedPageIndex()" [pageSize]="pageSize" [pageSizeOptions]="[pageSize]" (page)="onApprovedPage($event)"></mat-paginator>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Používatelia</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Hľadať používateľa</mat-label>
+        <input matInput [value]="usersQuery()" (input)="onUsersQueryInput($event)">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      @if (usersLoading()) {
+        <div class="center">
+          <mat-progress-spinner mode="indeterminate" diameter="32"></mat-progress-spinner>
+        </div>
+      }
+      @if (usersError()) {
+        <div class="error">{{ usersError() }}</div>
+      }
+      @if (!usersLoading() && !usersError()) {
+        <mat-list class="users-list">
+          @for (u of pagedUsers(); track u.id) {
+            <mat-list-item>
+              <div class="item-content">
+                <span class="name"><strong>{{ u.firstName }} {{ u.surname }}</strong>&nbsp;</span>
+                <span class="name">({{ u.email }})</span>
+                <span class="spacer"></span>
+                <button mat-stroked-button color="warn" (click)="deleteUser(u.id)">
+                  <mat-icon>person_remove</mat-icon>
+                  Zmazať účet
+                </button>
+              </div>
+            </mat-list-item>
+          }
+        </mat-list>
+        <mat-paginator [length]="filteredUsers().length" [pageIndex]="usersPageIndex()" [pageSize]="pageSize" [pageSizeOptions]="[pageSize]" (page)="onUsersPage($event)"></mat-paginator>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>
+

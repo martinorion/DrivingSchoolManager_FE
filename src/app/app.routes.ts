@@ -20,6 +20,7 @@ import { MyProfileComponent } from './auth/profile/my-profile.component';
 import { VehicleReservationsComponent } from './vehicle-reservations/vehicle-reservations.component';
 import { StudentLessonRequestsComponent } from './lessons/student-lesson-requests.component';
 import { InstructorIncomingRequestsComponent } from './lessons/instructor-incoming-requests.component';
+import { AdminPortalComponent } from './admin/admin-portal.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -31,12 +32,14 @@ export const routes: Routes = [
   { path: 'confirm-verification', component: ConfirmVerificationComponent,canActivate: [guestGuard], data: { title: 'Overenie účtu' } },
   { path: 'waiting-room', component: WaitingRoomComponent, canActivate: [authGuard], data: { title: 'Čakáreň' } },
   { path: 'members', component: MembersComponent, canActivate: [authGuard], data: { title: 'Členovia' } },
-  { path: 'instructors', component: InstructorRequestComponent, canActivate: [instructorNoOrgGuard], data: { title: 'Inštruktori' } },
+  { path: 'instructors', component: InstructorRequestComponent, canActivate: [instructorNoOrgGuard], data: { title: 'Pripojenie k organizácii' } },
   { path: 'vehicles', component: VehiclesComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Vozidlá' } },
   { path: 'groups', component: GroupsMaterialComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Skupiny' } },
   { path: 'car-reservations', component: VehicleReservationsComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Rezervácie vozidiel' } },
   { path: 'lesson-requests', component: StudentLessonRequestsComponent, canActivate: [authGuard], data: { title: 'Žiadosti o jazdy' } },
   { path: 'incoming-lesson-requests', component: InstructorIncomingRequestsComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Prichádzajúce žiadosti o jazdy' } },
   { path: 'my-profile', component: MyProfileComponent, canActivate: [authGuard], data: { title: 'Môj profil' } },
+  // Admin portal route (visible only to admins by UI; guard just requires auth)
+  { path: 'admin', component: AdminPortalComponent, canActivate: [authGuard], data: { title: 'Admin portál' } },
   { path: '**', redirectTo: 'dashboard' }
 ];

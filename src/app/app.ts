@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { filter } from 'rxjs/operators';
-import { OrganizationService } from './services/organization.service';
+import { OrganizationService, Organization } from './services/organization.service';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +21,7 @@ export class App {
   protected readonly pageTitle = signal<string>('');
   protected readonly menuOpen = signal<boolean>(false);
   protected readonly hasOrg = signal<boolean | null>(null);
+  protected readonly orgPending = signal<boolean>(false);
 
   constructor() {
     this.updatePageTitle();
@@ -55,12 +56,19 @@ export class App {
 
   private refreshOrgState() {
     if (this.auth.hasRole('INSTRUCTOR')) {
-      this.org.checkHasOrganization().subscribe({
-        next: v => this.hasOrg.set(v),
-        error: () => this.hasOrg.set(false)
+      // Check if instructor has an org
+      this.org.getCurrentOrganization().subscribe({
+        next: (current: Organization | null) => {
+          const has = !!current;
+          this.hasOrg.set(has);
+          // org is pending if exists but not accepted
+          this.orgPending.set(!!current && current.isAccepted === false);
+        },
+        error: () => { this.hasOrg.set(false); this.orgPending.set(false); }
       });
     } else {
       this.hasOrg.set(null);
+      this.orgPending.set(false);
     }
   }
 

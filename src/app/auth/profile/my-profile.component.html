@@ -59,7 +59,7 @@
         </mat-form-field>
 
         <button class="btn btn-primary" type="submit" [disabled]="form.invalid || loading()">
-          Uložiť zmeny
+          Uložiť zmeny profilu
         </button>
 
         <div class="links">
@@ -67,7 +67,7 @@
         </div>
       </form>
 
-      @if (auth.hasRole('INSTRUCTOR')) {
+      @if (auth.hasRole('INSTRUCTOR') && currentOrg()) {
         <div class="org-edit">
           <h3>Moja organizácia</h3>
           <form [formGroup]="orgForm" (ngSubmit)="updateOrganization()" class="org-form">
@@ -83,10 +83,17 @@
             @if (orgImagePreviewUrl()) {
               <div class="preview">
                 <img [src]="orgImagePreviewUrl()" alt="Náhľad obrázka"/>
-                <button mat-flat-button color="warn" type="button" (click)="removeOrgSelectedImage()">Odstrániť</button>
               </div>
             }
             <button type="submit" id="update" class="btn btn-primary" [disabled]="orgForm.invalid">Upraviť organizáciu</button>
+
+            @if (currentOrg() && currentUserId() && currentOrg()?.ownerId === currentUserId()) {
+              <div class="delete-org-section">
+                <button mat-flat-button color="warn"  type="button" (click)="deleteMyOrganization()">
+                  Vymazať celú organizáciu
+                </button>
+              </div>
+            }
           </form>
         </div>
       }

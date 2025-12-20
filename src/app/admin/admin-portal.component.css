@@ -1,0 +1,25 @@
+.admin-portal { padding: 16px; }
+.error { color: #b00020; margin-top: 8px; }
+.center { display: flex; justify-content: center; padding: 16px 0; }
+.item-content { display: flex; align-items: center; width: 100%; gap: 5px; }
+.item-content .name { font-weight: 500; }
+.item-content .spacer { flex: 1 1 auto; }
+
+.org-columns { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 16px; }
+@media (min-width: 900px) {
+  .org-columns { grid-template-columns: 1fr 1fr; }
+}
+
+.card-actions { margin-top: auto; }
+.search-field { width: 100%}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+@media (max-width: 660px) {
+  .item-content { flex-direction: column; gap: 3px; }
+  .org-list .mdc-list-item.mdc-list-item--with-one-line { height: 70px; }
+  .users-list .mdc-list-item.mdc-list-item--with-one-line { height: 100px; }
+  .item-content { align-items: flex-start; }
+}

@@ -1,7 +1,7 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import { AuthService, EditProfileDTO, EditProfileResponseDTO, UserDTO } from '../../services/auth.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,7 +13,7 @@ import { OrganizationService, Organization } from '../../services/organization.s
 @Component({
   selector: 'app-my-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule],
+  imports: [CommonModule, ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, RouterLink],
   templateUrl: './my-profile.component.html',
   styleUrl: './my-profile.component.css'
 })
@@ -21,10 +21,12 @@ export class MyProfileComponent implements OnInit {
   private fb = inject(FormBuilder);
   protected auth = inject(AuthService);
   private orgService = inject(OrganizationService);
+  private router = inject(Router);
 
   loading = signal(false);
   error = signal<string | null>(null);
   success = signal<string | null>(null);
+  currentUserId = signal<number | null>(null);
 
   form = this.fb.group({
     username: ['', usernameValidators],
@@ -50,6 +52,7 @@ export class MyProfileComponent implements OnInit {
     this.loading.set(true);
     this.auth.getUserProfile().subscribe({
       next: (user: UserDTO) => {
+        this.currentUserId.set(user.id ?? null);
         this.form.patchValue({
           username: user.username || '',
           email: user.email || '',
@@ -69,7 +72,6 @@ export class MyProfileComponent implements OnInit {
     if (this.auth.hasRole('INSTRUCTOR')) {
       this.orgService.getCurrentOrganization().subscribe({
         next: (org) => {
-          console.log(org)
           this.currentOrg.set(org);
           if (org) {
             this.orgForm.patchValue({ id: org.id, name: org.name });
@@ -126,11 +128,6 @@ export class MyProfileComponent implements OnInit {
     this.orgImagePreviewUrl.set(file ? URL.createObjectURL(file) : null);
   }
 
-  removeOrgSelectedImage() {
-    this.orgImageFile.set(null);
-    this.orgImagePreviewUrl.set(null);
-  }
-
   // Submit organization update (name change or optional new image)
   updateOrganization() {
     if (this.orgForm.invalid) return;
@@ -149,6 +146,31 @@ export class MyProfileComponent implements OnInit {
       },
       error: (err) => {
         this.error.set(err?.error?.message || 'Úprava organizácie zlyhala.');
+      }
+    });
+  }
+
+  deleteMyOrganization() {
+    const org = this.currentOrg();
+    if (!org || !org.id) return;
+    const ok = confirm('Naozaj chcete zmazať celú organizáciu? Táto akcia je nezvratná.');
+    if (!ok) return;
+    this.loading.set(true);
+    this.error.set(null);
+    this.success.set(null);
+    this.orgService.deleteMyOrganization(org.id).subscribe({
+      next: () => {
+        this.success.set('Organizácia bola zmazaná.');
+        this.currentOrg.set(null);
+        this.orgForm.reset({ id: null, name: '' });
+        this.orgImageFile.set(null);
+        this.orgImagePreviewUrl.set(null);
+        this.loading.set(false);
+        this.router.navigateByUrl('dashboard');
+      },
+      error: (err) => {
+        this.error.set(err?.error?.message || 'Zmazanie organizácie zlyhalo.');
+        this.loading.set(false);
       }
     });
   }

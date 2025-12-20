@@ -29,9 +29,6 @@
         <button type="submit" class="btn btn-primary" [disabled]="createForm.invalid">Vytvoriť organizáciu</button>
       </form>
       </div>
-      <div class="alt-option">
-        <a routerLink="/instructors">Alebo sa pripojiť k existujúcej organizácii ako inštruktor</a>
-      </div>
     } @else if (hasOrg() === true) {
       <div class="alert alert--info">Už máte vytvorenú organizáciu. Použite stránky <a routerLink="/waiting-room">Čakáreň</a>, <a routerLink="/members">Študenti</a>, <a routerLink="/vehicles">Vozidlá</a>, <a routerLink="/groups">Skupiny</a> a <a routerLink="/reservations">Rezervácie</a>.</div>
     }
