@@ -20,7 +20,9 @@
             @if (!students().length) { <div>Zatiaľ tu nie sú žiadni študenti.</div> }
           </div>
         }
-        <mat-paginator [length]="students().length" [pageSize]="pageSize" [pageIndex]="studentsPageIndex()" [pageSizeOptions]="[pageSize]" (page)="onStudentsPage($event)"></mat-paginator>
+        <mat-card-actions class="card-actions">
+          <mat-paginator [length]="students().length" [pageIndex]="studentsPageIndex()" [pageSize]="pageSize" [pageSizeOptions]="[pageSize]" (page)="onStudentsPage($event)"></mat-paginator>
+        </mat-card-actions>
       </section>
 
       <section class="panel">
@@ -36,7 +38,9 @@
             @if (!instructors().length) { <div>Zatiaľ tu nie sú žiadni inštruktori.</div> }
           </div>
         }
-        <mat-paginator [length]="instructors().length" [pageSize]="pageSize" [pageIndex]="instructorsPageIndex()" [pageSizeOptions]="[pageSize]" (page)="onInstructorsPage($event)"></mat-paginator>
+        <mat-card-actions class="card-actions">
+          <mat-paginator [length]="instructors().length" [pageIndex]="instructorsPageIndex()" [pageSize]="pageSize" [pageSizeOptions]="[pageSize]" (page)="onInstructorsPage($event)"></mat-paginator>
+        </mat-card-actions>
       </section>
     </div>
   }

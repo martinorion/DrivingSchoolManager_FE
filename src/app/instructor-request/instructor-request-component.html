@@ -63,6 +63,9 @@
             <strong>{{ organizationNameById(existingRequest()?.organizationId) }}</strong>.
           </p>
           <p class="muted">Po schválení budete mať rovnaký prístup ako hlavný inštruktor.</p>
+          <div class="actions">
+            <button mat-flat-button color="warn" type="button" (click)="cancelMyRequest()">Zrušiť moju žiadosť</button>
+          </div>
         </div>
       }
     }

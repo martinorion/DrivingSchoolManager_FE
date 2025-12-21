@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { OrganizationService, UserDTO } from '../services/organization.service';
 import { AuthService } from '../services/auth.service';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import {MatCardActions} from '@angular/material/card';
 
 @Component({
   selector: 'app-members',
   standalone: true,
-  imports: [CommonModule, MatPaginatorModule],
+  imports: [CommonModule, MatPaginatorModule, MatCardActions],
   templateUrl: './members.component.html',
   styleUrl: './members.component.css'
 })

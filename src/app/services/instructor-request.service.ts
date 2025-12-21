@@ -30,4 +30,14 @@ export class InstructorRequestService {
   getInstructorRequest(): Observable<InstructorRequestDTO> {
     return this.http.get<InstructorRequestDTO>(`${this.baseUrl}/getInstructorRequest`);
   }
+
+  // Delete the current instructor's own request
+  deleteInstructorRequest(): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/deleteInstructorRequest`);
+  }
+
+  // Delete a request by its ID (for instructors managing their org)
+  deleteInstructorRequestById(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/deleteInstructorRequestById/${id}`);
+  }
 }

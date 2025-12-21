@@ -156,4 +156,14 @@ export class WaitingRoomComponent implements OnInit {
       error: () => this.error.set('Pridanie inštruktora zlyhalo.')
     });
   }
+
+  removeInstructorRequest(req: InstructorRequestDTO) {
+    if (!req.id) return;
+    this.success.set(null);
+    this.error.set(null);
+    this.instructorReq.deleteInstructorRequestById(req.id).subscribe({
+      next: () => { this.success.set('Žiadosť inštruktora bola odstránená.'); this.refresh(); },
+      error: () => this.error.set('Odstránenie žiadosti zlyhalo.')
+    });
+  }
 }

@@ -123,3 +123,5 @@ h3 {
 
 /* Keep paginator always visible inside column */
 :host ::ng-deep mat-paginator { position: sticky; bottom: 0; background: #fff; border-top: 1px solid #eee; border-radius: 0 0 12px 12px; }
+
+.card-actions { margin-top: auto; }

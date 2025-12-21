@@ -131,4 +131,15 @@ export class InstructorRequestComponent implements OnInit {
     const found = this.organizations().find(o => o.id === id);
     return found?.name ?? `ID ${id}`;
   }
+
+  // Allow instructor to cancel their own existing request
+  cancelMyRequest() {
+    if (!this.existingRequest()) return;
+    this.error.set(null);
+    this.success.set(null);
+    this.reqService.deleteInstructorRequest().subscribe({
+      next: () => { this.success.set('Vaša žiadosť bola zrušená.'); this.existingRequest.set(null); this.refresh(); },
+      error: () => this.error.set('Zrušenie žiadosti zlyhalo.')
+    });
+  }
 }

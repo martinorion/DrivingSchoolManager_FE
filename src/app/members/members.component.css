@@ -4,7 +4,7 @@
   .grid { grid-template-columns: 1fr 1fr; }
 }
 
-.panel { display: flex; flex-direction: column; gap: .75rem; border: 1px solid #eee; border-radius: 12px; padding: 1rem; background: #fff; min-height: 300px; }
+.panel { display: flex; flex-direction: column; gap: .75rem; border: 1px solid #eee; border-radius: 12px; padding: 1rem; background: #fff;}
 .panel h2 { margin: 0; font-size: 1.125rem; }
 
 .list { display: grid; gap: .5rem; overflow: auto; max-height: 60vh; padding-bottom: .25rem; }

@@ -50,7 +50,9 @@
               }
               @if (!students().length) { <div>Žiadni študenti v čakárni.</div> }
             </div>
-            <mat-paginator [length]="students().length" [pageSize]="pageSize" [pageIndex]="studentsPageIndex()" [pageSizeOptions]="[pageSize]" (page)="onStudentsPage($event)"></mat-paginator>
+            <mat-card-actions class="card-actions">
+              <mat-paginator [length]="students().length" [pageIndex]="studentsPageIndex()" [pageSize]="pageSize" [pageSizeOptions]="[pageSize]" (page)="onStudentsPage($event)"></mat-paginator>
+            </mat-card-actions>
           </div>
           <div class="requests-col">
             <h3>Inštruktori čakajúci na schválenie</h3>
@@ -60,12 +62,15 @@
                   <div>Žiadosť inštruktora ID: {{ r.instructorId }} (org ID: {{ r.organizationId }})</div>
                   <div class="actions">
                     <button class="approve" (click)="approveInstructor(r)">Pridať inštruktora</button>
+                    <button class="reject" (click)="removeInstructorRequest(r)">Odstrániť žiadosť</button>
                   </div>
                 </div>
               }
               @if (!instructorRequests().length) { <div>Žiadni inštruktori v čakárni.</div> }
             </div>
-            <mat-paginator [length]="instructorRequests().length" [pageSize]="pageSize" [pageIndex]="instructorsPageIndex()" [pageSizeOptions]="[pageSize]" (page)="onInstructorsPage($event)"></mat-paginator>
+            <mat-card-actions class="card-actions">
+              <mat-paginator [length]="instructorRequests().length" [pageIndex]="instructorsPageIndex()" [pageSize]="pageSize" [pageSizeOptions]="[pageSize]" (page)="onInstructorsPage($event)"></mat-paginator>
+            </mat-card-actions>
           </div>
         </div>
       }
