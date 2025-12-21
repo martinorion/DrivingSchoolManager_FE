@@ -1,16 +1,13 @@
-/* Basic styles for the members lists */
-.grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-@media (min-width: 900px) {
-  .grid { grid-template-columns: 1fr 1fr; }
-}
+.org-columns { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 900px) { .org-columns { grid-template-columns: 1fr 1fr; } }
 
-.panel { display: flex; flex-direction: column; gap: .75rem; border: 1px solid #eee; border-radius: 12px; padding: 1rem; background: #fff;}
-.panel h2 { margin: 0; font-size: 1.125rem; }
+.search-field { width: 100%; }
+.center { display: flex; justify-content: center; padding: 16px 0; }
+.error { color: #b00020; margin-top: 8px; }
+.item-content { display: flex; align-items: center; width: 100%; gap: 5px; }
+.item-content .name { font-weight: 500; }
+.item-content .spacer { flex: 1 1 auto; }
 
-.list { display: grid; gap: .5rem; overflow: auto; max-height: 60vh; padding-bottom: .25rem; }
-.row { display: flex; justify-content: space-between; align-items: center; padding: .75rem 1rem; border: 1px solid #eee; border-radius: 8px; }
-.name { font-weight: 600; }
-.meta { color: #666; font-size: .9rem; }
+.card-actions { margin-top: auto; }
 
-/* Keep paginator always visible inside panel */
-:host ::ng-deep mat-paginator { position: sticky; bottom: 0; background: #fff; border-top: 1px solid #eee; border-radius: 0 0 12px 12px; }
+

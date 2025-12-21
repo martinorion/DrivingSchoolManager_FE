@@ -6,42 +6,77 @@
   } @else if (hasOrg() === false) {
     <div class="alert alert--info">Na zobrazenie členov musíte mať vytvorenú organizáciu.</div>
   } @else {
-    <div class="grid">
-      <section class="panel">
-        <h2>Študenti v organizácii</h2>
-        @if (studentsLoading()) { <div>Načítavam...</div> } @else {
-          <div class="list">
-            @for (s of pagedStudents(); track s.id) {
-              <div class="row">
-                <div class="name">{{ s.firstName || '' }} {{ s.surname || '' }}</div>
-                <div class="meta">{{ s.email || s.username }}</div>
-              </div>
-            }
-            @if (!students().length) { <div>Zatiaľ tu nie sú žiadni študenti.</div> }
-          </div>
-        }
-        <mat-card-actions class="card-actions">
-          <mat-paginator [length]="students().length" [pageIndex]="studentsPageIndex()" [pageSize]="pageSize" [pageSizeOptions]="[pageSize]" (page)="onStudentsPage($event)"></mat-paginator>
-        </mat-card-actions>
-      </section>
+    <div class="org-columns">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Študenti v organizácii</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Hľadať študenta</mat-label>
+            <input matInput [value]="studentsQuery()" (input)="onStudentsQueryInput($event)">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
 
-      <section class="panel">
-        <h2>Inštruktori v organizácii</h2>
-        @if (instructorsLoading()) { <div>Načítavam...</div> } @else {
-          <div class="list">
-            @for (i of pagedInstructors(); track i.id) {
-              <div class="row">
-                <div class="name">{{ i.firstName || '' }} {{ i.surname || '' }}</div>
-                <div class="meta">{{ i.email || i.username }}</div>
-              </div>
-            }
-            @if (!instructors().length) { <div>Zatiaľ tu nie sú žiadni inštruktori.</div> }
-          </div>
-        }
+          @if (studentsLoading()) {
+            <div class="center">
+              <mat-progress-spinner mode="indeterminate" diameter="32"></mat-progress-spinner>
+            </div>
+          }
+          @if (error()) { <div class="error">{{ error() }}</div> }
+          @if (!studentsLoading() && !error()) {
+            <mat-list class="org-list">
+              @for (s of pagedStudents(); track s.id) {
+                <mat-list-item>
+                  <div class="item-content">
+                    <span class="name">{{ s.firstName || '' }} {{ s.surname || '' }}</span>
+                    <span class="spacer"></span>
+                    <span class="name">{{ s.email || s.username }}</span>
+                  </div>
+                </mat-list-item>
+              }
+            </mat-list>
+          }
+        </mat-card-content>
         <mat-card-actions class="card-actions">
-          <mat-paginator [length]="instructors().length" [pageIndex]="instructorsPageIndex()" [pageSize]="pageSize" [pageSizeOptions]="[pageSize]" (page)="onInstructorsPage($event)"></mat-paginator>
+          <mat-paginator [length]="filteredStudents().length" [pageIndex]="studentsPageIndex()" [pageSize]="pageSize" [pageSizeOptions]="[pageSize]" (page)="onStudentsPage($event)"></mat-paginator>
         </mat-card-actions>
-      </section>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Inštruktori v organizácii</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Hľadať inštruktora</mat-label>
+            <input matInput [value]="instructorsQuery()" (input)="onInstructorsQueryInput($event)">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+
+          @if (instructorsLoading()) {
+            <div class="center">
+              <mat-progress-spinner mode="indeterminate" diameter="32"></mat-progress-spinner>
+            </div>
+          }
+          @if (!instructorsLoading()) {
+            <mat-list class="org-list">
+              @for (i of pagedInstructors(); track i.id) {
+                <mat-list-item>
+                  <div class="item-content">
+                    <span class="name">{{ i.firstName || '' }} {{ i.surname || '' }}</span>
+                    <span class="spacer"></span>
+                    <span class="name">{{ i.email || i.username }}</span>
+                  </div>
+                </mat-list-item>
+              }
+            </mat-list>
+          }
+        </mat-card-content>
+        <mat-card-actions class="card-actions">
+          <mat-paginator [length]="filteredInstructors().length" [pageIndex]="instructorsPageIndex()" [pageSize]="pageSize" [pageSizeOptions]="[pageSize]" (page)="onInstructorsPage($event)"></mat-paginator>
+        </mat-card-actions>
+      </mat-card>
     </div>
   }
 </section>

@@ -7,12 +7,16 @@ import { InstructorRequestService, InstructorRequestDTO } from '../services/inst
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-waiting-room',
   standalone: true,
-  imports: [CommonModule, MatPaginatorModule, MatCardModule, MatButtonModule],
+  imports: [CommonModule, MatPaginatorModule, MatCardModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, MatListModule],
   templateUrl: './waiting-room.component.html',
   styleUrl: './waiting-room.component.css'
 })
@@ -36,17 +40,32 @@ export class WaitingRoomComponent implements OnInit {
   students = signal<UserDTO[]>([]);
   instructorRequests = signal<InstructorRequestDTO[]>([]);
 
-  readonly pageSize = 10;
+  studentsQuery = signal('');
+  instructorsQuery = signal('');
+  readonly pageSize = 5;
   studentsPageIndex = signal(0);
   instructorsPageIndex = signal(0);
 
+  filteredStudents = computed(() => {
+    const q = this.studentsQuery().toLowerCase().trim();
+    if (!q) return this.students();
+    return this.students().filter(s => `${s.firstName || ''} ${s.surname || ''} ${s.email || ''}`.toLowerCase().includes(q));
+  });
+  filteredInstructorRequests = computed(() => {
+    const q = this.instructorsQuery().toLowerCase().trim();
+    if (!q) return this.instructorRequests();
+    return this.instructorRequests().filter(r => `${r.instructorId || ''} ${r.organizationId || ''}`.toLowerCase().includes(q));
+  });
+
   pagedStudents = computed(() => {
     const start = this.studentsPageIndex() * this.pageSize;
-    return this.students().slice(start, start + this.pageSize);
+    const arr = this.filteredStudents();
+    return arr.slice(start, start + this.pageSize);
   });
   pagedInstructorRequests = computed(() => {
     const start = this.instructorsPageIndex() * this.pageSize;
-    return this.instructorRequests().slice(start, start + this.pageSize);
+    const arr = this.filteredInstructorRequests();
+    return arr.slice(start, start + this.pageSize);
   });
 
   loading = signal(false);
@@ -118,6 +137,17 @@ export class WaitingRoomComponent implements OnInit {
 
   onStudentsPage(e: PageEvent) { this.studentsPageIndex.set(e.pageIndex); }
   onInstructorsPage(e: PageEvent) { this.instructorsPageIndex.set(e.pageIndex); }
+
+  onStudentsQueryInput(event: Event) {
+    const val = (event.target as HTMLInputElement).value;
+    this.studentsQuery.set(val);
+    this.studentsPageIndex.set(0);
+  }
+  onInstructorsQueryInput(event: Event) {
+    const val = (event.target as HTMLInputElement).value;
+    this.instructorsQuery.set(val);
+    this.instructorsPageIndex.set(0);
+  }
 
   approve(student: UserDTO) {
     this.success.set(null);

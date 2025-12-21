@@ -2,7 +2,7 @@ import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../services/auth.service';
 import { OrganizationService, Organization } from '../services/organization.service';
-import { AdminUsersService, UserSummary } from './admin-users.service';
+import { AdminUsersService, UserSummary } from '../services/admin-users.service';
 // Angular Material imports
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';

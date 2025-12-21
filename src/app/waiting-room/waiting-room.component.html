@@ -32,46 +32,80 @@
       @if (hasOrg() === false) {
         <div class="alert alert--info">Na zobrazenie čakárne musíte mať vytvorenú organizáciu.</div>
       } @else {
-        <div class="requests-grid">
-          <div class="requests-col">
-            <h3>Študenti čakajúci na schválenie</h3>
-            <div class="list">
-              @for (s of pagedStudents(); track s.id) {
-                <div class="row">
-                  <div>
-                    {{ s.firstName || '' }} {{ s.surname || '' }}
-                    <span class="muted">ID: {{ s.id }}</span>
-                  </div>
-                  <div class="actions">
-                    <button class="approve" (click)="approve(s)">Schváliť</button>
-                    <button class="reject" (click)="reject(s)">Odmietnuť</button>
-                  </div>
-                </div>
-              }
-              @if (!students().length) { <div>Žiadni študenti v čakárni.</div> }
-            </div>
+        <div class="org-columns">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Študenti čakajúci na schválenie</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-form-field appearance="outline" class="search-field">
+                <mat-label>Hľadať študenta</mat-label>
+                <input matInput [value]="studentsQuery()" (input)="onStudentsQueryInput($event)">
+                <mat-icon matSuffix>search</mat-icon>
+              </mat-form-field>
+
+              <mat-list class="student-list">
+                @for (s of pagedStudents(); track s.id) {
+                  <mat-list-item>
+                    <div class="item-content">
+                      <span class="name">{{ s.firstName || '' }} {{ s.surname || '' }}</span>
+                      <span class="spacer"></span>
+                      <div class="buttons">
+                        <button mat-raised-button class="accept-green" (click)="approve(s)">
+                          <mat-icon>check_circle</mat-icon>
+                          Schváliť
+                        </button>
+                        <button mat-stroked-button color="warn" (click)="reject(s)">
+                          <mat-icon>cancel</mat-icon>
+                          Odmietnuť
+                        </button>
+                      </div>
+                    </div>
+                  </mat-list-item>
+                }
+              </mat-list>
+            </mat-card-content>
             <mat-card-actions class="card-actions">
-              <mat-paginator [length]="students().length" [pageIndex]="studentsPageIndex()" [pageSize]="pageSize" [pageSizeOptions]="[pageSize]" (page)="onStudentsPage($event)"></mat-paginator>
+              <mat-paginator [length]="filteredStudents().length" [pageSize]="pageSize" [pageIndex]="studentsPageIndex()" [pageSizeOptions]="[pageSize]" (page)="onStudentsPage($event)"></mat-paginator>
             </mat-card-actions>
-          </div>
-          <div class="requests-col">
-            <h3>Inštruktori čakajúci na schválenie</h3>
-            <div class="list">
-              @for (r of pagedInstructorRequests(); track r.id) {
-                <div class="row">
-                  <div>Žiadosť inštruktora ID: {{ r.instructorId }} (org ID: {{ r.organizationId }})</div>
-                  <div class="actions">
-                    <button class="approve" (click)="approveInstructor(r)">Pridať inštruktora</button>
-                    <button class="reject" (click)="removeInstructorRequest(r)">Odstrániť žiadosť</button>
-                  </div>
-                </div>
-              }
-              @if (!instructorRequests().length) { <div>Žiadni inštruktori v čakárni.</div> }
-            </div>
+          </mat-card>
+
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Inštruktori čakajúci na schválenie</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-form-field appearance="outline" class="search-field">
+                <mat-label>Hľadať inštruktora</mat-label>
+                <input matInput [value]="instructorsQuery()" (input)="onInstructorsQueryInput($event)">
+                <mat-icon matSuffix>search</mat-icon>
+              </mat-form-field>
+
+              <mat-list class="instructor-list">
+                @for (r of pagedInstructorRequests(); track r.id) {
+                  <mat-list-item>
+                    <div class="item-content">
+                      <span class="name">Žiadosť inštruktora ID: {{ r.id }} (org ID: {{ r.organizationId }})</span>
+                      <span class="spacer"></span>
+                      <div class="buttons--long">
+                        <button mat-raised-button class="accept-green" (click)="approveInstructor(r)">
+                          <mat-icon>person_add</mat-icon>
+                          Pridať inštruktora
+                        </button>
+                        <button mat-stroked-button color="warn" (click)="removeInstructorRequest(r)">
+                          <mat-icon>delete</mat-icon>
+                          Odstrániť žiadosť
+                        </button>
+                      </div>
+                    </div>
+                  </mat-list-item>
+                }
+              </mat-list>
+            </mat-card-content>
             <mat-card-actions class="card-actions">
-              <mat-paginator [length]="instructorRequests().length" [pageIndex]="instructorsPageIndex()" [pageSize]="pageSize" [pageSizeOptions]="[pageSize]" (page)="onInstructorsPage($event)"></mat-paginator>
+              <mat-paginator [length]="filteredInstructorRequests().length" [pageSize]="pageSize" [pageIndex]="instructorsPageIndex()" [pageSizeOptions]="[pageSize]" (page)="onInstructorsPage($event)"></mat-paginator>
             </mat-card-actions>
-          </div>
+          </mat-card>
         </div>
       }
     }

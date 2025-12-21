@@ -3,12 +3,17 @@ import { CommonModule } from '@angular/common';
 import { OrganizationService, UserDTO } from '../services/organization.service';
 import { AuthService } from '../services/auth.service';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import {MatCardActions} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-members',
   standalone: true,
-  imports: [CommonModule, MatPaginatorModule, MatCardActions],
+  imports: [CommonModule, MatPaginatorModule, MatCardModule, MatFormFieldModule, MatInputModule, MatIconModule, MatListModule, MatProgressSpinnerModule],
   templateUrl: './members.component.html',
   styleUrl: './members.component.css'
 })
@@ -25,21 +30,38 @@ export class MembersComponent implements OnInit {
   studentsLoading = signal(false);
   error = signal<string | null>(null);
 
-  readonly pageSize = 10;
-  studentsPageIndex = signal(0);
-  pagedStudents = computed(() => {
-    const start = this.studentsPageIndex() * this.pageSize;
-    return this.students().slice(start, start + this.pageSize);
-
-  });
-
   // Instructors state
   instructors = signal<UserDTO[]>([]);
   instructorsLoading = signal(false);
+
+  // Search queries
+  studentsQuery = signal('');
+  instructorsQuery = signal('');
+
+  readonly pageSize = 5;
+  studentsPageIndex = signal(0);
   instructorsPageIndex = signal(0);
+
+  filteredStudents = computed(() => {
+    const q = this.studentsQuery().toLowerCase().trim();
+    if (!q) return this.students();
+    return this.students().filter(s => `${s.firstName || ''} ${s.surname || ''} ${s.email || ''} ${s.username || ''}`.toLowerCase().includes(q));
+  });
+  filteredInstructors = computed(() => {
+    const q = this.instructorsQuery().toLowerCase().trim();
+    if (!q) return this.instructors();
+    return this.instructors().filter((i: UserDTO) => `${i.firstName || ''} ${i.surname || ''} ${i.email || ''} ${i.username || ''}`.toLowerCase().includes(q));
+  });
+
+  pagedStudents = computed(() => {
+    const start = this.studentsPageIndex() * this.pageSize;
+    const arr = this.filteredStudents();
+    return arr.slice(start, start + this.pageSize);
+  });
   pagedInstructors = computed(() => {
     const start = this.instructorsPageIndex() * this.pageSize;
-    return this.instructors().slice(start, start + this.pageSize);
+    const arr = this.filteredInstructors();
+    return arr.slice(start, start + this.pageSize);
   });
 
   ngOnInit() {
@@ -69,12 +91,22 @@ export class MembersComponent implements OnInit {
   private loadInstructors() {
     this.instructorsLoading.set(true);
     this.org.getOrganizationInstructors().subscribe({
-      next: list => { this.instructors.set(list); this.instructorsPageIndex.set(0); this.instructorsLoading.set(false); },
+      next: (list: UserDTO[]) => { this.instructors.set(list); this.instructorsPageIndex.set(0); this.instructorsLoading.set(false); },
       error: () => { this.instructors.set([]); this.instructorsLoading.set(false); }
     });
   }
 
   onStudentsPage(e: PageEvent) { this.studentsPageIndex.set(e.pageIndex); }
   onInstructorsPage(e: PageEvent) { this.instructorsPageIndex.set(e.pageIndex); }
-}
 
+  onStudentsQueryInput(event: Event) {
+    const val = (event.target as HTMLInputElement).value;
+    this.studentsQuery.set(val);
+    this.studentsPageIndex.set(0);
+  }
+  onInstructorsQueryInput(event: Event) {
+    const val = (event.target as HTMLInputElement).value;
+    this.instructorsQuery.set(val);
+    this.instructorsPageIndex.set(0);
+  }
+}
