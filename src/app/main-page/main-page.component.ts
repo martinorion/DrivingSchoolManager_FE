@@ -1,24 +1,20 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { OrganizationService, Organization } from '../services/organization.service';
 import { WaitingRoomService, WaitingRoomDTO } from '../services/waiting-room.service';
 import { AuthService } from '../services/auth.service';
-import {Router, RouterLink} from '@angular/router';
-import {MatButton} from '@angular/material/button';
-import {MatError, MatFormField} from '@angular/material/form-field';
-import {MatInput, MatLabel} from '@angular/material/input';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, MatButton, MatFormField, MatInput, MatLabel, MatError],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.css'
 })
 export class MainPageComponent implements OnInit {
   private readonly orgService = inject(OrganizationService);
-  private readonly fb = inject(FormBuilder);
   private readonly waiting = inject(WaitingRoomService);
   protected readonly auth = inject(AuthService);
   private readonly router = inject(Router);
@@ -37,16 +33,6 @@ export class MainPageComponent implements OnInit {
   readonly isStudentInOrg = computed(() => this.auth.hasRole('STUDENT') && !!this.myOrganization());
 
   isStudent = computed(() => this.auth.hasRole('STUDENT'));
-  isInstructor = computed(() => this.auth.hasRole('INSTRUCTOR'));
-  hasOrg = signal<boolean | null>(null);
-
-  // Image file required for creating organization
-  imageFile = signal<File | null>(null);
-  imagePreviewUrl = signal<string | null>(null);
-
-  createForm = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
-  });
 
   ngOnInit() {
     // For students, first check if they already belong to an organization. If yes, display only that one.
@@ -71,18 +57,6 @@ export class MainPageComponent implements OnInit {
     } else {
       // Non-students or unauthenticated users just see the list
       this.fetchOrganizations();
-    }
-
-    // Instructor-specific metadata
-    if (this.auth.isAuthenticated() && this.isInstructor()) {
-      this.orgService.checkHasOrganization().subscribe({
-        next: v => {
-          this.hasOrg.set(v);
-        },
-        error: () => {
-          this.hasOrg.set(false);
-        }
-      });
     }
   }
 
@@ -115,46 +89,5 @@ export class MainPageComponent implements OnInit {
       },
       error: (err) => this.error.set(err?.error?.message || 'Pripojenie zlyhalo.')
     });
-  }
-
-  // Handle image selection
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const file = input.files && input.files[0] ? input.files[0] : null;
-    this.imageFile.set(file);
-    this.imagePreviewUrl.set(file ? URL.createObjectURL(file) : null);
-  }
-
-  removeSelectedImage() {
-    this.imageFile.set(null);
-    this.imagePreviewUrl.set(null);
-  }
-
-  createOrganization() {
-    if (this.createForm.invalid || this.hasOrg()) return;
-    const { name } = this.createForm.getRawValue();
-    // Require image file
-    const file = this.imageFile();
-    if (!file) {
-      this.error.set('Prosím nahrajte obrázok organizácie.');
-      return;
-    }
-    this.error.set(null);
-    this.success.set(null);
-    this.orgService.createOrganizationWithImage({ name: name as string }, file).subscribe({
-      next: () => {
-        this.success.set('Organizácia bola vytvorená.');
-        this.createForm.reset();
-        this.imageFile.set(null);
-        this.hasOrg.set(true);
-        this.router.navigateByUrl('/waiting-room');
-      },
-      error: (err) => this.error.set(err?.error?.message || 'Vytvorenie zlyhalo.')
-    });
-  }
-
-  triggerFileInput(inputId: string) {
-    const el = document.getElementById(inputId) as HTMLInputElement | null;
-    el?.click();
   }
 }

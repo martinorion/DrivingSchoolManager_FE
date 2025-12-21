@@ -93,7 +93,6 @@
 }
 
 .page {
-  padding-top: 1.25rem;
   padding-bottom: 2rem;
   flex: 1 0 auto; /* grow to push footer down */
   min-width: 0; /* prevent flex overflow */

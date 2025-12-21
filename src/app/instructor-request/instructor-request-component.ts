@@ -1,22 +1,30 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Organization, OrganizationService } from '../services/organization.service';
 import { InstructorRequestDTO, InstructorRequestService } from '../services/instructor-request.service';
 import { AuthService } from '../services/auth.service';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+// Angular Material
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-instructor-request',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule],
   templateUrl: './instructor-request-component.html',
   styleUrl: './instructor-request-component.css'
 })
-export class InstructorRequestComponent {
+export class InstructorRequestComponent implements OnInit {
   private readonly org = inject(OrganizationService);
   private readonly reqService = inject(InstructorRequestService);
   protected readonly auth = inject(AuthService);
+  private readonly fb = inject(FormBuilder);
 
   organizations = signal<Organization[]>([]);
   existingRequest = signal<InstructorRequestDTO | null>(null);
@@ -24,9 +32,17 @@ export class InstructorRequestComponent {
   error = signal<string | null>(null);
   success = signal<string | null>(null);
 
+  // Image file required for creating organization (match main-page shape)
+  imageFile = signal<File | null>(null);
+  imagePreviewUrl = signal<string | null>(null);
+
+  createForm = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
+  });
+
   isInstructor = computed(() => this.auth.hasRole('INSTRUCTOR'));
 
-  constructor() {
+  ngOnInit() {
     if (this.isInstructor()) {
       this.refresh();
     }
@@ -66,6 +82,47 @@ export class InstructorRequestComponent {
         this.refresh();
       },
       error: (err) => this.error.set(err?.error?.message || 'Odoslanie žiadosti zlyhalo.')
+    });
+  }
+
+  // Handle image selection (match main-page names)
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files && input.files[0] ? input.files[0] : null;
+    this.imageFile.set(file);
+    this.imagePreviewUrl.set(file ? URL.createObjectURL(file) : null);
+  }
+
+  removeSelectedImage() {
+    this.imageFile.set(null);
+    this.imagePreviewUrl.set(null);
+  }
+
+  triggerFileInput(inputId: string) {
+    const el = document.getElementById(inputId) as HTMLInputElement | null;
+    el?.click();
+  }
+
+  createOrganization() {
+    if (this.createForm.invalid) return;
+    const { name } = this.createForm.getRawValue();
+    // Require image file
+    const file = this.imageFile();
+    if (!file) {
+      this.error.set('Prosím nahrajte obrázok organizácie.');
+      return;
+    }
+    this.error.set(null);
+    this.success.set(null);
+    this.org.createOrganizationWithImage({ name: name as string }, file).subscribe({
+      next: () => {
+        this.success.set('Organizácia bola vytvorená.');
+        this.createForm.reset();
+        this.imageFile.set(null);
+        // refresh list
+        this.refresh();
+      },
+      error: (err) => this.error.set(err?.error?.message || 'Vytvorenie zlyhalo.')
     });
   }
 

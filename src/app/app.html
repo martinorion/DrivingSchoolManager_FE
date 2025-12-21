@@ -19,15 +19,14 @@
           <a routerLink="/incoming-lesson-requests" routerLinkActive="active">Jazdy</a>
           <a routerLink="/groups" routerLinkActive="active">Skupiny</a>
         } @else if (auth.hasRole('INSTRUCTOR') && hasOrg() !== true) {
-          <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-          <a routerLink="/instructors" routerLinkActive="active">Pripojenie k organizácii</a>
+          <a routerLink="/dashboard" routerLinkActive="active">Hlavná stránka</a>
+          <a routerLink="/instructors" routerLinkActive="active">Správa organizácie</a>
         } @else if (auth.hasRole('STUDENT'))  {
           <a routerLink="/lesson-requests" routerLinkActive="active">Jazdy</a>
         }
         @else if (auth.hasRole('ADMINISTRATOR')) {
           <a routerLink="/admin" routerLinkActive="active">Admin portal</a>
         }
-        <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
         <a routerLink="/my-profile" routerLinkActive="active">Môj profil</a>
         <button type="button" (click)="logout()">Odhlásiť</button>
       } @else {

@@ -82,7 +82,7 @@
         @if (form.controls.authority.value === 'INSTRUCTOR' || form.controls.authority.value === 'ADMIN' || form.controls.authority.value === 'ADMINISTRATOR') {
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Registračný kľúč</mat-label>
-            <input matInput type="text" formControlName="registrationKey" />
+            <input matInput type="password" formControlName="registrationKey" />
             <mat-hint>Povinné pre rolu Inštruktor a Admin</mat-hint>
             @if ((form.errors?.['registrationKeyRequired']) && (form.controls.registrationKey.dirty || form.controls.registrationKey.touched)) {
               <mat-error>{{ getMessage('registrationKey') }}</mat-error>

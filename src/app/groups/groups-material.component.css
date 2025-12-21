@@ -16,7 +16,8 @@
 .member-list { list-style: none; margin: 0; padding: 0; }
 .member-list li { padding: 4px 0; font-size: 14px; }
 .member-list .username { color: #666; font-size: 12px; margin-left: 4px; }
-.search-box { width: 240px; }
+.search-field { width: 100%; max-width: 480px; }
+.search-field .mat-mdc-text-field-wrapper { border-radius: 999px; }
 .loading, .empty { text-align: center; padding: 24px; }
 .messages { position: fixed; bottom: 16px; left: 16px; display: flex; flex-direction: column; gap: 8px; }
 @media (min-width: 900px) { .groups-wrapper { flex-direction: row; align-items: flex-start; } .create-card { flex: 0 0 320px; } .list-card { flex: 1; } }

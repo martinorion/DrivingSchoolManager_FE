@@ -21,10 +21,15 @@
   <mat-card class="list-card">
     <div class="header-row">
       <h2>Skupiny ({{ filteredGroups().length }})</h2>
-      <div class="search-box">
-        <mat-form-field appearance="outline">
+      <div class="toolbar">
+        <mat-form-field appearance="outline" class="search-field">
           <mat-label>Hľadať</mat-label>
-          <input matInput (input)="onSearch($any($event.target).value)" placeholder="Názov alebo popis" />
+          <input matInput  type="search" [value]="searchTerm()" (input)="onSearch($any($event.target).value)" placeholder="Názov alebo popis" />
+          @if (searchTerm()) {
+            <button matSuffix mat-icon-button aria-label="Vyčistiť" (click)="onSearch('')">
+            <mat-icon>close</mat-icon>
+          </button> }
+          <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
       </div>
     </div>

@@ -32,7 +32,7 @@ export const routes: Routes = [
   { path: 'confirm-verification', component: ConfirmVerificationComponent,canActivate: [guestGuard], data: { title: 'Overenie účtu' } },
   { path: 'waiting-room', component: WaitingRoomComponent, canActivate: [authGuard], data: { title: 'Čakáreň' } },
   { path: 'members', component: MembersComponent, canActivate: [authGuard], data: { title: 'Členovia' } },
-  { path: 'instructors', component: InstructorRequestComponent, canActivate: [instructorNoOrgGuard], data: { title: 'Pripojenie k organizácii' } },
+  { path: 'instructors', component: InstructorRequestComponent, canActivate: [instructorNoOrgGuard], data: { title: 'Správa organizácie' } },
   { path: 'vehicles', component: VehiclesComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Vozidlá' } },
   { path: 'groups', component: GroupsMaterialComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Skupiny' } },
   { path: 'car-reservations', component: VehicleReservationsComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Rezervácie vozidiel' } },
