@@ -131,6 +131,13 @@ export class AuthService {
     return this.http.get<StudentStatusDTO>(`${this.baseUrl}/get-student-status`, { withCredentials: true });
   }
 
+  // Fetch student status by ID (for instructors editing individual student counts)
+  getStudentStatusById(id: number): Observable<StudentStatusDTO> {
+    return this.http.get<StudentStatusDTO>(`${this.baseUrl}/get-student-status/${id}`, { withCredentials: true });
+  }
+
+
+
   logout(): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/logout`, {}).pipe(
       map(() => void 0),

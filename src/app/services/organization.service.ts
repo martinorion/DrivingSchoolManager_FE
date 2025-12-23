@@ -99,8 +99,11 @@ export class OrganizationService {
     return this.http.post<void>(`${this.baseUrl}/update`, formData);
   }
 
-  // --- Admin-only endpoints ---
-  // List organizations awaiting acceptance
+  setStudentLessonCounts(drivingLessonsCount: number, drivingSimulationsCount: number, theoryLessonsCount: number, studentId: number): Observable<void> {
+    const params: any = { drivingLessonsCount, drivingSimulationsCount, theoryLessonsCount, studentId };
+    return this.http.put<void>(`${this.baseUrl}/setOrganizationLessonCounts`, null, { params });
+  }
+
   getAllUnacceptedOrganizations(): Observable<Organization[]> {
     return this.http.get<Organization[]>(`${this.baseUrl}/getAllUnacceptedOrganizations`).pipe(
       map(list => list.map(org => {

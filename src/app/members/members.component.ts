@@ -9,17 +9,21 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { LessonCountsDialogComponent } from './lesson-counts-dialog.component';
 
 @Component({
   selector: 'app-members',
   standalone: true,
-  imports: [CommonModule, MatPaginatorModule, MatCardModule, MatFormFieldModule, MatInputModule, MatIconModule, MatListModule, MatProgressSpinnerModule],
+  imports: [CommonModule, MatPaginatorModule, MatCardModule, MatFormFieldModule, MatInputModule, MatIconModule, MatListModule, MatProgressSpinnerModule, MatDialogModule, MatButtonModule],
   templateUrl: './members.component.html',
   styleUrl: './members.component.css'
 })
 export class MembersComponent implements OnInit {
   private readonly org = inject(OrganizationService);
   protected readonly auth = inject(AuthService);
+  private readonly dialog = inject(MatDialog);
 
   isInstructor = computed(() => this.auth.hasRole('INSTRUCTOR'));
 
@@ -108,5 +112,18 @@ export class MembersComponent implements OnInit {
     const val = (event.target as HTMLInputElement).value;
     this.instructorsQuery.set(val);
     this.instructorsPageIndex.set(0);
+  }
+
+  // Open dialog with selected student
+  openLessonCountsDialogWith(student: UserDTO) {
+    const ref = this.dialog.open(LessonCountsDialogComponent, {
+      width: '600px',
+      data: student
+    });
+    ref.afterClosed().subscribe(res => {
+      if (res && res.success) {
+        this.loadStudents();
+      }
+    });
   }
 }

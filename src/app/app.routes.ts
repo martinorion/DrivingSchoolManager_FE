@@ -42,6 +42,6 @@ export const routes: Routes = [
   { path: 'my-profile', component: MyProfileComponent, canActivate: [authGuard], data: { title: 'Môj profil' } },
   // Admin portal route (visible only to admins by UI; guard just requires auth)
   { path: 'admin', component: AdminPortalComponent, canActivate: [authGuard], data: { title: 'Admin portál' } },
-  { path: 'info-about-author', component: InfoAboutAuthorComponent },
+  { path: 'info-about-author', component: InfoAboutAuthorComponent, data: { title: 'Informácie o autorovi' } },
   { path: '**', redirectTo: 'dashboard' }
 ];

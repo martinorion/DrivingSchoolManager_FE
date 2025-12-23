@@ -32,6 +32,9 @@
                     <span class="name">{{ s.firstName || '' }} {{ s.surname || '' }}</span>
                     <span class="spacer"></span>
                     <span class="name">{{ s.email || s.username }}</span>
+                    <button type="button" (click)="openLessonCountsDialogWith(s)" title="Upraviť minúty" class="plain-icon-btn">
+                      <mat-icon>edit</mat-icon>
+                    </button>
                   </div>
                 </mat-list-item>
               }
