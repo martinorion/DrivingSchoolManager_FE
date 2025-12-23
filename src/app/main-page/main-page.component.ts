@@ -5,11 +5,12 @@ import { OrganizationService, Organization } from '../services/organization.serv
 import { WaitingRoomService, WaitingRoomDTO } from '../services/waiting-room.service';
 import { AuthService } from '../services/auth.service';
 import {Router} from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-main-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, MatCardModule],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.css'
 })
@@ -32,6 +33,11 @@ export class MainPageComponent implements OnInit {
   private readonly myOrganization = signal<Organization | null>(null);
   readonly isStudentInOrg = computed(() => this.auth.hasRole('STUDENT') && !!this.myOrganization());
 
+  // Student status counts when in org
+  studentDrivingLessons = signal<number | null>(null);
+  studentDrivingSimulations = signal<number | null>(null);
+  studentTheoryLessons = signal<number | null>(null);
+
   isStudent = computed(() => this.auth.hasRole('STUDENT'));
 
   ngOnInit() {
@@ -43,6 +49,8 @@ export class MainPageComponent implements OnInit {
           this.myOrganization.set(org);
           if (org) {
             this.organizations.set([org]);
+            // fetch student status counts now
+            this.fetchStudentStatus();
             this.loading.set(false);
           } else {
             this.fetchOrganizations();
@@ -73,6 +81,23 @@ export class MainPageComponent implements OnInit {
     this.waiting.getUsersWaitingRoom().subscribe({
       next: (dto) => this.studentRequest.set(dto ?? null),
       error: () => this.studentRequest.set(null)
+    });
+  }
+
+  // Fetch student status counts if student belongs to org
+  fetchStudentStatus() {
+    if (!this.isStudentInOrg()) return;
+    this.auth.getStudentStatus().subscribe({
+      next: (dto) => {
+        this.studentDrivingLessons.set(dto?.drivingLessonsCount ?? null);
+        this.studentDrivingSimulations.set(dto?.drivingSimulationsCount ?? null);
+        this.studentTheoryLessons.set(dto?.theoryLessonsCount ?? null);
+      },
+      error: () => {
+        this.studentDrivingLessons.set(null);
+        this.studentDrivingSimulations.set(null);
+        this.studentTheoryLessons.set(null);
+      }
     });
   }
 

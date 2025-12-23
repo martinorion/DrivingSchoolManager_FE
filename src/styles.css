@@ -95,6 +95,17 @@ body { overflow-wrap: anywhere; }
 /* Two-column responsive grid used in registration */
 .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
 @media (max-width: 720px) { .row-2 { grid-template-columns: 1fr; } .links {flex-direction: column; } .row-2 {gap: 0 }}
+
+/* New three-across compact row for small number inputs */
+.row-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem; /* slightly tighter */
+}
+@media (max-width: 600px) {
+  .row-3 { grid-template-columns: 1fr; }
+}
+
 /* Themed primary button for non-Material buttons */
 .btn.btn-primary {
   background: var(--gradient-primary);
@@ -119,7 +130,3 @@ body { overflow-wrap: anywhere; }
 .alert--success { background: rgba(6, 95, 70, 0.06); border-color: rgba(6, 95, 70, 0.35); color: var(--color-success); }
 /* new info variant consolidating previous local yellow alert */
 .alert--info { background: var(--color-info-bg); border-color: var(--color-info-border); color: var(--color-info-text); }
-
-
-
-

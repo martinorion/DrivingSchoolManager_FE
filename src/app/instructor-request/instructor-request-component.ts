@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-instructor-request',
@@ -25,6 +26,7 @@ export class InstructorRequestComponent implements OnInit {
   private readonly reqService = inject(InstructorRequestService);
   protected readonly auth = inject(AuthService);
   private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
 
   organizations = signal<Organization[]>([]);
   existingRequest = signal<InstructorRequestDTO | null>(null);
@@ -38,6 +40,9 @@ export class InstructorRequestComponent implements OnInit {
 
   createForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
+    theoryLessonsCount: [null as number | null, [Validators.required, Validators.min(1), Validators.pattern(/^\d+$/)]],
+    drivingLessonsCount: [null as number | null, [Validators.required, Validators.min(1), Validators.pattern(/^\d+$/)]],
+    drivingSimulationsCount: [null as number | null, [Validators.required, Validators.min(1), Validators.pattern(/^\d+$/)]]
   });
 
   isInstructor = computed(() => this.auth.hasRole('INSTRUCTOR'));
@@ -105,7 +110,7 @@ export class InstructorRequestComponent implements OnInit {
 
   createOrganization() {
     if (this.createForm.invalid) return;
-    const { name } = this.createForm.getRawValue();
+    const { name, theoryLessonsCount, drivingLessonsCount, drivingSimulationsCount } = this.createForm.getRawValue();
     // Require image file
     const file = this.imageFile();
     if (!file) {
@@ -114,13 +119,17 @@ export class InstructorRequestComponent implements OnInit {
     }
     this.error.set(null);
     this.success.set(null);
-    this.org.createOrganizationWithImage({ name: name as string }, file).subscribe({
+    this.org.createOrganizationWithImage({
+      name: name as string,
+      theoryLessonsCount: Number(theoryLessonsCount),
+      drivingLessonsCount: Number(drivingLessonsCount),
+      drivingSimulationsCount: Number(drivingSimulationsCount)
+    }, file).subscribe({
       next: () => {
         this.success.set('Organizácia bola vytvorená.');
         this.createForm.reset();
         this.imageFile.set(null);
-        // refresh list
-        this.refresh();
+        this.router.navigateByUrl('/waiting-room');
       },
       error: (err) => this.error.set(err?.error?.message || 'Vytvorenie zlyhalo.')
     });

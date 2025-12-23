@@ -51,13 +51,12 @@
                       <span class="name">{{ s.firstName || '' }} {{ s.surname || '' }}</span>
                       <span class="spacer"></span>
                       <div class="buttons">
-                        <button mat-raised-button class="accept-green" (click)="approve(s)">
-                          <mat-icon>check_circle</mat-icon>
-                          Schváliť
+                        <button mat-icon-button class="accept" (click)="approve(s)">
+                          <mat-icon>person_add</mat-icon>
                         </button>
-                        <button mat-stroked-button color="warn" (click)="reject(s)">
-                          <mat-icon>cancel</mat-icon>
-                          Odmietnuť
+                        <button mat-icon-button class="reject" (click)="reject(s)">
+                          <mat-icon>delete</mat-icon>
+
                         </button>
                       </div>
                     </div>
@@ -85,16 +84,16 @@
                 @for (r of pagedInstructorRequests(); track r.id) {
                   <mat-list-item>
                     <div class="item-content">
-                      <span class="name">Žiadosť inštruktora ID: {{ r.id }} (org ID: {{ r.organizationId }})</span>
+                      <span class="name">{{ r.firstName }} {{ r.surname }}</span>
                       <span class="spacer"></span>
-                      <div class="buttons--long">
-                        <button mat-raised-button class="accept-green" (click)="approveInstructor(r)">
+                      <div class="buttons">
+                        <button mat-icon-button class="accept" (click)="approveInstructor(r)">
                           <mat-icon>person_add</mat-icon>
-                          Pridať inštruktora
+
                         </button>
-                        <button mat-stroked-button color="warn" (click)="removeInstructorRequest(r)">
+                        <button mat-icon-button class="reject" (click)="removeInstructorRequest(r)">
                           <mat-icon>delete</mat-icon>
-                          Odstrániť žiadosť
+
                         </button>
                       </div>
                     </div>

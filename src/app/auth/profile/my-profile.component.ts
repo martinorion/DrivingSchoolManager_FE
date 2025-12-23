@@ -35,13 +35,16 @@ export class MyProfileComponent implements OnInit {
     firstName: ['', nameValidators],
     surname: ['', nameValidators],
     // optional password: reuse same rules but not required; keep hints
-    password: ['', [Validators.minLength(8), Validators.maxLength(30), Validators.pattern(/.*\d.*/)]],
+    password: ['', [Validators.minLength(8), Validators.maxLength(30), Validators.pattern(/^(?=.*\d)(?=.*[^\w\s]).+$/)]],
   });
 
   // Organization edit form (for instructors)
   orgForm = this.fb.group({
     id: [null as number | null],
     name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
+    theoryLessonsCount: [null as number | null, [Validators.required, Validators.min(1), Validators.pattern(/^\d+$/)]],
+    drivingLessonsCount: [null as number | null, [Validators.required, Validators.min(1), Validators.pattern(/^\d+$/)]],
+    drivingSimulationsCount: [null as number | null, [Validators.required, Validators.min(1), Validators.pattern(/^\d+$/)]]
   });
   orgImageFile = signal<File | null>(null);
   orgImagePreviewUrl = signal<string | null>(null);
@@ -74,7 +77,13 @@ export class MyProfileComponent implements OnInit {
         next: (org) => {
           this.currentOrg.set(org);
           if (org) {
-            this.orgForm.patchValue({ id: org.id, name: org.name });
+            this.orgForm.patchValue({
+              id: org.id,
+              name: org.name,
+              theoryLessonsCount: org.theoryLessonsCount ?? null,
+              drivingLessonsCount: org.drivingLessonsCount ?? null,
+              drivingSimulationsCount: org.drivingSimulationsCount ?? null,
+            });
             if (org.imageUrl !== undefined && org.imageUrl !== null) {
               this.orgImagePreviewUrl.set(org.imageUrl);
             }
@@ -131,9 +140,15 @@ export class MyProfileComponent implements OnInit {
   // Submit organization update (name change or optional new image)
   updateOrganization() {
     if (this.orgForm.invalid) return;
-    const { id, name } = this.orgForm.getRawValue();
+    const { id, name, theoryLessonsCount, drivingLessonsCount, drivingSimulationsCount } = this.orgForm.getRawValue();
     const file = this.orgImageFile();
-    const dto: Partial<Organization> = { id: id as number, name: name as string };
+    const dto: Partial<Organization> = {
+      id: id as number,
+      name: name as string,
+      theoryLessonsCount: theoryLessonsCount != null ? Number(theoryLessonsCount) : undefined,
+      drivingLessonsCount: drivingLessonsCount != null ? Number(drivingLessonsCount) : undefined,
+      drivingSimulationsCount: drivingSimulationsCount != null ? Number(drivingSimulationsCount) : undefined,
+    };
     this.error.set(null);
     this.success.set(null);
     this.orgService.updateOrganizationWithOptionalImage(dto, file).subscribe({

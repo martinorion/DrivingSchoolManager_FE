@@ -92,6 +92,8 @@
         }
       </div>
     }
-    <mat-paginator [length]="filteredVehicles().length" [pageSize]="pageSize" [pageIndex]="pageIndex()" [pageSizeOptions]="[pageSize]" (page)="onPage($event)"></mat-paginator>
+    <mat-card-actions class="card-actions">
+      <mat-paginator [length]="filteredVehicles().length" [pageIndex]="pageIndex()" [pageSize]="pageSize" [pageSizeOptions]="[pageSize]" (page)="onPage($event)"></mat-paginator>
+    </mat-card-actions>
   </div>
 </section>

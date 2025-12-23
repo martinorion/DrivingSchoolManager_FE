@@ -6,6 +6,9 @@ export interface InstructorRequestDTO {
   id?: number;
   instructorId?: number;
   organizationId?: number;
+  firstName?: string;
+  surname?: string;
+  email?: string;
 }
 
 @Injectable({ providedIn: 'root' })

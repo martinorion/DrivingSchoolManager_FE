@@ -10,4 +10,10 @@
 
 .card-actions { margin-top: auto; }
 
-
+.mdc-list-item.mdc-list-item--with-one-line {
+  margin-bottom: 5px;
+  margin-top: 5px;
+  border: #ada9a9 1px solid;
+  border-radius: 6px;
+  background-color: #f7f7f7;
+}

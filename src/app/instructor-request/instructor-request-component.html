@@ -9,7 +9,7 @@
       <div>Načítavam...</div>
     } @else {
       @if (!existingRequest()) {
-        <mat-card class="auth-card auth-card--sm" appearance="outlined">
+        <mat-card class="auth-card auth-card--md" appearance="outlined">
           <section class="org-section">
             <h2>Vytvoriť organizáciu</h2>
           </section>
@@ -20,6 +20,25 @@
               <input matInput type="text" formControlName="name" required />
               @if (createForm.controls.name.hasError('required') && (createForm.controls.name.touched || createForm.controls.name.dirty)) { <mat-error>Povinné pole</mat-error> }
             </mat-form-field>
+
+            <div class="row-3">
+              <mat-form-field appearance="outline" class="field-sm">
+                <mat-label>Počet minút teórie</mat-label>
+                <input matInput type="number" formControlName="theoryLessonsCount" min="1" />
+                @if (createForm.controls.theoryLessonsCount.invalid && (createForm.controls.theoryLessonsCount.touched || createForm.controls.theoryLessonsCount.dirty)) { <mat-error>Kladné celé číslo</mat-error> }
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="field-sm">
+                <mat-label>Počet minút jázd</mat-label>
+                <input matInput type="number" formControlName="drivingLessonsCount" min="1" />
+                @if (createForm.controls.drivingLessonsCount.invalid && (createForm.controls.drivingLessonsCount.touched || createForm.controls.drivingLessonsCount.dirty)) { <mat-error>Kladné celé číslo</mat-error> }
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="field-sm">
+                <mat-label>Počet minút simulácií</mat-label>
+                <input matInput type="number" formControlName="drivingSimulationsCount" min="1" />
+                @if (createForm.controls.drivingSimulationsCount.invalid && (createForm.controls.drivingSimulationsCount.touched || createForm.controls.drivingSimulationsCount.dirty)) { <mat-error>Kladné celé číslo</mat-error> }
+              </mat-form-field>
+            </div>
+
             @if (imagePreviewUrl()) {
               <div class="preview">
                 <div class="img-box">

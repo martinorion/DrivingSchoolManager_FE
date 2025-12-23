@@ -52,6 +52,7 @@ export interface EditProfileResponseDTO {
   user?: any;
 }
 
+// Define user DTO returned by getUserProfile
 export interface UserDTO {
   id?: number;
   username: string;
@@ -60,6 +61,13 @@ export interface UserDTO {
   firstName?: string | null;
   surname?: string | null;
   authority?: string;
+}
+
+// Add student status DTO for displaying counts on dashboard
+export interface StudentStatusDTO {
+  drivingLessonsCount: number | null;
+  drivingSimulationsCount: number | null;
+  theoryLessonsCount: number | null;
 }
 
 const AUTH_STATE_KEY = 'auth_state';
@@ -116,6 +124,11 @@ export class AuthService {
 
   resetPassword(email: string): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/reset-password`, { email });
+  }
+
+  // Fetch student status (remaining lessons counts)
+  getStudentStatus(): Observable<StudentStatusDTO> {
+    return this.http.get<StudentStatusDTO>(`${this.baseUrl}/get-student-status`, { withCredentials: true });
   }
 
   logout(): Observable<void> {

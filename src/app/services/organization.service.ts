@@ -10,10 +10,17 @@ export interface Organization {
   imageBase64Data?: string | null;
   contentType?: string | null; // optional if backand send that
   imageUrl?: string | null; // convience for rendering
+  // Add configured lesson minute counts for organization
+  theoryLessonsCount?: number;
+  drivingLessonsCount?: number;
+  drivingSimulationsCount?: number;
 }
 
 export interface CreateOrganizationRequest {
   name: string;
+  theoryLessonsCount: number;
+  drivingLessonsCount: number;
+  drivingSimulationsCount: number;
 }
 
 export interface UserDTO {
@@ -22,6 +29,7 @@ export interface UserDTO {
   surname?: string;
   username?: string;
   email?: string;
+  phone?: string;
 }
 
 @Injectable({ providedIn: 'root' })

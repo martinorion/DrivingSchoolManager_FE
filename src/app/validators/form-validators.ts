@@ -11,7 +11,7 @@ export const passwordValidators = [
   Validators.required,
   Validators.minLength(8),
   Validators.maxLength(30),
-  Validators.pattern(/.*\d.*/),
+  Validators.pattern(/^(?=.*\d)(?=.*[^\w\s]).+$/),
 ];
 
 export const emailValidators = [Validators.required, Validators.email];
@@ -24,6 +24,7 @@ export const phoneValidators = [
 export const nameValidators = [
   Validators.required,
   Validators.pattern(/^[\p{L}' \-]+$/u),
+  Validators.maxLength(15),
 ];
 
 // Control-level match validator factory: ensures control equals its sibling control value
@@ -68,6 +69,7 @@ export function getErrorMessage(controlName: string, control: AbstractControl, f
     case 'firstName':
     case 'surname': {
       if (errors['pattern']) return 'Musí obsahovať len písmená.';
+      if (errors['maxlength']) return 'Môže obsahovať najviac 15 znakov.';
       break;
     }
     case 'email': {
@@ -81,7 +83,7 @@ export function getErrorMessage(controlName: string, control: AbstractControl, f
     case 'password': {
       if (errors['minlength']) return 'Musí obsahovať aspoň 8 znakov.';
       if (errors['maxlength']) return 'Musí obsahovať najviac 30 znakov.';
-      if (errors['pattern']) return 'Musí obsahovať aspoň jedno číslo.';
+      if (errors['pattern']) return 'Musí obsahovať číslo a špeciálny znak.';
       break;
     }
     case 'confirmPassword': {

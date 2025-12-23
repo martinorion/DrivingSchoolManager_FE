@@ -11,3 +11,8 @@
   justify-content: center;
   margin-top: 16px;
 }
+
+.auth-wrapper {
+  flex-direction: column;
+  gap: 16px;
+}
