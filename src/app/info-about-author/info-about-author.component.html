@@ -1,0 +1,62 @@
+<div class="info-wrapper container">
+  <mat-card class="info-card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Informácie o autorovi</mat-card-title>
+      <mat-card-subtitle>{{ authorName }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="top-row">
+        <div class="photo-box" *ngIf="photoUrl">
+          <img [src]="photoUrl" alt="Fotografia autora" />
+        </div>
+        <div class="text-box">
+          <p class="bio">{{ shortBio }}</p>
+          <p class="goal">{{ appGoal }}</p>
+          <div class="contact">
+            <p><strong>Email:</strong> {{ contactEmail }}</p>
+            <p><strong>Tel.:</strong> {{ contactPhone }}</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Máte záujem o inštruktorskú rolu? <br> Napíšte mi</h3>
+      <form class="contact-form" [formGroup]="form" (ngSubmit)="sendViaGmail()">
+        <div class="row-2">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Meno</mat-label>
+            <input matInput type="text" formControlName="firstName" />
+            @if (f.firstName.invalid && (f.firstName.touched || f.firstName.dirty)) { <mat-error>Povinné</mat-error> }
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Priezvisko</mat-label>
+            <input matInput type="text" formControlName="surname" />
+            @if (f.surname.invalid && (f.surname.touched || f.surname.dirty)) { <mat-error>Povinné</mat-error> }
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Emailová adresa</mat-label>
+          <input matInput type="email" formControlName="email" />
+          @if (f.email.invalid && (f.email.touched || f.email.dirty)) { <mat-error>Zadajte platný email</mat-error> }
+        </mat-form-field>
+
+        <div class="row-2">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Názov organizácie</mat-label>
+            <input matInput type="text" formControlName="orgName" />
+            @if (f.orgName.invalid && (f.orgName.touched || f.orgName.dirty)) { <mat-error>Povinné</mat-error> }
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Sídlo organizácie</mat-label>
+            <input matInput type="text" formControlName="orgAddress" />
+            @if (f.orgAddress.invalid && (f.orgAddress.touched || f.orgAddress.dirty)) { <mat-error>Povinné</mat-error> }
+          </mat-form-field>
+        </div>
+
+        <div class="actions">
+          <button mat-stroked-button type="submit" [disabled]="form.invalid">Poslať cez Gmail</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -21,6 +21,7 @@ import { VehicleReservationsComponent } from './vehicle-reservations/vehicle-res
 import { StudentLessonRequestsComponent } from './lessons/student-lesson-requests.component';
 import { InstructorIncomingRequestsComponent } from './lessons/instructor-incoming-requests.component';
 import { AdminPortalComponent } from './admin/admin-portal.component';
+import { InfoAboutAuthorComponent } from './info-about-author/info-about-author.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -41,5 +42,6 @@ export const routes: Routes = [
   { path: 'my-profile', component: MyProfileComponent, canActivate: [authGuard], data: { title: 'Môj profil' } },
   // Admin portal route (visible only to admins by UI; guard just requires auth)
   { path: 'admin', component: AdminPortalComponent, canActivate: [authGuard], data: { title: 'Admin portál' } },
+  { path: 'info-about-author', component: InfoAboutAuthorComponent },
   { path: '**', redirectTo: 'dashboard' }
 ];

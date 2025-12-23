@@ -1,0 +1,6 @@
+.top-row { display: grid; grid-template-columns: 220px 1fr; gap: 16px; align-items: start; }
+@media (max-width: 720px) { .top-row { grid-template-columns: 1fr; } }
+
+.photo-box { width: 220px; height: 220px; border-radius: 12px; overflow: hidden; box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
+
+
