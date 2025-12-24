@@ -5,32 +5,13 @@
   padding: 16px;
 }
 
-.groups-card,
-.announcements-card {
-  padding: 20px;
-}
-
-.groups-card h2,
-.announcements-card h2 {
-  margin: 0 0 12px 0;
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: #1a237e;
-}
-
-.header { display: flex; align-items: center; gap: 12px; }
-.flex-spacer { flex: 1 1 auto; }
-
 .groups-list { display: flex; flex-direction: column; gap: 10px; }
-
 .list { margin-top: 12px; }
 
 .w-100 { width: 100%; }
-mat-form-field.w-100 { margin-bottom: 12px; }
 
 .loading-row { display: flex; align-items: center; gap: 10px; color: #666; }
-.muted { color: #666; }
-
+.muted { color: #666; margin-bottom: 12px; }
 
 /* Force wrap in Angular Material list items */
 .mat-mdc-list-item .mat-mdc-list-item-line,
@@ -43,7 +24,6 @@ mat-form-field.w-100 { margin-bottom: 12px; }
   overflow: visible !important;
   display: block;
 }
-
 
 @media (max-width: 1024px) {
   .container { grid-template-columns: 1fr; }

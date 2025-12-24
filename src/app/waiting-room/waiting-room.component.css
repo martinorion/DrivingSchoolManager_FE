@@ -1,22 +1,16 @@
 .waiting-card {
-  border: 1px dashed #9e9e9e;
   background: #fafafa;
   padding: 16px;
-  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  position: relative;
   max-width: 720px;
-  width: 100%;
 }
 .waiting-card .underline {
   text-decoration: underline;
 }
-.mb-8 {
-  margin-bottom: 1.25rem;
-}
+
 .full-center {
   min-height: 70vh;
   display: flex;

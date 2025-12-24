@@ -1,10 +1,10 @@
-<div class="auth-wrapper">
-  <mat-card class="auth-card auth-card--md" appearance="outlined">
+<div class="wrapper">
+  <mat-card class="card card--md" appearance="outlined">
     <mat-card-header>
       <mat-card-title>Môj profil</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form" novalidate>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form" novalidate>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Používateľské meno</mat-label>
           <input matInput type="text" formControlName="username" required />
@@ -70,12 +70,12 @@
   </mat-card>
 
       @if (auth.hasRole('INSTRUCTOR') && currentOrg()) {
-        <mat-card class="auth-card auth-card--md" appearance="outlined">
+        <mat-card class="card card--md" appearance="outlined">
           <mat-card-header>
             <mat-card-title>Moja organizácia</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-          <form [formGroup]="orgForm" (ngSubmit)="updateOrganization()" class="auth-form">
+          <form [formGroup]="orgForm" (ngSubmit)="updateOrganization()" class="form">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Nový názov organizácie</mat-label>
               <input matInput type="text" formControlName="name" required />

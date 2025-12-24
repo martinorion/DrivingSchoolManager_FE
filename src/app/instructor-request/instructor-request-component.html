@@ -9,12 +9,12 @@
       <div>Načítavam...</div>
     } @else {
       @if (!existingRequest()) {
-        <mat-card class="auth-card auth-card--md" appearance="outlined">
+        <mat-card class="card card--md" appearance="outlined">
           <section class="org-section">
             <h2>Vytvoriť organizáciu</h2>
           </section>
           <mat-card-content>
-          <form class="auth-form" [formGroup]="createForm" (ngSubmit)="createOrganization()">
+          <form class="form" [formGroup]="createForm" (ngSubmit)="createOrganization()">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Názov organizácie</mat-label>
               <input matInput type="text" formControlName="name" required />

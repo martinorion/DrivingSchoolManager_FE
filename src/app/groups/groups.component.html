@@ -1,7 +1,10 @@
 <div class="groups-wrapper">
-  <mat-card class="create-card">
-    <h2>Vytvoriť skupinu</h2>
-    <form [formGroup]="createForm" (ngSubmit)="submitCreate()" class="create-form">
+  <mat-card class="card card--sm" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Vytvoriť skupinu</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+    <form [formGroup]="createForm" (ngSubmit)="submitCreate()" class="form">
       <mat-form-field appearance="outline">
         <mat-label>Názov</mat-label>
         <input matInput formControlName="name" maxlength="30" />
@@ -16,12 +19,14 @@
       <button mat-raised-button color="primary" type="submit" [disabled]="createForm.invalid || creating()">Vytvoriť</button>
       @if (creating()) { <mat-progress-spinner diameter="24" mode="indeterminate"></mat-progress-spinner> }
     </form>
+      </mat-card-content>
   </mat-card>
 
-  <mat-card class="list-card">
-    <div class="header-row">
-      <h2>Skupiny ({{ filteredGroups().length }})</h2>
-      <div class="toolbar">
+  <mat-card class="card card--md" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Skupiny ({{ filteredGroups().length }})</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
         <mat-form-field appearance="outline" class="search-field">
           <mat-label>Hľadať</mat-label>
           <input matInput  type="search" [value]="searchTerm()" (input)="onSearch($any($event.target).value)" placeholder="Názov alebo popis" />
@@ -31,8 +36,6 @@
           </button> }
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
-      </div>
-    </div>
 
     @if (loadingGroups()) { <div class="loading"><mat-progress-spinner diameter="40" mode="indeterminate"></mat-progress-spinner></div> }
     @if (!loadingGroups() && pagedGroups().length === 0) { <div class="empty">Žiadne skupiny.</div> }
@@ -122,6 +125,7 @@
     } @else if (success()) {
       <div class="header-message alert alert--success">{{ success() }}</div>
     }
+    </mat-card-content>
   </mat-card>
 
 </div>

@@ -15,7 +15,7 @@ import { MembersComponent } from './members/members.component';
 import { VehiclesComponent } from './vehicles/vehicles.component';
 import { instructorWithOrgGuard } from './auth/guards/instructor-with-org.guard';
 import { studentWaitingRedirectGuard } from './auth/guards/student-waiting-redirect.guard';
-import { GroupsMaterialComponent } from './groups/groups-material.component';
+import { GroupsComponent } from './groups/groups.component';
 import { MyProfileComponent } from './auth/profile/my-profile.component';
 import { VehicleReservationsComponent } from './vehicle-reservations/vehicle-reservations.component';
 import { StudentLessonRequestsComponent } from './lessons/student-lesson-requests.component';
@@ -36,7 +36,7 @@ export const routes: Routes = [
   { path: 'members', component: MembersComponent, canActivate: [authGuard], data: { title: 'Členovia' } },
   { path: 'instructors', component: InstructorRequestComponent, canActivate: [instructorNoOrgGuard], data: { title: 'Správa organizácie' } },
   { path: 'vehicles', component: VehiclesComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Vozidlá' } },
-  { path: 'groups', component: GroupsMaterialComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Skupiny' } },
+  { path: 'groups', component: GroupsComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Skupiny' } },
   { path: 'group-announcements', component: GroupAnnouncementsComponent, canActivate: [authGuard], data: { title: 'Skupinové oznámenia' } },
   { path: 'car-reservations', component: VehicleReservationsComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Rezervácie vozidiel' } },
   { path: 'lesson-requests', component: StudentLessonRequestsComponent, canActivate: [authGuard], data: { title: 'Žiadosti o jazdy' } },

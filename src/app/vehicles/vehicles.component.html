@@ -1,7 +1,7 @@
 <section class="container">
   @if (error()) { <mat-card class="mb-4"><div class="alert alert--error access-message">{{ error() }}</div></mat-card> }
   <div class="form">
-    <form class="auth-form" (ngSubmit)="submit()" [formGroup]="form">
+    <form class="form" (ngSubmit)="submit()" [formGroup]="form">
       <div class="fields">
         <mat-form-field appearance="outline">
           <mat-label>Názov</mat-label>
@@ -51,7 +51,7 @@
             <div class="row" [class.editing]="editingId() === v.id">
               @if (editingId() === v.id) {
                 <div class="form">
-                  <form class="auth-form">
+                  <form class="form">
                     <div class="fields">
                       <mat-form-field appearance="outline"><mat-label>Názov</mat-label><input matInput [formControl]="editForm.controls.name" />
                         @if (editForm.controls.name.hasError('required') && (editForm.controls.name.touched || editForm.controls.name.dirty)) { <mat-error>Povinné pole</mat-error> }

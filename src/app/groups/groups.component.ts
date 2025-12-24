@@ -33,10 +33,10 @@ import { GroupDTO, GroupMemberDTO, GroupService } from '../services/group.servic
     MatTooltipModule,
     MatPaginatorModule
   ],
-  templateUrl: './groups-material.component.html',
-  styleUrl: './groups-material.component.css'
+  templateUrl: './groups.component.html',
+  styleUrl: './groups.component.css'
 })
-export class GroupsMaterialComponent implements OnInit {
+export class GroupsComponent implements OnInit {
   private readonly groupService = inject(GroupService);
   private readonly orgService = inject(OrganizationService);
   private readonly fb = inject(FormBuilder);

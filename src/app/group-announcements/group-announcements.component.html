@@ -1,6 +1,9 @@
 <div class="container">
-  <mat-card class="groups-card">
-    <h2>Moje skupiny</h2>
+  <mat-card class="card" appearance="outlined" >
+    <mat-card-header>
+      <mat-card-title>Moje skupiny</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
     @if (!loadingGroups()) {
       <div class="groups-list">
         @for (g of groups(); track g.id) {
@@ -15,16 +18,16 @@
     } @else {
       <div class="loading-row"><mat-spinner diameter="24"></mat-spinner> Načítavam skupiny…</div>
     }
+    </mat-card-content>
   </mat-card>
 
   @if (selectedGroupId()) {
-    <mat-card class="announcements-card">
-      <div class="header">
-        <h2>Oznámenia</h2>
-        <span class="flex-spacer"></span>
+    <mat-card class="card" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>Oznámenia</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
         <div class="muted">Skupina: {{ selectedGroupName() || '—' }}</div>
-      </div>
-
       @if (canPost()) {
         <form [formGroup]="announceForm" (ngSubmit)="submitAnnouncement()">
           <mat-form-field appearance="outline" class="w-100">
@@ -65,11 +68,13 @@
       } @else {
         <div class="loading-row"><mat-spinner diameter="24"></mat-spinner> Načítavam oznámenia…</div>
       }
-
+      </mat-card-content>
     </mat-card>
   } @else {
-    <mat-card class="announcements-card">
+    <mat-card class="card" appearance="outlined">
+      <mat-card-content>
       <div class="muted">Vyberte skupinu pre zobrazenie oznámení.</div>
+      </mat-card-content>
     </mat-card>
   }
 

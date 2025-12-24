@@ -71,20 +71,20 @@ body { overflow-wrap: anywhere; }
 
 
 /*FORMS*/
-/* Auth shared styles (centralized) */
-.auth-wrapper { display: flex; align-items: flex-start; justify-content: center; padding: 1rem; width: 100%; }
-.auth-card { width: 100%; margin: 0 auto; }
+/* Shared card/layout styles (refactored from auth-*) */
+.wrapper { display: flex; align-items: flex-start; justify-content: center; padding: 1rem; width: 100%; }
+.card { width: 100%; margin: 0 auto; }
 /* Size modifiers */
-.auth-card--sm { max-width: 480px; }
-.auth-card--md { max-width: 560px; }
+.card--sm { max-width: 480px; }
+.card--md { max-width: 560px; }
 /* Ensure Material card paddings are symmetric */
-.auth-card .mat-mdc-card-content,
-.auth-card .mat-mdc-card-header { padding-left: 16px; padding-right: 16px; }
-/* Ensure shadow on Angular Material mat-card used as auth-card */
-.auth-card.mat-mdc-card,
-.auth-card .mat-mdc-card { border-radius: 16px; background: var(--color-surface); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12) !important; border: none; }
+.card .mat-mdc-card-content,
+.card .mat-mdc-card-header { padding-left: 16px; padding-right: 16px; }
+/* Ensure shadow on Angular Material mat-card used as card */
+.card.mat-mdc-card,
+.card .mat-mdc-card { border-radius: 10px; background: var(--color-surface); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12) !important; }
 /* Form spacing and helpers */
-.auth-form { display: flex; flex-direction: column; margin-top: 0.5rem; width: 100%; }
+.form { display: flex; flex-direction: column; margin-top: 0.5rem; width: 100%; }
 
 
 .w-100 { width: 100%; }
@@ -130,3 +130,6 @@ body { overflow-wrap: anywhere; }
 .alert--success { background: rgba(6, 95, 70, 0.06); border-color: rgba(6, 95, 70, 0.35); color: var(--color-success); }
 /* new info variant consolidating previous local yellow alert */
 .alert--info { background: var(--color-info-bg); border-color: var(--color-info-border); color: var(--color-info-text); }
+
+/* Remove deprecated prefixed classes */
+/* .auth-wrapper, .auth-card, .auth-card--sm, .auth-card--md, .auth-form are replaced by .wrapper, .card, .card--sm, .card--md, .form */

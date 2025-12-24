@@ -6,13 +6,13 @@
     @if (isStudent()) {
       @if (myWaiting()) {
         <div class="full-center">
-          <mat-card class="waiting-card">
+          <mat-card class="card waiting-card" appearance="outlined">
             <mat-card-header>
               <mat-card-title>Vitajte, študent</mat-card-title>
               <mat-card-subtitle>Ste v čakárni organizácie</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
-              <p class="mb-8"><span class="waiting-icon" aria-hidden="true">⏳</span>Čakáte, kým vás nepotvrdí inštruktor v <span class="underline">{{ orgNameForMyWaiting() }}</span>.</p>
+              <p><span class="waiting-icon" aria-hidden="true">⏳</span>Čakáte, kým vás nepotvrdí inštruktor v <span class="underline">{{ orgNameForMyWaiting() }}</span>.</p>
             </mat-card-content>
             <mat-card-actions>
               <button mat-raised-button color="warn" (click)="cancelStudentsRequest()">Zrušiť žiadosť</button>
@@ -21,7 +21,7 @@
         </div>
       } @else {
         <div class="full-center">
-          <mat-card class="waiting-card">
+          <mat-card class="card waiting-card" appearance="outlined">
             <mat-card-title>Nemáte žiadne otvorené žiadosti.</mat-card-title>
           </mat-card>
         </div>
@@ -33,7 +33,7 @@
         <div class="alert alert--info">Na zobrazenie čakárne musíte mať vytvorenú organizáciu.</div>
       } @else {
         <div class="org-columns">
-          <mat-card>
+          <mat-card class="card" appearance="outlined">
             <mat-card-header>
               <mat-card-title>Študenti čakajúci na schválenie</mat-card-title>
             </mat-card-header>
@@ -69,7 +69,7 @@
             </mat-card-actions>
           </mat-card>
 
-          <mat-card>
+          <mat-card class="card" appearance="outlined">
             <mat-card-header>
               <mat-card-title>Inštruktori čakajúci na schválenie</mat-card-title>
             </mat-card-header>

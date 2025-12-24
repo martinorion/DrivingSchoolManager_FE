@@ -12,7 +12,7 @@
   margin-top: 16px;
 }
 
-.auth-wrapper {
+.wrapper {
   flex-direction: column;
   gap: 16px;
 }
