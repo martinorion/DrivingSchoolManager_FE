@@ -128,4 +128,8 @@ export class OrganizationService {
   deleteMyOrganization(organizationId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/deleteMyOrganization/${organizationId}`);
   }
+
+  removeStudentFromOrganization(studentId: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/removeStudentFromOrganization/${studentId}`);
+  }
 }

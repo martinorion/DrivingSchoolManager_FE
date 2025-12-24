@@ -27,6 +27,26 @@ export interface GroupMemberDTO {
   studentSurname?: string;
 }
 
+// Minimal Page interface matching Spring Data's Page
+export interface Page<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number; // current page index (0-based)
+}
+
+// Group announcement shape aligned with backend
+export interface GroupAnnouncementDTO {
+  id?: number;
+  groupId: number;
+  title: string;
+  message: string;
+  createdAt?: string;
+  updatedAt?: string;
+  authorId?: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class GroupService {
   private readonly http = inject(HttpClient);
@@ -34,6 +54,16 @@ export class GroupService {
 
   getAllGroups(): Observable<GroupDTO[]> {
     return this.http.get<GroupDTO[]>(`${this.baseUrl}/getAllGroups`);
+  }
+
+  // Return current student's groups
+  getStudentGroups(): Observable<GroupDTO[]> {
+    return this.http.get<GroupDTO[]>(`${this.baseUrl}/studentGroups`);
+  }
+
+  // Return current instructor's groups
+  getInstructorGroups(): Observable<GroupDTO[]> {
+    return this.http.get<GroupDTO[]>(`${this.baseUrl}/instructorGroups`);
   }
 
   createGroup(dto: GroupDTO): Observable<GroupDTO> {
@@ -46,6 +76,15 @@ export class GroupService {
 
   getGroupMembers(groupId: number): Observable<UserDTO[]> {
     return this.http.get<UserDTO[]>(`${this.baseUrl}/getGroupMembers/${groupId}`);
+  }
+
+  // Announcements
+  createAnnouncement(dto: GroupAnnouncementDTO): Observable<GroupAnnouncementDTO> {
+    return this.http.post<GroupAnnouncementDTO>(`${this.baseUrl}/announcements`, dto);
+  }
+
+  getAnnouncements(groupId: number, page = 0, size = 10): Observable<Page<GroupAnnouncementDTO>> {
+    return this.http.get<Page<GroupAnnouncementDTO>>(`${this.baseUrl}/announcements/${groupId}`, { params: { page, size } as any });
   }
 
   updateGroup(id: number, dto: GroupDTO): Observable<GroupDTO> {

@@ -126,4 +126,14 @@ export class MembersComponent implements OnInit {
       }
     });
   }
+
+  removeStudent(student: UserDTO) {
+    if (!student?.id) return;
+    const ok = confirm('Naozaj chcete odstrániť študenta z organizácie?');
+    if (!ok) return;
+    this.org.removeStudentFromOrganization(Number(student.id)).subscribe({
+      next: () => this.loadStudents(),
+      error: () => this.error.set('Odstránenie študenta zlyhalo.')
+    });
+  }
 }

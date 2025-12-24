@@ -18,11 +18,13 @@
           <a routerLink="/car-reservations" routerLinkActive="active">Rezervácie</a>
           <a routerLink="/incoming-lesson-requests" routerLinkActive="active">Jazdy</a>
           <a routerLink="/groups" routerLinkActive="active">Skupiny</a>
+          <a routerLink="/group-announcements" routerLinkActive="active">Oznámenia</a>
         } @else if (auth.hasRole('INSTRUCTOR') && hasOrg() !== true) {
           <a routerLink="/dashboard" routerLinkActive="active">Hlavná stránka</a>
           <a routerLink="/instructors" routerLinkActive="active">Správa organizácie</a>
         } @else if (auth.hasRole('STUDENT'))  {
           <a routerLink="/lesson-requests" routerLinkActive="active">Jazdy</a>
+          <a routerLink="/group-announcements" routerLinkActive="active">Oznámenia</a>
         }
         @else if (auth.hasRole('ADMINISTRATOR')) {
           <a routerLink="/admin" routerLinkActive="active">Admin portal</a>

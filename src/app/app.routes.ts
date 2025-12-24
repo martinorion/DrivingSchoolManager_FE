@@ -22,6 +22,7 @@ import { StudentLessonRequestsComponent } from './lessons/student-lesson-request
 import { InstructorIncomingRequestsComponent } from './lessons/instructor-incoming-requests.component';
 import { AdminPortalComponent } from './admin/admin-portal.component';
 import { InfoAboutAuthorComponent } from './info-about-author/info-about-author.component';
+import { GroupAnnouncementsComponent } from './group-announcements/group-announcements.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
@@ -36,6 +37,7 @@ export const routes: Routes = [
   { path: 'instructors', component: InstructorRequestComponent, canActivate: [instructorNoOrgGuard], data: { title: 'Správa organizácie' } },
   { path: 'vehicles', component: VehiclesComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Vozidlá' } },
   { path: 'groups', component: GroupsMaterialComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Skupiny' } },
+  { path: 'group-announcements', component: GroupAnnouncementsComponent, canActivate: [authGuard], data: { title: 'Skupinové oznámenia' } },
   { path: 'car-reservations', component: VehicleReservationsComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Rezervácie vozidiel' } },
   { path: 'lesson-requests', component: StudentLessonRequestsComponent, canActivate: [authGuard], data: { title: 'Žiadosti o jazdy' } },
   { path: 'incoming-lesson-requests', component: InstructorIncomingRequestsComponent, canActivate: [instructorWithOrgGuard], data: { title: 'Prichádzajúce žiadosti o jazdy' } },
