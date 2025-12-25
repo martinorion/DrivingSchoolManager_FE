@@ -5,11 +5,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { DrivingLessonRequestDTO, DrivingLessonRequestService } from '../services/driving-lesson-request.service';
+import {MatCard, MatCardContent} from '@angular/material/card';
 
 @Component({
   selector: 'app-instructor-incoming-requests',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule],
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, MatCard, MatCardContent],
   templateUrl: './instructor-incoming-requests.component.html',
   styleUrl: './instructor-incoming-requests.component.css'
 })

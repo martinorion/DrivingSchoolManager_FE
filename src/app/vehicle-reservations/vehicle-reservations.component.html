@@ -4,7 +4,8 @@
   @if (form.controls.endTime.hasError('range') && form.controls.endTime.touched) {
     <div class="alert alert--error">Koniec musí byť po začiatku.</div>
   }
-  <div class="form">
+  <mat-card class="card" appearance="outlined">
+    <mat-card-content>
   <form class="form" [formGroup]="form" (ngSubmit)="submit()">
     <div class="fields">
     <mat-form-field appearance="outline">
@@ -55,7 +56,13 @@
     </div>
     <button mat-flat-button type="submit" class="btn btn-primary" [disabled]="form.invalid || creating()">Vytvoriť rezerváciu</button>
   </form>
-  </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Vaše rezervácie</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
   <div class="toolbar">
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>Hľadať</mat-label>
@@ -96,4 +103,6 @@
       }
     </div>
   }
+    </mat-card-content>
+  </mat-card>
 </section>

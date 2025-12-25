@@ -1,6 +1,7 @@
 <section class="container">
   @if (error()) { <mat-card class="mb-4"><div class="alert alert--error access-message">{{ error() }}</div></mat-card> }
-  <div class="form">
+  <mat-card class="card" appearance="outlined">
+    <mat-card-content>
     <form class="form" (ngSubmit)="submit()" [formGroup]="form">
       <div class="fields">
         <mat-form-field appearance="outline">
@@ -30,8 +31,14 @@
       </button>
       @if (success()) { <div class="alert alert--success access-message" style="margin-top:.5rem;"><mat-icon>check_circle</mat-icon> {{ success() }}</div> }
     </form>
-  </div>
+    </mat-card-content>
+  </mat-card>
 
+  <mat-card class="card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Vaše vozidlá</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
   <div class="toolbar">
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>Hľadať</mat-label>
@@ -96,4 +103,6 @@
       <mat-paginator [length]="filteredVehicles().length" [pageIndex]="pageIndex()" [pageSize]="pageSize" [pageSizeOptions]="[pageSize]" (page)="onPage($event)"></mat-paginator>
     </mat-card-actions>
   </div>
+    </mat-card-content>
+  </mat-card>
 </section>

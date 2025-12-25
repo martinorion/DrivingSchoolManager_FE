@@ -1,7 +1,4 @@
 .groups-wrapper { display: flex; flex-direction: column; gap: 24px; padding: 16px; }
-.create-card, .list-card { padding: 16px; }
-.create-form, .edit-form, .add-member-form { display: flex; flex-direction: column; gap: 12px; }
-.header-row { display: flex; justify-content: space-between; align-items: center; }
 .groups-list { display: flex; flex-direction: column; gap: 8px; }
 .group-item { padding: 8px 0; }
 .group-main { display: flex; flex-direction: column; gap: 8px; }

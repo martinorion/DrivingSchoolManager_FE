@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { DrivingLessonRequestDTO, DrivingLessonRequestService } from '../services/driving-lesson-request.service';
 import { OrganizationService } from '../services/organization.service';
 import {MatTimepicker, MatTimepickerInput, MatTimepickerToggle} from '@angular/material/timepicker';
+import {MatCard, MatCardContent} from '@angular/material/card';
 
 @Component({
   selector: 'app-student-lesson-requests',
@@ -28,6 +29,8 @@ import {MatTimepicker, MatTimepickerInput, MatTimepickerToggle} from '@angular/m
     MatTimepicker,
     MatTimepickerInput,
     MatTimepickerToggle,
+    MatCard,
+    MatCardContent,
   ],
   templateUrl: './student-lesson-requests.component.html',
   styleUrl: './student-lesson-requests.component.css'

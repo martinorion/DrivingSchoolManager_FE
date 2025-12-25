@@ -1,48 +1,14 @@
-.instructors-page h1 { margin-top:0; }
-/* Removed local alert styles (use global) */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: .75rem;
-}
-
-.card {
-  border: 1px solid #e5e7eb;
-  border-radius: .75rem;
-  padding: 1rem;
-  background: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-.card__title { font-weight: 600; }
-
-.card__image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  margin-top: 8px;
-  display: block;
-  border-radius: 6px;
-}
-
-.org-section {
+mat-card-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
-
-h2 {
-  margin-bottom: 0.5rem;
-}
-
 /*Preview image*/
 .preview { display: flex; align-items: center; gap: 10px; flex-direction: column; }
-.preview .img-box { width: 80%; height: 200px; border-radius: 8px; overflow: hidden; box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
+.preview .img-box { width: 90%; height: 200px; border-radius: 8px; overflow: hidden; box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
 .preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 /* Optional waiting section styles */
 .waiting { text-align: center; margin-top: 1rem; }
 .waiting__icon { font-size: 32px; }
 .muted { color: #6b7280; }
+

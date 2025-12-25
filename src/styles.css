@@ -133,3 +133,32 @@ body { overflow-wrap: anywhere; }
 
 /* Remove deprecated prefixed classes */
 /* .auth-wrapper, .auth-card, .auth-card--sm, .auth-card--md, .auth-form are replaced by .wrapper, .card, .card--sm, .card--md, .form */
+
+/* Organization layout */
+.org-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: .75rem;
+}
+.org-card {
+  display: flex;
+  align-items: center;
+  max-width: 500px;
+}
+.org-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  margin-top: 8px;
+  display: block;
+  border-radius: 6px;
+}
+
+.org-section {
+  display: flex;
+  justify-content: center;
+}
+
+.page {
+  margin-top: 0;
+}

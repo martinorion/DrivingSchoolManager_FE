@@ -1,4 +1,3 @@
-.form { display: flex; flex-direction: column; gap: .75rem; border: 1px solid #eee; padding: 1rem; border-radius: 12px; background:#fff; width: -webkit-fill-available }
 .fields { display: grid; gap: .75rem; grid-template-columns: 1fr; }
 @media (min-width: 700px) { .fields { grid-template-columns: repeat(4, 1fr); } }
 

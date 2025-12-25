@@ -28,18 +28,22 @@
   @if (loading()) {
     <div>Načítavam...</div>
   } @else {
-    <div class="grid">
+    <div class="org-grid">
       @for (org of organizations(); track org.id) {
-        <div class="card">
-          <div class="card__title">{{ org.name }}</div>
+        <mat-card class="card org-card" appearance="outlined">
+          <mat-card-header>
+            <mat-card-title>{{ org.name }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
           @if (org.imageUrl) {
-            <img [src]="org.imageUrl" alt="Logo organizácie" class="card__image" />
+            <img [src]="org.imageUrl" alt="Logo organizácie" class="org-image" />
           }
           @if (isStudent() && auth.isAuthenticated() && !isStudentInOrg()) {
             <br>
             <button class="btn btn-primary" (click)="joinSendRequest(org)" [disabled]="studentHasPending()">Pripojiť sa</button>
           }
-        </div>
+          </mat-card-content>
+        </mat-card>
       }
     </div>
   }
