@@ -31,13 +31,14 @@
                   <div class="item-content">
                     <span class="name">{{ s.firstName || '' }} {{ s.surname || '' }}</span>
                     <span class="spacer"></span>
-                    <span class="name">{{ s.email || s.username }}</span>
-                    <button type="button" (click)="openLessonCountsDialogWith(s)" title="Upraviť minúty" class="plain-icon-btn">
-                      <mat-icon>edit</mat-icon>
-                    </button>
-                    <button type="button" (click)="removeStudent(s)" title="Odstrániť študenta" class="plain-icon-btn">
-                      <mat-icon color="warn">delete</mat-icon>
-                    </button>
+                    <div class="buttons">
+                      <button mat-icon-button class="accept" (click)="openLessonCountsDialogWith(s)">
+                        <mat-icon class="edit">edit</mat-icon>
+                      </button>
+                      <button mat-icon-button class="reject" (click)="removeStudent(s)">
+                        <mat-icon class="reject">delete</mat-icon>
+                      </button>
+                    </div>
                   </div>
                 </mat-list-item>
               }

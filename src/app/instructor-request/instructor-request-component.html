@@ -78,17 +78,22 @@
         </div>
         @if (!organizations().length) { <p>Žiadne organizácie na zobrazenie.</p> }
       } @else {
-        <div class="waiting">
-          <div class="waiting__icon" aria-hidden="true">⏳</div>
-          <h2>Žiadosť odoslaná</h2>
-          <p>
-            Počkajte na schválenie administrátora organizácie
-            <strong>{{ organizationNameById(existingRequest()?.organizationId) }}</strong>.
-          </p>
-          <p class="muted">Po schválení budete mať rovnaký prístup ako hlavný inštruktor.</p>
-          <div class="actions">
-            <button mat-flat-button color="warn" type="button" (click)="cancelMyRequest()">Zrušiť moju žiadosť</button>
-          </div>
+        <div class="full-center">
+          <mat-card class="card waiting-card" appearance="outlined">
+            <mat-card-header>
+              <mat-card-title>
+                <div class="waiting-icon" aria-hidden="true">⏳</div>
+                <h2>Žiadosť odoslaná</h2>
+              </mat-card-title>
+              <mat-card-subtitle>Počkajte na schválenie administrátora organizácie
+                <strong>{{ organizationNameById(existingRequest()?.organizationId) }}</strong>.
+                <p>Po schválení budete mať rovnaký prístup ako hlavný inštruktor.</p>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-actions>
+              <button mat-flat-button color="warn" type="button" (click)="cancelMyRequest()">Zrušiť moju žiadosť</button>
+            </mat-card-actions>
+          </mat-card>
         </div>
       }
     }

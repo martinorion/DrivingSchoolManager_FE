@@ -10,10 +10,45 @@
 
 .card-actions { margin-top: auto; }
 
+
 .mdc-list-item.mdc-list-item--with-one-line {
+  height: 55px;
   margin-bottom: 5px;
   margin-top: 5px;
   border: #ada9a9 1px solid;
   border-radius: 6px;
   background-color: #f7f7f7;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  width: -webkit-fill-available;
+  justify-content: flex-end
+}
+
+@media (max-width: 950px) {
+  .mdc-list-item.mdc-list-item--with-one-line { height: 90px; }
+  .org-columns {grid-template-columns: 1fr;}
+  .item-content { align-items: flex-start; flex-direction: column; gap: 0; }
+}
+
+.accept {
+  border-radius: 6px;
+  background-color: #4a9fbe !important;
+  color: #fff !important;
+}
+
+.accept:hover {
+  background-color: #239dc6 !important;
+}
+
+.reject {
+  border-radius: 6px;
+  background-color:#e04e4e !important;
+  color: #fff !important;
+}
+
+.reject:hover {
+  background-color: #bf2323 !important;
 }

@@ -49,7 +49,7 @@ export class GroupAnnouncementsComponent implements OnInit {
   announcements = signal<GroupAnnouncementDTO[]>([]);
   totalAnnouncements = signal(0);
   pageIndex = signal(0);
-  pageSize = 10;
+  pageSize = 5;
   loadingAnnouncements = signal(false);
   error = signal<string | null>(null);
   success = signal<string | null>(null);

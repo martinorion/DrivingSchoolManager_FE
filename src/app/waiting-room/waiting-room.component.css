@@ -42,7 +42,7 @@
 .card-actions { margin-top: auto; }
 
 .mdc-list-item.mdc-list-item--with-one-line {
-  height: 65px;
+  height: 55px;
   margin-bottom: 5px;
   margin-top: 5px;
   border: #ada9a9 1px solid;
@@ -75,6 +75,7 @@
 .reject:hover {
   background-color: #bf2323 !important;
 }
+
 
 
 
